@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <navagation></navagation>
     <v-main>
       <router-view/>
     </v-main>
@@ -7,12 +8,13 @@
 </template>
 
 <script>
+import Navagation from "./components/nav/Navagation.vue";
+
 
 export default {
   name: 'App',
-
-  data: () => ({
-    //
-  }),
+  components: {
+    Navagation
+  },
 };
 </script>
