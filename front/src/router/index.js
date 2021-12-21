@@ -6,6 +6,7 @@ import SignIn from '../components/authentication/SignIn.vue'
 import SignupOne from '../components/authentication/SignUpStepOne.vue'
 import SignupTwo from '../components/authentication/SignUpStepTwo.vue'
 import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileView.vue'
+// import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileView.vue'
 
 
 Vue.use(VueRouter)
