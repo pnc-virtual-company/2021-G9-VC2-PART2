@@ -15,17 +15,32 @@
           <v-card color="transparent" elevation="0" class="pa-5">
             <h1 class="text-center white--text mb-3">SIGN UP</h1>
             <v-row no-gutters>
-              <v-col cols="12">
+              <v-col cols="12" lg="6" md="6" sm="6" xs="12">
                 <v-text-field
                   dense
-                  class="mr-1"
-                  background-color="white"
-                  placeholder="E-mail"
-                  :rules="emailRules"
+                  placeholder="First name"
+                  :rules="nameRules"
+                  type="text"
                   outlined
+                  background-color="white"
+                  class="mr-1"
+                  v-model="first_name"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" lg="6" md="6" sm="6" xs="12">
+                <v-text-field
+                  :rules="nameRules"
+                  dense
+                  class="mr-1"
+                  placeholder="Last name"
+                  type="text"
+                  outlined
+                  background-color="white"
+                  v-model="last_name"
                 ></v-text-field>
               </v-col>
             </v-row>
+            
             <v-row no-gutters>
               <v-col cols="12">
                 <v-text-field
@@ -35,6 +50,7 @@
                   background-color="white"
                   placeholder="Phone number"
                   outlined
+                  v-model="phone_number"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -49,6 +65,7 @@
                   outlined
                   background-color="white"
                   class="mr-1"
+                  
                 ></v-text-field>
               </v-col>
               <v-col cols="12" lg="6" md="6" sm="6" xs="12">
@@ -63,15 +80,20 @@
                   background-color="white"
                 ></v-text-field>
               </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12">
+            </v-row>            
+            <v-row no-gutters class="ma-0 pa-0">
+              <v-col cols="12" class="mt-0 pt-0">
                 <v-checkbox
                   v-model="checkbox"
                   label="Show password"
                 ></v-checkbox>
               </v-col>
             </v-row>
+            <v-radio-group row class="mt-0 pt-0"  v-model="gender">
+              <v-radio label="Female" value="female"></v-radio>
+              <v-radio label="Male" value="male"></v-radio>
+              <v-radio label="Other" value="other"></v-radio>
+            </v-radio-group>
             <v-row no-gutters>
               <v-col cols="12">
                 <router-link
@@ -89,7 +111,7 @@
                   color="transparent"
                   elevation="0"
                 >
-                  <v-btn color="#FF9933" class="white--text">NEXT</v-btn>
+                  <v-btn color="#FF9933" class="white--text" @click="loginToUserAlumni">NEXT</v-btn>
                 </v-card>
               </v-col>
             </v-row>
@@ -117,33 +139,74 @@
 </template>
 
 <script>
+import axios from "./../../api/api.js"
+
 export default {
   data() {
     return {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      gender: null,
       password: "",
       confirmPassword: "",
       checkbox: false,
       isShowPassword: false,
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      ],
+      userId: JSON.parse(localStorage.getItem('user')).id,
+      alumnis: [],
+      
       phoneRules: [(v) => !!v || "Phone number is required"],
       passwordRules: [
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 8) || "Password at leaste 8 characters",
+        (v) => v === this.confirmPassword || "Password must match",
+
       ],
       passwordConfirmRules: [
         (v) => !!v || "Confirm password is required",
+        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
         (v) => v === this.password || "Password must match",
       ],
+      nameRules: [(v) => !!v || "Name is required"],
+      items: ['2005', '2006', '2007', '2008', '2009', '2020', '2021'],
     };
   },
   watch: {
     checkbox() {
       this.isShowPassword = !this.isShowPassword
     },
+
+
   },
+  methods: {
+    loginToUserAlumni(){
+      if (this.password === this.confirmPassword){
+        let id = this.alumnis.filter(alumni => alumni.user_id === this.userId);
+        let userData = {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: JSON.parse(localStorage.getItem('user')).email,
+          role: 'alumni',
+          phone_number: this.phone_number,
+          gender: this.gender,
+          alumni_id: id[0].id
+
+        }
+
+        axios.put('/users/'+ this.userId, userData).then((res)=>{
+          console.log(res.data);
+          // this.$router.push('myprofile');
+        })
+      }
+    }
+  },
+  mounted(){
+    axios.get('/alumnis').then((res)=>{
+      this.alumnis = res.data.data;
+      console.log(this.alumnis);
+      // this.$router.push('myprofile');
+    })
+  }
 };
 </script>
 

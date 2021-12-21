@@ -16,41 +16,19 @@
             <h1 class="text-center white--text mb-3">SIGN UP</h1>
 
             <v-row no-gutters>
-              <v-col cols="12" lg="6" md="6" sm="6" xs="12">
-                <v-text-field
-                  dense
-                  placeholder="First name"
-                  :rules="nameRules"
-                  type="text"
-                  outlined
-                  background-color="white"
-                  class="mr-1"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" lg="6" md="6" sm="6" xs="12">
-                <v-text-field
-                  :rules="nameRules"
-                  dense
-                  class="mr-1"
-                  placeholder="Last name"
-                  type="text"
-                  outlined
-                  background-color="white"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
               <v-col cols="12">
-                <v-select
+                <v-text-field
                   dense
                   class="mr-1"
                   background-color="white"
-                  placeholder="Batch"
-                  :items="items"
+                  placeholder="E-mail"
+                  :rules="emailRules"
                   outlined
-                ></v-select>
+                  v-model="email"
+                ></v-text-field>
               </v-col>
             </v-row>
+            
             <v-row no-gutters>
               <v-col cols="12">
                 <router-link
@@ -69,7 +47,7 @@
                   elevation="0"
                 >
                   
-                  <router-link to="/signup-two"><v-btn color="#FF9933" class="white--text">NEXT</v-btn></router-link>
+                <v-btn color="#FF9933" class="white--text" @click="verifyEmail">NEXT</v-btn>
                 </v-card>
               </v-col>
             </v-row>
@@ -97,13 +75,37 @@
 </template>
 
 <script>
+import axios from "./../../api/api.js"
+
 export default {
   data() {
     return {
-      nameRules: [(v) => !!v || "Name is required"],
-      items: ['2005', '2006', '2007', '2008', '2009', '2020', '2021'],
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+      ],
+      email: "",
+      userList: [],
     };
   },
+  methods:{
+    verifyEmail(){
+      let user = this.userList.filter(user=> user.email === this.email);
+      console.log(user);
+      if (user.length === 0){
+        console.log("snf");
+      }else{
+        localStorage.setItem('user', JSON.stringify(user[0]));
+
+        this.$router.push('signup-two');
+      }
+    }
+  },
+  mounted(){
+    axios.get('/users').then((res)=>{
+      this.userList = res.data;
+    })
+  }
 };
 </script>
 

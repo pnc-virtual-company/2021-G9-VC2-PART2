@@ -19,6 +19,7 @@
                 type="email"
                 outlined
                 background-color="white"
+                v-model="email"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -31,6 +32,7 @@
                 type="password"
                 outlined
                 background-color="white"
+                v-model="password"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -47,7 +49,7 @@
                 color="transparent"
                 elevation="0"
               >
-                <v-btn color="#FF9933" class="white--text">NEXT</v-btn>
+                <v-btn color="#FF9933" class="white--text" @click="isSignIn">NEXT</v-btn>
               </v-card>
             </v-col>
           </v-row>
@@ -68,6 +70,7 @@
 </template>
 
 <script>
+import axios from "./../../api/api.js"
 export default {
   data() {
     return {
@@ -79,8 +82,34 @@ export default {
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 8) || "Min length should be 8",
       ],
+
+      email: '',
+      password: '',
+      usersData: [],
+      user: {}
     };
   },
+  methods: {
+    isSignIn(){
+      console.log(this.email);
+      // this.usersData.filter(user => user.email === this.email && user.password === this.password);
+      let user = {
+        email: this.email,
+        password: this.password
+      }
+      axios.post('/signin', user).then((res)=>{
+        this.user = res.data;
+        localStorage.setItem('user', JSON.stringify(this.user));
+      }).catch((error)=> console.log(error))
+    }
+  },
+  mounted(){
+    // axios.get('/users').then((res)=>{
+    //   this.usersData = res.data;
+    //   console.log(this.usersData);
+
+    // })
+  }
 };
 </script>
 
