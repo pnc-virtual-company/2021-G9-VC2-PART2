@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Navagation from "./components/nav/Navagation.vue";
+import Navagation from "./components/nav/Navigation.vue";
 
 
 export default {
