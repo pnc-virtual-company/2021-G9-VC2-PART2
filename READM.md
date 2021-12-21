@@ -10,6 +10,8 @@
 - on .env file, update the database name :
   DB_DATABASE=tasks_db
 
+  
+
 - Launch composer install
 - Launch npm install
 - Launch php artisan migrate
