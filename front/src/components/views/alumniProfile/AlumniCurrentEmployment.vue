@@ -34,11 +34,44 @@
             max-width="500px"
             >
             <v-card>
-            <v-card-text>
-            <v-text-field label="File name"></v-text-field>
-
-            <small class="grey--text">* This doesn't actually save.</small>
-            </v-card-text>
+            <v-form>
+    <v-container>
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+        >
+          <v-text-field
+           dense
+            label="Outlined"
+            outlined
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+        >
+          <v-text-field
+           dense
+            label="Outlined"
+            outlined
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+          
+        >
+          <v-text-field
+           dense
+            label="Outlined"
+            outlined
+          ></v-text-field>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 
             <v-card-actions>
             <v-spacer></v-spacer>
