@@ -57,6 +57,7 @@ class UserController extends Controller
         $user->last_name = $request->last_name;
         $user->role = $request->role;
         $user->email = $request->email;
+        $user->password = bcrypt($request->password);
         $user->save();
 
         if ($request->role === 'alumni'){

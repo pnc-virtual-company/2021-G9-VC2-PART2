@@ -91,13 +91,13 @@ export default {
   methods:{
     verifyEmail(){
       let user = this.userList.filter(user=> user.email === this.email);
-      console.log(user);
       if (user.length === 0){
         console.log("snf");
       }else{
-        localStorage.setItem('user', JSON.stringify(user[0]));
-
-        this.$router.push('signup-two');
+        if (user[0].first_name === null && user[0].last_name === null){
+          localStorage.setItem('user', JSON.stringify(user[0]));
+          this.$router.push('signup-two');
+        }
       }
     }
   },

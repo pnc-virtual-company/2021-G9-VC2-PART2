@@ -72,6 +72,7 @@
 <script>
 import axios from "./../../api/api.js"
 export default {
+  emits:['signin'],
   data() {
     return {
       emailRules: [
@@ -91,24 +92,28 @@ export default {
   },
   methods: {
     isSignIn(){
-      console.log(this.email);
       // this.usersData.filter(user => user.email === this.email && user.password === this.password);
       let user = {
         email: this.email,
         password: this.password
       }
       axios.post('/signin', user).then((res)=>{
-        this.user = res.data;
-        localStorage.setItem('user', JSON.stringify(this.user));
+        this.user = res.data.user;
+        if(this.user.first_name !== null && this.user.last_name !== null){
+          if(this.user.role === 'admin'){
+            this.$router.push('/admin');       
+          }else if(this.user.role === 'alumni'){
+            this.$router.push('/alumni/profile');
+          }
+          this.$emit('signin', this.user);
+        }
+        
+        // localStorage.setItem('user', JSON.stringify(this.user));
       }).catch((error)=> console.log(error))
     }
   },
   mounted(){
-    // axios.get('/users').then((res)=>{
-    //   this.usersData = res.data;
-    //   console.log(this.usersData);
 
-    // })
   }
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <navagation></navagation>
+    <navagation v-if="activeUser" @sign-out="userSignOut"></navagation>
     <v-main>
-      <router-view/>
+      <router-view @signin="userSignin"/>
     </v-main>
   </v-app>
 </template>
@@ -16,5 +16,47 @@ export default {
   components: {
     Navagation
   },
+  data(){
+    return{
+        activeUser:null,
+    }
+  },
+  watch : {
+    activeUser(){
+      return this.activeUser !== null;
+    }
+  },
+  methods: {
+    userSignin(user){
+      this.activeUser = user;
+      localStorage.setItem('user',JSON.stringify(user));
+      console.log(this.activeUser);
+    },
+    userSignOut(){
+        this.activeUser = null;
+      }
+  },
+  mounted(){
+    if ((window.localStorage.getItem("user") !== null) && this.$route.path == "/signIn" ) {
+      this.activeUser = JSON.parse(localStorage.getItem("user"));
+
+    }
+    let user = JSON.parse(localStorage.getItem("user"));
+    if(user !== null){
+        this.activeUser = JSON.parse(localStorage.getItem("user"));
+
+    }
+    else{
+       this.activeUser = user;
+       this.$router.push('/signIn');
+
+    }
+    // window.onpopstate = () => {
+      // if ((window.localStorage.getItem("user") !== null) && this.$route.path == "/signIn" || this.$route.path == "/") {
+          // this.$router.push("/myEvent"); // redirect to myEvent, for example
+      // }
+      // console.log(event);
+    // };
+  }
 };
 </script>

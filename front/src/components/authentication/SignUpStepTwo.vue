@@ -185,6 +185,7 @@ export default {
         let userData = {
           first_name: this.first_name,
           last_name: this.last_name,
+          password: this.password,
           email: JSON.parse(localStorage.getItem('user')).email,
           role: 'alumni',
           phone_number: this.phone_number,
@@ -194,7 +195,9 @@ export default {
         }
 
         axios.put('/users/'+ this.userId, userData).then((res)=>{
-          console.log(res.data);
+          this.$emit('signin', res.data.user);
+          this.$router.push('/alumni/profile');
+          // console.log(res.data);
           // this.$router.push('myprofile');
         })
       }

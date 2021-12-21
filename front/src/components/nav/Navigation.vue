@@ -2,7 +2,7 @@
   <!-- <v-app app>  -->
   <v-app-bar class="" width="100%" height="70" app color="white">
     <v-img
-      src="https://www.passerellesnumeriques.org/wp-content/uploads/2019/03/PN-Cambodia-Alumni-Association.png"
+      src="./../../assets/PN-Cambodia-Alumni-Association.png"
       max-height="50"
       max-width="150"
     ></v-img>
@@ -25,7 +25,7 @@
         >Ero Officer</v-tab
       >
       <v-tab
-        :to="{ path: '/alumni_profile' }"
+        :to="{ path: '/alumni/profile' }"
         class="text-h6 blue--text"
         color="black"
         v-if="role === 'alumni'"
@@ -40,15 +40,66 @@
       >
     </v-tabs>
     <v-spacer></v-spacer>
-    <v-btn color="#22BBEA" class="white--text">Logout</v-btn>
+
+    <v-row justify="center">
+      <v-btn
+        color="#22BBEA"
+        width="20px"
+        dark
+        @click.stop="dialog = true"
+      >
+        Logout
+      </v-btn>
+
+      <v-dialog
+        v-model="dialog"
+        max-width="290"
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+            Are you want to logout your account?
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="orange"
+              text
+              @click="dialog = false"
+            >
+              Disagree
+            </v-btn>
+
+            <v-btn
+              color="#22BBEA"
+              text
+              @click="logoutAcout"
+            >
+              Agree
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app-bar>
 </template>
 <script>
 export default {
+  emits:['sign-out'],
   data() {
     return {
-      role: "admin",
+      dialog: false,
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
+  methods:{
+    logoutAcout(){
+      this.dialog = false
+      localStorage.clear();
+      this.$emit("sign-out");
+      this.$router.push('/signin');
+      localStorage.setItem('path', '/signin');
+    }
+  }
 };
 </script>
