@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Alumni;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
 {
     public function getUsers(){
-        return UserResource::collection(User::get());
+        return User::latest()->get();
     }
 
     public function getUser(Request $request, $id){
@@ -20,10 +22,11 @@ class UserController extends Controller
     public function createUser(Request $request)
     {
         $request->validate([
-        "first_name"=>"required|min:2|max:30",
-        "last_name"=>"required|min:2|max:30",
-        "password"=>"required|confirmed|min:8|max:16",
+        "first_name"=>"nullable",
+        "last_name"=>"nullable",
+        "password"=>"nullable",
         'email' => 'required|email|unique:users,email',
+        'role' => "required"
         ]);
         //move image to storage
         $user = new User();
@@ -33,6 +36,17 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->save();
+
+        if ($request->role === 'alumni'){
+            $alumni = new Alumni();
+            $alumni->phone_number = $request->phone_number;
+            $alumni->gender = $request->gender;
+            $alumni->batch = $request->batch;
+            $alumni->major = $request->major;
+            $alumni->user_id = $user->id;
+            $alumni->profile = 'default_profile.jpg';
+            $alumni->save();
+        }
         return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
 
@@ -41,8 +55,17 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
+        $user->role = $request->role;
         $user->email = $request->email;
         $user->save();
+
+        if ($request->role === 'alumni'){
+            $alumni = Alumni::findorfail($request->alumni_id);
+            $alumni->phone_number = $request->phone_number;
+            $alumni->gender = $request->gender;
+
+            $alumni->save();
+        }
         return response()->json(["message"=>"Post Updated","user"=>$user],201);
     }
 

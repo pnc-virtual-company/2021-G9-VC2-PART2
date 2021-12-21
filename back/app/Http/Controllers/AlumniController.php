@@ -27,19 +27,19 @@ class AlumniController extends Controller
     public function createAlumni(Request $request)
     {
         $request->validate([
-            'phone_number'=>'required',
-            'gender'=>'required',
-            'batch'=>'required',
-            'major'=>'required',
+            // 'phone_number'=>'required',
+            // 'gender'=>'required',
+            // 'batch'=>'required',
+            // 'major'=>'required',
             'profile' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
         ]);
         $request->file('profile')->store('public/profile');
         $alumni = new Alumni();
-        $alumni->phone_number = $request->phone_number;
-        $alumni->gender = $request->gender;
-        $alumni->batch = $request->batch;
-        $alumni->major = $request->major;
-        $alumni->user_id = $request->user_id;
+        // $alumni->phone_number = $request->phone_number;
+        // $alumni->gender = $request->gender;
+        // $alumni->batch = $request->batch;
+        // $alumni->major = $request->major;
+        // $alumni->user_id = $request->user_id;
         $alumni->profile = $request->file('profile')->hashName();
 
         $alumni->save();
