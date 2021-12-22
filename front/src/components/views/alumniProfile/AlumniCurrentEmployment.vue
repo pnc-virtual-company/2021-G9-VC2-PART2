@@ -28,50 +28,50 @@
                 </v-list-item>
             </v-list>
 
-            <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon>
-            <v-dialog
+            <!-- <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon> -->
+            <v-icon class="align-self-end" v-if="hover" @click="dialog = !dialog" >mdi-pen</v-icon>
+            <!-- <v-dialog
             v-model="dialog"
             max-width="500px"
             >
             <v-card>
             <v-form>
-    <v-container>
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-           dense
-            label="Outlined"
-            outlined
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-           dense
-            label="Outlined"
-            outlined
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-          
-        >
-          <v-text-field
-           dense
-            label="Outlined"
-            outlined
-          ></v-text-field>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+              <v-container>
+                <v-row no-gutters>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                    dense
+                      label="Company"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                    dense
+                      label="Position"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                    dense
+                      label="Years"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
 
             <v-card-actions>
             <v-spacer></v-spacer>
@@ -85,7 +85,7 @@
             </v-btn>
             </v-card-actions>
             </v-card>
-            </v-dialog>
+            </v-dialog> -->
         <!-- </v-btn> -->
         </v-card>
 </v-hover>
