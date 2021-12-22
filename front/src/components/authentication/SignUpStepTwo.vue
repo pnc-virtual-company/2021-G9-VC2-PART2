@@ -192,12 +192,10 @@ export default {
           alumni_id: id[0].id
 
         }
-
+        localStorage.setItem('user', JSON.stringify(userData));
         axios.put('/users/'+ this.userId, userData).then((res)=>{
           this.$emit('signin', res.data.user);
           this.$router.push('/alumni/profile');
-          // console.log(res.data);
-          // this.$router.push('myprofile');
         })
       }
     }
@@ -205,8 +203,6 @@ export default {
   mounted(){
     axios.get('/alumnis').then((res)=>{
       this.alumnis = res.data.data;
-      console.log(this.alumnis);
-      // this.$router.push('myprofile');
     })
   }
 };

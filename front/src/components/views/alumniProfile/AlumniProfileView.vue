@@ -114,6 +114,7 @@
     </v-card>
 </template>
 <script>
+// import axios from "./../../../api/api.js";
 import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue"
 export default ({
     components:{
@@ -123,6 +124,7 @@ export default ({
     return{
         profile: 'https://64.media.tumblr.com/daaaed4e9727956224b76102781efb09/09ed29dff71fda55-d0/s640x960/3181a0e5a8d4ced7e3a4e45fb497dd21467fe005.jpg',
         dialog:false,
+        alumni: {},
     }
 },
 methods:{
@@ -131,6 +133,10 @@ methods:{
         this.profile = URL.createObjectURL(image);
     }
 },
+mounted(){
+    
+    
+}
 })
 </script>
 

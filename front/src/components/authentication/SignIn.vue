@@ -87,7 +87,8 @@ export default {
       email: '',
       password: '',
       usersData: [],
-      user: {}
+      user: {},
+      alumni: []
     };
   },
   methods: {
@@ -103,6 +104,10 @@ export default {
           if(this.user.role === 'admin'){
             this.$router.push('/admin');       
           }else if(this.user.role === 'alumni'){
+            let alumni = this.alumni.filter(alumni => alumni.user_id === this.userId);
+            let user = JSON.parse(localStorage.getItem('user'));
+            
+            localStorage.setItem('user', JSON.stringify(user));
             this.$router.push('/alumni/profile');
           }
           this.$emit('signin', this.user);
@@ -113,7 +118,9 @@ export default {
     }
   },
   mounted(){
-
+    axios.get('/alumnis').then((res)=>{
+      this.alumni = res.data.data;
+    });
   }
 };
 </script>

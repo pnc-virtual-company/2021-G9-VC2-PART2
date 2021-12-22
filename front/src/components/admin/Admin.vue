@@ -227,6 +227,7 @@ export default {
         axios.post('/users', alumni).then((res)=>{
           console.log(res.data);
           this.items = [];
+          this.model = [];
         }).catch((error)=>{
           console.log(error);
         })
