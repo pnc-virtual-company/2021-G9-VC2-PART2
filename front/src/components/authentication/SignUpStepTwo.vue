@@ -159,7 +159,6 @@ export default {
       passwordRules: [
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 8) || "Password at leaste 8 characters",
-        (v) => v === this.confirmPassword || "Password must match",
 
       ],
       passwordConfirmRules: [
