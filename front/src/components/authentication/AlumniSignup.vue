@@ -94,15 +94,6 @@
               <v-radio label="Male" value="male"></v-radio>
               <v-radio label="Other" value="other"></v-radio>
             </v-radio-group>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <router-link
-                  class="purple--text text-decoration-underline"
-                  to="/"
-                  >Have an account yet?</router-link
-                >
-              </v-col>
-            </v-row>
             <v-row>
               <v-col cols="12">
                 <v-card
@@ -174,6 +165,21 @@ export default {
     checkbox() {
       this.isShowPassword = !this.isShowPassword
     },
+    password(){
+        if(this.confirmPassword !== this.password){
+            this.passwordConfirmRules = ["Password must match"]
+        }else{
+            this.passwordConfirmRules = []
+        }
+    },
+    confirmPassword(){
+        if(this.confirmPassword !== this.password){
+            this.passwordConfirmRules = ["Password must match"]
+        }else{
+            this.passwordConfirmRules = []
+        }
+    }
+
 
 
   },
@@ -189,12 +195,13 @@ export default {
           role: 'alumni',
           phone_number: this.phone_number,
           gender: this.gender,
-          alumni_id: id[0].id
+          alumni_id: id[0].id,
+          id: this.userId
 
         }
-        localStorage.setItem('user', JSON.stringify(userData));
-        axios.put('/users/'+ this.userId, userData).then((res)=>{
-          this.$emit('signin', res.data.user);
+        // localStorage.setItem('user', JSON.stringify(userData));
+        axios.put('/users/'+ this.userId, userData).then(()=>{
+          this.$emit('signin', userData);
           this.$router.push('/alumni/profile');
         })
       }

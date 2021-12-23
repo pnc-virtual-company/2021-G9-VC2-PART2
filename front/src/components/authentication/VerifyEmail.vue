@@ -13,32 +13,24 @@
       <v-row class="sub-container">
         <v-col cols="12" xs="12" sm="10" md="6" lg="6">
           <v-card color="transparent" elevation="0" class="pa-5">
-            <h1 class="text-center white--text mb-3">SIGN UP</h1>
+            <h1 class="text-center white--text">SIGN IN</h1>
 
-            <v-row no-gutters>
+            <v-row no-gutters class="mt-6">
               <v-col cols="12">
                 <v-text-field
                   dense
-                  class="mr-1"
-                  background-color="white"
                   placeholder="E-mail"
                   :rules="emailRules"
+                  type="email"
                   outlined
+                  background-color="white"
                   v-model="email"
                 ></v-text-field>
+              
+
               </v-col>
             </v-row>
-            
-            <v-row no-gutters>
-              <v-col cols="12">
-                <router-link
-                  class="purple--text text-decoration-underline"
-                  to="/"
-                  >Have an account yet?</router-link
-                >
-              </v-col>
-            </v-row>
-            <v-row>
+            <v-row class="ma-0 pa-0">
               <v-col cols="12">
                 <v-card
                   dense
@@ -46,8 +38,9 @@
                   color="transparent"
                   elevation="0"
                 >
-                  
-                <v-btn color="#FF9933" class="white--text" @click="verifyEmail">NEXT</v-btn>
+                  <v-btn color="#FF9933" class="white--text" @click="verifyEmail"
+                    >NEXT</v-btn
+                  >
                 </v-card>
               </v-col>
             </v-row>
@@ -75,37 +68,41 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js"
-
+import axios from "./../../api/api.js";
 export default {
+  
   data() {
     return {
+      email: null,
       emailRules: [
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+/.test(v) || "E-mail must be valid",
       ],
-      email: "",
       userList: [],
+
     };
   },
-  methods:{
-    verifyEmail(){
+  methods: {
+    verifyEmail() {
       let user = this.userList.filter(user=> user.email === this.email);
       if (user.length === 0){
-        console.log("snf");
+        this.emailRules = ['Your Email does not exist'];
       }else{
         if (user[0].first_name === null && user[0].last_name === null){
-          localStorage.setItem('user', JSON.stringify(user[0]));
           this.$router.push('signup-two');
+        }else{
+          this.$router.push('verify-password');
         }
+        localStorage.setItem('user', JSON.stringify(user[0]));
+
       }
-    }
+    },
   },
-  mounted(){
+  mounted() {
     axios.get('/users').then((res)=>{
       this.userList = res.data;
     })
-  }
+  },
 };
 </script>
 

@@ -5,6 +5,7 @@
       src="./../../assets/PN-Cambodia-Alumni-Association.png"
       max-height="50"
       max-width="150"
+      class="ml-8"
     ></v-img>
     <v-spacer></v-spacer>
     <v-tabs
@@ -16,14 +17,13 @@
         :to="{ path: '/admin' }"
         class="text-h6 blue--text"
         v-if="role === 'admin'"
-        >Administrator</v-tab
+        >Manager Users</v-tab
       >
       <v-tab
         :to="{ path: '/ero_officers' }"
         class="text-h6 blue--text"
-        v-if="role === 'ero' || role === 'admin'"
-        >Ero Officer</v-tab
-      >
+        v-if="role === 'ero'"
+        >Ero Officer</v-tab>
       <v-tab
         :to="{ path: '/alumni/profile' }"
         class="text-h6 blue--text"
@@ -35,9 +35,14 @@
         :to="{ path: '/alumni_users' }"
         class="text-h6 blue--text"
         color="black"
+        v-if="role === 'admin'"
+        >Explore Alumnis</v-tab>
+      <v-tab
+        :to="{ path: '/alumni_users' }"
+        class="text-h6 blue--text"
+        color="black"
         v-if="role === 'admin' || role === 'ero'"
-        >Alumnis</v-tab
-      >
+        >Events</v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -47,6 +52,7 @@
         width="20px"
         dark
         @click.stop="dialog = true"
+        class="mr-6 "
       >
         Logout
       </v-btn>
@@ -67,7 +73,7 @@
               text
               @click="dialog = false"
             >
-              Disagree
+              No
             </v-btn>
 
             <v-btn
@@ -75,7 +81,7 @@
               text
               @click="logoutAcout"
             >
-              Agree
+              Yes
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -97,8 +103,7 @@ export default {
       this.dialog = false
       localStorage.clear();
       this.$emit("sign-out");
-      this.$router.push('/signin');
-      localStorage.setItem('path', '/signin');
+      this.$router.push('/verify-email');
     }
   }
 };

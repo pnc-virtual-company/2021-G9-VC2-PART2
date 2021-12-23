@@ -35,36 +35,36 @@
                 >    
                     <v-list-item-content class="black--text">
                         <v-list-item-title class="text-h4 text-color">
-                            Somphors Ngoun
+                            {{ alumni.first_name }} {{ alumni.last_name }}
                         </v-list-item-title>
                         <v-list-item-title class="text-h6 mt-4 d-flex">
                             Generation:
                             <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                                Batch 2021
+                                {{ alumni.batch }}
                             </v-list-item-title>
                         </v-list-item-title>
                         <v-list-item-title class="text-h6 mt-4 d-flex">
                             Major:
                             <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                                WEP
+                                {{ alumni.major }}
                             </v-list-item-title>
                         </v-list-item-title>
                         <v-list-item-title class="text-h6 mt-4 d-flex">
                             Gender:
                             <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                                Female
+                                {{ alumni.gender }}
                             </v-list-item-title>
                         </v-list-item-title>
                         <v-list-item-title class="text-h6 mt-4 d-flex">
                             Tel:
                             <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                                097 49 11 250
+                                {{ alumni.phone_number }}
                             </v-list-item-title>
                         </v-list-item-title>
                         <v-list-item-title class="text-h6 mt-4 d-flex">
                             Email:
                             <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                                somphorsngoun@gmail.com
+                                {{ alumni.email }}
                             </v-list-item-title>
                         </v-list-item-title>
                     </v-list-item-content>
@@ -106,8 +106,16 @@
         
         <v-container fluid class="mb-9">
             <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
-            <h2 class="title mt-4 text-h5 text-color">Current Employment</h2>
-            <alumni-current-employment/>
+            <div class="d-flex align-content-center">
+                <h2 class="title mt-4 text-h5 text-color">Current Employment</h2>
+                <v-spacer></v-spacer>
+                <v-btn class="mt-6 mr-10" color="#FF9933">
+                    <v-icon>mdi-home-modern</v-icon>
+                    
+                    <v-list-item-title>ADD</v-list-item-title>
+                </v-btn>
+            </div>
+            <alumni-current-employment :current-empolyment="currentEmployments"/>
         </v-container>
         </v-row>
         <!-- </v-img> -->
@@ -122,9 +130,10 @@ export default ({
     },
     data() {
     return{
-        profile: 'https://64.media.tumblr.com/daaaed4e9727956224b76102781efb09/09ed29dff71fda55-d0/s640x960/3181a0e5a8d4ced7e3a4e45fb497dd21467fe005.jpg',
+        profile: 'https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png',
         dialog:false,
         alumni: {},
+        currentEmployments: [],
     }
 },
 methods:{
@@ -134,8 +143,27 @@ methods:{
     }
 },
 mounted(){
-    
-    
+    this.alumni = JSON.parse(localStorage.getItem('user'));
+    this.alumni = {
+          first_name: this.alumni.first_name,
+          last_name: this.alumni.last_name,
+          password: this.alumni.password,
+          email: this.alumni.email,
+          role: 'alumni',
+          phone_number: this.alumni.phone_number,
+          gender: this.alumni.gender,
+          alumni_id: this.alumni_id,
+          id: this.alumni.id,
+          batch: null,
+          major: null,
+
+        }
+    let emplotment = {
+        companyName: "PNC",
+        position: "Full-Stack Developer",
+        year: "2019-Present"
+    }
+    this.currentEmployments.push(emplotment);
 }
 })
 </script>

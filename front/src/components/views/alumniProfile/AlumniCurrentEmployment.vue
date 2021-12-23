@@ -5,25 +5,27 @@
         outlined
         tile
         width="93%"
+        v-for="employment of currentEmpolyment"
+        :key="employment.id"
         >
             <v-list class="d-flex" width="95%">
-                <v-img src="http://www.topjobcambodia.com/photos/social/20191010-182540-mango_byte_technology_co_ltd.png" width="90"></v-img>
+                <v-img src="https://www.zerobhs.com/public/uploads/company/all-other-images/logo/default-logo.png" width="90"></v-img>
                 <v-list-item two-line>
                     <v-list-item-content>
                         <v-list-item-title>Company</v-list-item-title>
-                        <v-list-item-subtitle class="mt-2">Mango Byte</v-list-item-subtitle>
+                        <v-list-item-subtitle class="mt-2">{{ employment.companyName }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item two-line>
                     <v-list-item-content>
                         <v-list-item-title>Position</v-list-item-title>
-                        <v-list-item-subtitle class="mt-2">Web Developer</v-list-item-subtitle>
+                        <v-list-item-subtitle class="mt-2">{{ employment.position }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item two-line>
                     <v-list-item-content>
                         <v-list-item-title>Years</v-list-item-title>
-                        <v-list-item-subtitle class="mt-2">2010-present</v-list-item-subtitle>
+                        <v-list-item-subtitle class="mt-2">{{ employment.year }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -59,11 +61,8 @@
 </template>
 
 <script>
-// import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue"
 export default ({
-    components:{
-        // AlumniCurrentEmployment
-    },
+    props:['currentEmpolyment'],
     data() {
     return{
         dialog:false,
