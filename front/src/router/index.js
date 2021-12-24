@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AlumniProfileView from "./../components/ui/alumniProfile/AlumniProfileView.vue";
+import AlumniProfileView from "./../components/views/alumniProfile/AlumniProfileView.vue";
 
 Vue.use(VueRouter)
 
