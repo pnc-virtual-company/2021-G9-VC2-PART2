@@ -161,7 +161,7 @@
     </v-container>
 </template>
 <script>
-import axios from './../../api/api.js';
+import axios from './../../../api/api.js';
 export default {
   data: () => ({
     alumnisInvite: [],
