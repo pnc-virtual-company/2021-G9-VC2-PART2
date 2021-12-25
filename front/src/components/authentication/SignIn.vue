@@ -104,7 +104,7 @@ export default {
           if(this.user.role === 'admin'){
             this.$router.push('/admin');       
           }else if(this.user.role === 'alumni'){
-            let alumni = this.alumni.filter(alumni => alumni.user_id === this.userId);
+            // let alumni = this.alumni.filter(alumni => alumni.user_id === this.userId);
             let user = JSON.parse(localStorage.getItem('user'));
             
             localStorage.setItem('user', JSON.stringify(user));
