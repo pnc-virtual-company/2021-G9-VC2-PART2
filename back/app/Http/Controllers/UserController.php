@@ -10,7 +10,12 @@ use App\Http\Resources\UserResource;
 class UserController extends Controller
 {
     public function getUsers(){
-        return UserResource::collection(User::get());
+
+        return User::with('alumni')->get();
+        // ->where([['event__joins.event_id','=',$eventId],['event__joins.role','=','member']])
+        // ->get(['users.*','alumnis.*']);
+        // return $event_join_members;
+        // return UserResource::collection(User::get());
     }
 
     public function getUser(Request $request, $id){
