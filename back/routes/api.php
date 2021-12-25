@@ -13,12 +13,13 @@ use App\Http\Controllers\WorkExperienceController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::post('signin',[UserController::class, "signIn"]);
+Route::post('signout',[UserController::class, "signOut"]);
 
 Route::get('users',[UserController::class,'getUsers']);
 Route::post('users',[UserController::class,'createUser']);
 Route::put('users/{user_id}',[UserController::class,'updateUser']);
 Route::delete('users/{user_id}',[UserController::class,'deleteUser']);
-
 
 Route::get('alumnis',[AlumniController::class,'getAllAlumni']);
 Route::post('alumnis',[AlumniController::class,'createAlumni']);
