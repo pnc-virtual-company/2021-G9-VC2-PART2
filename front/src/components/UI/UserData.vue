@@ -1,0 +1,218 @@
+<template>
+  <v-data-table
+    :search="search"
+    :headers="headers"
+    :items="desserts"
+    sort-by="calories"
+    class="elevation-15"
+  >
+    <template v-slot:top>
+      <v-toolbar class="pr-0 pl-0 pt-0 pb-0 ma-0" dark color="#22BBEA">
+        <v-card width="100%" elevation="0" color="transparent">
+          <v-card-title class="d-flex justify-between px-0">
+            <h2 v-if="isAlumni">ERO</h2>
+            <h2 v-else>ALUMNI</h2>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+        </v-card>
+        <v-dialog v-model="dialog" max-width="500px">
+          <v-card>
+            <v-form class="pa-2">
+              <v-card-title class="d-flex justify-center">
+                <span class="text-h5">UPDATE DATA</span>
+              </v-card-title>
+              <v-divider
+                color="#FF9933"
+                class="mx-auto mb-4"
+                width="95%"
+              ></v-divider>
+
+              <v-container>
+                <v-row >
+                  <v-col cols="12" sm="12" md="6" class=" mb-0 pb-0">
+                    <v-text-field dense label="First name" v-model="editedItem.first_name" outlined></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12" md="6" class=" mb-0 pb-0">
+                    <v-text-field dense label="Last name" v-model="editedItem.last_name" outlined></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12" md="12" class="pt-0 mb-0 pb-0">
+                    <v-text-field dense label="E-mail" v-model="editedItem.email" outlined></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12" md="12" class="pt-0 mb-0 pb-0">
+                    <v-text-field dense label="Password" type="password" outlined></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+            <v-card-actions class="pt-0 mt-0">
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
+              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete this item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >Cancel</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.actions="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)" color="#22BBEA"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)" color="#FF9933"> mdi-delete </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+    </template>
+  </v-data-table>
+</template>
+<script>
+export default {
+  props: ["isAlumni"],
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    search: "",
+    headers: [
+      {
+        text: "First name",
+        align: "start",
+        sortable: false,
+        value: "first_name",
+      },
+      { text: "Last name", value: "last_name" },
+      { text: "E-mail", value: "email" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    desserts: [],
+    editedIndex: -1,
+    editedItem: {
+      first_name: "",
+      last_name: "",
+      email: "",
+    },
+    defaultItem: {
+      first_name: "",
+      last_name: "",
+      email: "",
+    },
+  }),
+  mounted() {
+  },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.desserts = [
+        {
+          first_name: "Vuthy",
+          last_name: "YIB",
+          email: "vuthy@gmail.com",
+        },
+        {
+          first_name: "Somphors",
+          last_name: "NGOUN",
+          email: "somphors@gmail.com",
+        },
+        {
+          first_name: "Pros",
+          last_name: "NOB",
+          email: "pros@gmail.com",
+        },
+        {
+          first_name: "Sinet",
+          last_name: "SEN",
+          email: "sinet@gmail.com",
+        },
+        {
+          first_name: "Sophanna",
+          last_name: "CHHORN",
+          email: "sophanna@gmail.com",
+        },
+      ];
+    },
+
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        this.desserts.push(this.editedItem);
+      }
+      this.close();
+    },
+  },
+};
+</script>
+<style scoped>
+
+</style>

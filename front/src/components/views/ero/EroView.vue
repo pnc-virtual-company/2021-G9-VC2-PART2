@@ -1,3 +1,3 @@
 <template>
-    <h1>View</h1>
+    <h1>ERO VIEW</h1>
 </template>
