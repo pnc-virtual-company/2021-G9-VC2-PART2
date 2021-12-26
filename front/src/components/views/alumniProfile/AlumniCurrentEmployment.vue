@@ -34,13 +34,10 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
-      <!-- <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon> -->
       <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon>
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
           <v-form class="pt-5 px-5">
-            <!-- <h2 class="text-center blue--text">Update Employment</h2> -->
             <v-card-title class="d-flex justify-center my-0 py-0">
               <span class="text-h5 text-color">UPDATE EMPLOYMENT</span>
             </v-card-title>
@@ -90,7 +87,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!-- </v-btn> -->
     </v-card>
   </v-hover>
 </template>
