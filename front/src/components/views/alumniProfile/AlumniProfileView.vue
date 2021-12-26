@@ -248,7 +248,7 @@ export default {
 .icon {
   position: absolute;
   top: 20%;
-  left: 26%;
+  left: 23%;
   height: 33px;
 }
 .header{

@@ -43,13 +43,6 @@
         color="black"
         v-if="alumni.role === 'admin'"
         >Explore Alumnis</v-tab>
-      <v-tab
-        :to="{ path: '/alumni_users' }"
-        class="text-h6 blue--text"
-        color="black"
-        v-if="alumni.role === 'admin' || alumni.role === 'ero'"
-        >Events</v-tab>
-    </v-tabs>
     <v-spacer></v-spacer>
 
     <v-row justify="center">
