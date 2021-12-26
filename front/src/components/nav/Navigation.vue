@@ -42,7 +42,10 @@
         class="text-h6 blue--text"
         color="black"
         v-if="alumni.role === 'admin'"
-        >Explore Alumnis</v-tab>
+        >
+        Explore Alumnis
+      </v-tab>
+    </v-tabs>
     <v-spacer></v-spacer>
 
     <v-row justify="center">

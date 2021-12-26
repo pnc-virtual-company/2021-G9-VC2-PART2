@@ -126,11 +126,9 @@
                       color="primary"
                       @click="
                         checkPassword = true;
-                        dialog = false;
-                      "
+                        dialog = false;"
                     >
-                      <span>Submit</span>
-                      <v-icon right>mdi-account-edit</v-icon>
+                      <span>Update</span>
                     </v-btn>
                     <v-dialog v-model="checkPassword" max-width="500px">
                       <v-card class="rounded-lg">
