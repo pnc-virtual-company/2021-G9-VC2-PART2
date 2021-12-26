@@ -6,8 +6,6 @@ import VerifyEmail from '../components/views/login/VerifyEmail.vue'
 import VerifyPassword from '../components/views/login/VerifyPassword.vue'
 import AlumniSignup from '../components/views/login/AlumniSignup.vue'
 import AlumniProfileView from '../components/views/alumni/AlumniProfileView.vue'
-
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,10 +13,10 @@ const routes = [
     { path: "/ero_officers", component: EroOfficer },
     { path: "/alumni/profile/:name", component: AlumniProfileView },
     { path: "/alumni_users", component: Admin },
-    { path: "/verify-email", component: VerifyEmail },
-    { path: "/verify-password", component: VerifyPassword },
-    { path: "/alumni-signup", component: AlumniSignup },
-    { path: "/", redirect: "/verify-email" },
+    { path: "/verify_email", component: VerifyEmail },
+    { path: "/verify_password", component: VerifyPassword },
+    { path: "/alumni_signup", component: AlumniSignup },
+    { path: "/", redirect: "/verify_email" },
   
 ]
 

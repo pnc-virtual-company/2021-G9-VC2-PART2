@@ -14,7 +14,7 @@
       <v-row>
         <v-dialog v-model="dialog" persistent max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="#22BBEA" dark v-bind="attrs" v-on="on">
+            <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
               Add ero officer
             </v-btn>
           </template>
@@ -62,7 +62,7 @@
                       :type="isShowPassword ? 'text' : 'password'"
                       dense
                       label="Password"
-                      v-model = "password"
+                      v-model="password"
                       :rules="passwordRules"
                       outlined
                     ></v-text-field>
@@ -72,7 +72,7 @@
                       :type="isShowPassword ? 'text' : 'password'"
                       dense
                       label="Confirm password"
-                      v-model = "confirmPassword"
+                      v-model="confirmPassword"
                       :rules="passwordConfirmRules"
                       outlined
                     ></v-text-field>
@@ -114,11 +114,10 @@ export default {
       (v) => (v && v.length >= 8) || "Password at leaste 8 characters",
     ],
     passwordConfirmRules: [
-        (v) => !!v || "Confirm password is required",
-        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
-      ],
-    
-    
+      (v) => !!v || "Confirm password is required",
+      (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
+    ],
+
     nameRules: [(v) => !!v || "Name is required"],
     emailRules: [
       (v) => !!v || "E-mail is required",
@@ -143,20 +142,20 @@ export default {
     checkbox() {
       this.isShowPassword = !this.isShowPassword;
     },
-    password(){
-        if(this.confirmPassword !== this.password){
-            this.passwordConfirmRules = ["Password must match"]
-        }else{
-            this.passwordConfirmRules = []
-        }
+    password() {
+      if (this.confirmPassword !== this.password) {
+        this.passwordConfirmRules = ["Password must match"];
+      } else {
+        this.passwordConfirmRules = [];
+      }
     },
-    confirmPassword(){
-        if(this.confirmPassword !== this.password){
-            this.passwordConfirmRules = ["Password must match"]
-        }else{
-            this.passwordConfirmRules = []
-        }
-    }
+    confirmPassword() {
+      if (this.confirmPassword !== this.password) {
+        this.passwordConfirmRules = ["Password must match"];
+      } else {
+        this.passwordConfirmRules = [];
+      }
+    },
   },
 };
 </script>

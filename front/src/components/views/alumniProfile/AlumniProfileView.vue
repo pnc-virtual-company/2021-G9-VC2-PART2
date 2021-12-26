@@ -59,22 +59,114 @@
               >mdi-pen</v-icon
             >
             <v-dialog v-model="dialog" max-width="500px">
-              <v-card>
+              <v-card class="rounded-lg">
+                <v-card-title class="justify-center">
+                  <span class="text-h5">User Profile</span>
+                </v-card-title>
                 <v-card-text>
-                  <v-text-field label="File name"></v-text-field>
+                  <v-divider
+                    color="#FF9933"
+                    class="mx-auto mt-3"
+                    width="98%"
+                  ></v-divider>
+                  <v-row class="mt-4 pb-0" dense>
+                    <v-col cols="6" class="pb-0">
+                      <v-text-field
+                        label="First Name"
+                        placeholder="First Name"
+                        outlined
+                        dense
+                        width="100px"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        label="Last Name"
+                        placeholder="Last Name"
+                        outlined
+                        dense
+                        width="100px"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row class="mt-0 pt-0" dense>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Phone Number"
+                        placeholder="Phone Number"
+                        outlined
+                        dense
+                        width="100px"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                  <small class="grey--text"
-                    >* This doesn't actually save.</small
-                  >
+                  <v-text-field
+                    label="Email"
+                    placeholder="Email"
+                    outlined
+                    dense
+                    width="100px"
+                  ></v-text-field>
+
+                  <v-select
+                    label="Major"
+                    dense
+                    outlined
+                    :items="major"
+                  ></v-select>
+                  <v-radio-group row class="mt-0 pt-0">
+                    <v-radio label="Female" value="radio-1"></v-radio>
+                    <v-radio label="Male" value="radio-2"></v-radio>
+                  </v-radio-group>
+                  <v-card-actions class="justify-end">
+                    <v-btn
+                      color="primary"
+                      @click="
+                        checkPassword = true;
+                        dialog = false;
+                      "
+                    >
+                      <span>Submit</span>
+                      <v-icon right>mdi-account-edit</v-icon>
+                    </v-btn>
+                    <v-dialog v-model="checkPassword" max-width="500px">
+                      <v-card class="rounded-lg">
+                        <v-card-title class="justify-center">
+                          <span class="text-h5">Verify you password</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-divider
+                            color="#FF9933"
+                            class="mx-auto mt-3"
+                            width="98%"
+                          ></v-divider>
+
+                          <v-row class="mt-6 pt-0" dense>
+                            <v-col cols="12">
+                              <v-text-field
+                                label="Password"
+                                placeholder="Password"
+                                outlined
+                                dense
+                                width="100px"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+
+                          <v-card-actions class="justify-end">
+                            <v-btn
+                              color="#22BBEA"
+                              @click="checkPassword = false"
+                            >
+                              <span class="white--text">Confirm</span>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card-text>
+                      </v-card>
+                    </v-dialog>
+                  </v-card-actions>
                 </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn text color="primary" @click="dialog = false">
-                    Submit
-                  </v-btn>
-                </v-card-actions>
               </v-card>
             </v-dialog>
           </v-col>
@@ -100,6 +192,7 @@
 <script>
 // import axios from "./../../../api/api.js";
 import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
+
 export default {
   components: {
     AlumniCurrentEmployment,
@@ -111,6 +204,8 @@ export default {
       dialog: false,
       alumni: {},
       currentEmployments: [],
+      major: ["WEB", "SNA"],
+      checkPassword: false,
     };
   },
   methods: {

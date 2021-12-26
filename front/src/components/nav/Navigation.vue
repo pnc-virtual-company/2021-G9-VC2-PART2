@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-app app>  -->
   <v-app-bar class="" width="100%" height="70" app color="white">
     <v-img
       src="./../../assets/PN-Cambodia-Alumni-Association.png"
@@ -23,7 +22,8 @@
         :to="{ path: '/ero_officers' }"
         class="text-h6 blue--text"
         v-if="role === 'ero'"
-        >Ero Officer</v-tab>
+        >Ero Officer</v-tab
+      >
       <v-tab
         :to="{ path: '/alumni/profile' }"
         class="text-h6 blue--text"
@@ -36,13 +36,15 @@
         class="text-h6 blue--text"
         color="black"
         v-if="role === 'admin'"
-        >Explore Alumnis</v-tab>
+        >Explore Alumnis</v-tab
+      >
       <v-tab
         :to="{ path: '/alumni_users' }"
         class="text-h6 blue--text"
         color="black"
         v-if="role === 'admin' || role === 'ero'"
-        >Events</v-tab>
+        >Events</v-tab
+      >
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -57,10 +59,7 @@
         Logout
       </v-btn>
 
-      <v-dialog
-        v-model="dialog"
-        max-width="290"
-      >
+      <v-dialog v-model="dialog" max-width="290">
         <v-card>
           <v-card-title class="text-h5">
             Are you sure to logout your account?
@@ -68,21 +67,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn
-              color="orange"
-              text
-              @click="dialog = false"
-            >
-              No
-            </v-btn>
+            <v-btn color="orange" text @click="dialog = false"> No </v-btn>
 
-            <v-btn
-              color="#22BBEA"
-              text
-              @click="logoutAcout"
-            >
-              Yes
-            </v-btn>
+            <v-btn color="#22BBEA" text @click="logoutAcout"> Yes </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -91,20 +78,20 @@
 </template>
 <script>
 export default {
-  emits:['sign-out'],
+  emits: ["sign-out"],
   data() {
     return {
       dialog: false,
-      role: JSON.parse(localStorage.getItem('user')).role,
+      role: JSON.parse(localStorage.getItem("user")).role,
     };
   },
-  methods:{
-    logoutAcout(){
-      this.dialog = false
+  methods: {
+    logoutAcout() {
+      this.dialog = false;
       localStorage.clear();
       this.$emit("sign-out");
-      this.$router.push('/verify-email').catch(()=>{});
-    }
-  }
+      this.$router.push("/verify_email").catch(() => {});
+    },
+  },
 };
 </script>

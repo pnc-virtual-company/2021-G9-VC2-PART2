@@ -14,7 +14,7 @@
       <v-row>
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="#22BBEA" dark v-bind="attrs" v-on="on">
+            <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
               invite alumni
             </v-btn>
           </template>
