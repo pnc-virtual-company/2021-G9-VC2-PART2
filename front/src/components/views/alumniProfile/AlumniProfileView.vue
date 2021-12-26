@@ -72,35 +72,114 @@
                 </v-list-item>
                 <!-- <v-divider class="mr-6"></v-divider> -->
                 <v-icon class="align-self-end mr-16 mb-3" v-if="hover" @click="dialog = !dialog" >mdi-pen</v-icon>
-                <v-dialog
-                    v-model="dialog"
-                    max-width="500px"
-                    >
-                    <v-card>
-                    <v-card-text>
-                    <v-text-field label="File name"></v-text-field>
+                    <v-dialog v-model="dialog" max-width="500px">
+                        <v-card class="rounded-lg">
+                            <v-card-title class="justify-center">
+                                <span class="text-h5 text-color">USER PROFILE</span>
+                            </v-card-title>
+                            <v-card-text>
+                            <v-divider
+                            color="#FF9933"
+                            class="mx-auto mt-3"
+                            width="98%"
+                            ></v-divider>
+                            <v-row class="mt-4 pb-0" dense>
+                                <v-col cols="6" class="pb-0">
+                                    <v-text-field
+                                    label="First Name"
+                                    placeholder="First Name"
+                                    outlined
+                                    dense
+                                    width="100px"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-text-field
+                                    label="Last Name"
+                                    placeholder="Last Name"
+                                    outlined
+                                    dense
+                                    width="100px"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row class="mt-0 pt-0" dense>
+                                <v-col cols="3">
+                                    <v-select label="Code" dense outlined :items="items">
+                                    </v-select>
+                                    </v-col>
+                                    <v-col cols="9">
+                                    <v-text-field
+                                    label="Phone Number"
+                                    placeholder="Phone Number"
+                                    outlined
+                                    dense
+                                    width="100px"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                                <v-text-field
+                                label="Email"
+                                placeholder="Email"
+                                outlined
+                                dense
+                                width="100px"
+                                ></v-text-field>
+                                <v-select
+                                label="Major"
+                                dense
+                                outlined
+                                :items="major"
+                                ></v-select>
+                                    <v-radio-group row class="my-0 py-0 ">
+                                        <v-radio label="Female" value="radio-1"></v-radio>
+                                        <v-radio label="Male" value="radio-2"></v-radio>
+                                    </v-radio-group>
+                                <v-card-actions class="justify-end">
 
-                    <small class="grey--text">* This doesn't actually save.</small>
-                    </v-card-text>
+                                    <v-btn color="#22BBEA" @click="checkPassword = true; dialog = false" >
+                                        <span class="white--text">Submit</span>
+                                        <v-icon right class="white--text">mdi-account-edit</v-icon>
+                                    </v-btn>
+                                    <v-dialog v-model="checkPassword" max-width="500px">
+                                        <v-card class="rounded-lg">
+                                            <v-card-title class="justify-center">
+                                                <span class="text-h5 text-color">VERIFY YOUR PASSWORD</span>
+                                            </v-card-title>
+                                            <v-card-text>
+                                            <v-divider
+                                            color="#FF9933"
+                                            class="mx-auto mt-3"
+                                            width="98%"
+                                            ></v-divider>
 
-                    <v-card-actions>
-                    <v-spacer></v-spacer>
+                                                <v-row class="mt-6 pt-0" dense>
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                            label="Password"
+                                                            placeholder="Password"
+                                                            outlined
+                                                            dense
+                                                            width="100px"
+                                                            >                            
+                                                        </v-text-field>
+                                                    </v-col>
+                                                </v-row>
 
-                    <v-btn
-                    text
-                    color="primary"
-                    @click="dialog = false"
-                    >
-                    Submit
-                    </v-btn>
-                    </v-card-actions>
-                    </v-card>
-                </v-dialog>
+                                                <v-card-actions class="justify-end">
+                                                    <v-btn color="#22BBEA" @click="checkPassword = false" >
+                                                        <span class="white--text">Confirm</span>
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
+                                </v-card-actions>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                 </v-col>
             </v-hover>
-            <!-- <v-btn color="" class=""> -->
-                
-            <!-- </v-btn> -->
 
             </v-col>
         
