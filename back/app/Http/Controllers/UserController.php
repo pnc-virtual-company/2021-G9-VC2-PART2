@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function getUsers(){
-        return User::latest()->get();
+
+        return User::with('alumni')->get();
     }
 
     public function getUser(Request $request, $id){
