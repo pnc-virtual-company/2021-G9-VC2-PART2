@@ -17,6 +17,7 @@ Route::post('signin',[UserController::class, "signIn"]);
 Route::post('signout',[UserController::class, "signOut"]);
 
 Route::get('users',[UserController::class,'getUsers']);
+Route::get('users/{user_id}',[UserController::class,'getUser']);
 Route::post('users',[UserController::class,'createUser']);
 Route::put('users/{user_id}',[UserController::class,'updateUser']);
 Route::delete('users/{user_id}',[UserController::class,'deleteUser']);

@@ -5,41 +5,42 @@
       outlined
       tile
       width="93%"
-      v-for="employment of currentEmpolyment"
-      :key="employment.id"
     >
-      <v-list class="d-flex" width="95%">
+      <v-list class="d-flex" width="92%">
         <v-img
-          src="https://www.zerobhs.com/public/uploads/company/all-other-images/logo/default-logo.png"
+          src="http://www.topjobcambodia.com/photos/social/20191010-182540-mango_byte_technology_co_ltd.png"
           width="90"
         ></v-img>
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Company</v-list-item-title>
-            <v-list-item-subtitle class="mt-2">{{
-              employment.companyName
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="mt-2">Mango Byte</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Position</v-list-item-title>
-            <v-list-item-subtitle class="mt-2">{{
-              employment.position
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="mt-2"
+              >Web Developer</v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Years</v-list-item-title>
-            <v-list-item-subtitle class="mt-2">{{
-              employment.year
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="mt-2"
+              >2010-present</v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
 
-      <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon>
+      <v-icon
+        v-if="hover"
+        @click="dialog = !dialog"
+        class="edit pa-2 mr-3 white rounded-circle align-center elevation-6"
+        >mdi-pencil</v-icon
+      >
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
           <v-card-text>
@@ -50,7 +51,6 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-
             <v-btn text color="primary" @click="dialog = false"> Submit </v-btn>
           </v-card-actions>
         </v-card>
@@ -62,7 +62,6 @@
 
 <script>
 export default {
-  props: ["currentEmpolyment"],
   data() {
     return {
       dialog: false,
@@ -71,3 +70,10 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+.edit {
+  height: 40px;
+  margin-top: 40px;
+}
+</style>

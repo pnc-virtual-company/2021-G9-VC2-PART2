@@ -29,6 +29,7 @@ export default {
     }
   },
   methods: {
+
     userSignin(user){
       this.activeUser = user;
       localStorage.setItem('user',JSON.stringify(user));

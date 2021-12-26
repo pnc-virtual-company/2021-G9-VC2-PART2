@@ -1,64 +1,64 @@
 <template>
-  <v-card class="mx-auto pa-1" max-width="1004" tile>
-    <v-row align="end">
-      <v-col align-self="start" cols="12" class="d-flex justify-space-between">
-        <v-avatar class="profile mt-10 ml-10" size="250" tile>
-          <v-img :src="profile"></v-img>
-          <div class="align-self-end camera">
-            <label for="change"
-              ><v-icon class="mdi-36px" color="#E3F2FD"
-                >mdi-camera-party-mode</v-icon
-              ></label
-            >
-            <input type="file" id="change" hidden @change="selectProfile" />
-          </div>
+  <v-container width="50%">
+    <!-- <v-img
+      height="250px"
+      src="https://cdn.quotesgram.com/img/99/55/1480966742-banana-potato-song-minions-1.png"
+    ></v-img> -->
+    <v-card height="22vh" class="elevation-0"> </v-card>
+    <v-container class="header d-flex elevation-0">
+        <v-avatar size="170" class="avatar">
+          <v-img
+            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+            alt="John"
+          >
+            
+          </v-img>          
         </v-avatar>
-        <v-hover v-slot="{ hover }">
-          <v-col class="py-0 mt-8 ml-16 d-flex">
-            <v-list-item dark color="pink">
-              <v-list-item-content class="black--text">
-                <v-list-item-title class="text-h4 text-color">
-                  {{ alumni.first_name }} {{ alumni.last_name }}
-                </v-list-item-title>
-                <v-list-item-title class="text-h6 mt-4 d-flex">
-                  Generation:
-                  <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                    {{ alumni.batch }}
-                  </v-list-item-title>
-                </v-list-item-title>
-                <v-list-item-title class="text-h6 mt-4 d-flex">
-                  Major:
-                  <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                    {{ alumni.major }}
-                  </v-list-item-title>
-                </v-list-item-title>
-                <v-list-item-title class="text-h6 mt-4 d-flex">
-                  Gender:
-                  <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                    {{ alumni.gender }}
-                  </v-list-item-title>
-                </v-list-item-title>
-                <v-list-item-title class="text-h6 mt-4 d-flex">
-                  Tel:
-                  <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                    {{ alumni.phone_number }}
-                  </v-list-item-title>
-                </v-list-item-title>
-                <v-list-item-title class="text-h6 mt-4 d-flex">
-                  Email:
-                  <v-list-item-title class="mt-1 ml-1 font-weight-light">
-                    {{ alumni.email }}
-                  </v-list-item-title>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <!-- <v-divider class="mr-6"></v-divider> -->
-            <v-icon
-              class="align-self-end mr-16 mb-3"
-              v-if="hover"
-              @click="dialog = !dialog"
-              >mdi-pen</v-icon
-            >
+        <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
+        <input type="file" id="profile" hidden @change="selectProfile">
+
+      <v-card-text class="mt-0 pt-0 mb-0 pb-0">
+        <v-card-title class="mt-0 pt-0 text-h4 white--text"
+          >{{ alumni.first_name }} {{ alumni.last_name }}</v-card-title
+        >
+        <v-card-text class="d-flex ml-0 pl-0">
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+            <v-icon>mdi-briefcase</v-icon>
+            Web developer at Mango Byte co, ltd
+          </v-card-subtitle>
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+            <v-icon>mdi-phone-classic</v-icon>
+            {{ alumniData.phone_number }}
+          </v-card-subtitle>
+          <v-card-subtitle class="mt-0 pt-0 white--text">
+            <v-icon>mdi-email</v-icon>
+            {{ alumni.email }}
+          </v-card-subtitle>
+        </v-card-text>
+      </v-card-text>
+    </v-container>
+    <v-card tile color=" pt-6" height="100vh" class="d-flex">
+      <v-col cols="4">
+        <v-card-title class="justify-center font-weight-bold mb-0 pb-0 text-h5"> More Information </v-card-title>
+
+        <v-col class="ml-5">
+          <p class="pt-0">
+            <v-icon>mdi-gender-transgender</v-icon>
+            : {{ alumniData.gender }}
+          </p>
+          <p class="pt-0">
+            <v-icon>mdi-cloud-tags</v-icon>
+            : {{ alumniData.major }}
+          </p>
+          <p class="pt-0">
+            <v-icon>mdi-certificate</v-icon>
+            : {{ alumniData.batch }}
+          </p>
+          <p class="pt-0">Skills: HTML, JS, Node, Laravel, PHP, MySQL, OOP</p>
+
+        </v-col>
+         <v-row class="d-flex justify-center mt-2" tile >
+            <v-btn class="justify-center white--text" color="#22BBEA" @click="dialog = true">Edit</v-btn>
             <v-dialog v-model="dialog" max-width="500px">
               <v-card class="rounded-lg">
                 <v-card-title class="justify-center">
@@ -171,29 +171,29 @@
                 </v-card-text>
               </v-card>
             </v-dialog>
-          </v-col>
-        </v-hover>
+          </v-row>
       </v-col>
-
-      <v-container fluid class="mb-9">
-        <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
-        <div class="d-flex align-content-center">
-          <h2 class="title mt-4 text-h5 text-color">Current Employment</h2>
+      <v-card width="68%" class="ml-6 mr-6">
+        <v-card-text class="d-flex justify-center align-center">
+          <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
           <v-spacer></v-spacer>
-          <v-btn class="mt-6 mr-10" color="#FF9933">
-            <v-icon>mdi-home-modern</v-icon>
-
-            <v-list-item-title>ADD</v-list-item-title>
-          </v-btn>
-        </div>
-        <alumni-current-employment :current-empolyment="currentEmployments" />
-      </v-container>
-    </v-row>
-    <!-- </v-img> -->
-  </v-card>
+          <!-- <v-btn class="blue rounded-circle" width="10px"> -->
+            <v-icon class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text">mdi-plus</v-icon>
+            <!-- Add
+          </v-btn> -->
+        </v-card-text>
+        <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
+        <alumni-current-employment/>
+        <alumni-current-employment/>
+        <alumni-current-employment/>
+        <alumni-current-employment/>
+      </v-card>
+    </v-card>
+  </v-container>
 </template>
+
 <script>
-// import axios from "./../../../api/api.js";
+import axios from "./../../../api/api.js";
 import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
 
 export default {
@@ -206,6 +206,7 @@ export default {
         "https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       alumni: {},
+      alumniData: {},
       currentEmployments: [],
       major: ["WEB", "SNA"],
       checkPassword: false,
@@ -219,25 +220,19 @@ export default {
   },
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
-    this.alumni = {
-      first_name: this.alumni.first_name,
-      last_name: this.alumni.last_name,
-      password: this.alumni.password,
-      email: this.alumni.email,
-      role: "alumni",
-      phone_number: this.alumni.phone_number,
-      gender: this.alumni.gender,
-      alumni_id: this.alumni_id,
-      id: this.alumni.id,
-      batch: null,
-      major: null,
-    };
+    
+    axios.get('/users/'+ this.alumni.id).then((res)=>{
+      this.alumni = res.data;
+      this.alumniData = res.data.alumni;
+      console.log*(this.alumni);
+      localStorage.setItem('user', JSON.stringify(this.alumni));
+    })
     let emplotment = {
       companyName: "PNC",
       position: "Full-Stack Developer",
       year: "2019-Present",
     };
-    console.log(this.alumni);
+    // console.log(this.alumni);
     this.currentEmployments.push(emplotment);
   },
 };
@@ -245,15 +240,18 @@ export default {
 
 
 <style scoped>
-.title {
-  margin-left: 50px;
-  font-weight: bold;
+.avatar {
+  margin-top: -100px;
+  margin-left: 7%;
+  border: 5px solid white;
 }
-.camera {
-  margin-left: -40px;
-  /* / background: rgb(206, 206, 206); / */
+.icon {
+  position: absolute;
+  top: 20%;
+  left: 26%;
+  height: 33px;
 }
-.text-color {
-  color: #22bbea;
+.header{
+  background: #22BBEA;
 }
 </style>

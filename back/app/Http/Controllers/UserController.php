@@ -17,7 +17,7 @@ class UserController extends Controller
     }
 
     public function getUser(Request $request, $id){
-        return User::findOrFail($id);
+        return User::with('alumni')->findOrFail($id);
     }
 
     public function createUser(Request $request)

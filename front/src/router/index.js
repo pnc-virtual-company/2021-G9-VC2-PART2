@@ -7,8 +7,7 @@ import VerifyEmail from '../components/authentication/VerifyEmail.vue'
 import VerifyPassword from '../components/authentication/VerifyPassword.vue'
 import AlumniSignup from '../components/authentication/AlumniSignup.vue'
 import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileView.vue'
-// import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileView.vue'
-
+import Event from '../components/views/event/EventView.vue'
 
 Vue.use(VueRouter)
 
@@ -21,7 +20,7 @@ const routes = [
     { path: "/verify-email", component: VerifyEmail },
     { path: "/verify-password", component: VerifyPassword },
     { path: "/alumni-signup", component: AlumniSignup },
-    // { path: "/alumni/profile", component: ProfileAlumniView },
+    { path: "/event", component: Event },
 
     { path: "/", redirect: "/verify-email" },
   
