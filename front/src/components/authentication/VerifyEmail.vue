@@ -89,9 +89,9 @@ export default {
         this.emailRules = ['Your Email does not exist'];
       }else{
         if (user[0].first_name === null && user[0].last_name === null){
-          this.$router.push('signup-two');
+          this.$router.push('/alumni-signup');
         }else{
-          this.$router.push('verify-password');
+          this.$router.push('/verify-password');
         }
         localStorage.setItem('user', JSON.stringify(user[0]));
 

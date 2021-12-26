@@ -13,7 +13,9 @@ class Alumni extends Model
         'gender',
         'batch',
         'major',
-        'profile'
+        'profile',
+        'status',
+
     ];
 
     public function user(){

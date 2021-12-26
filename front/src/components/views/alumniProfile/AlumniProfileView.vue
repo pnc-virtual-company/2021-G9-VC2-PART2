@@ -237,6 +237,7 @@ export default {
       position: "Full-Stack Developer",
       year: "2019-Present",
     };
+    console.log(this.alumni);
     this.currentEmployments.push(emplotment);
   },
 };

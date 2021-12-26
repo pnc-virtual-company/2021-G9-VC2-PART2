@@ -44,6 +44,7 @@ class UserController extends Controller
             $alumni->gender = $request->gender;
             $alumni->batch = $request->batch;
             $alumni->major = $request->major;
+            $alumni->status = $request->status;
             $alumni->user_id = $user->id;
             $alumni->profile = 'default_profile.jpg';
             $alumni->save();

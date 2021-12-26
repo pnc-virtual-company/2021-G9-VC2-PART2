@@ -31,22 +31,7 @@ export default {
   methods: {
     userSignin(user){
       this.activeUser = user;
-      // let alumni = this.alumnis.filter(alumni => alumni.user_id === this.userId);
-      // let user = JSON.parse(localStorage.getItem('user'));
-      // if (user.role === 'alumni'){
-      //   let userData = {
-      //     first_name: user.first_name,
-      //     last_name: user.last_name,
-      //     phone_number: alumni[0].phone_number,
-      //     gender: alumni[0].gender,
-      //     id: user.id,
-      //     email: user.email,
-      //     role: 'alumni'
-      //   }
-      //   localStorage.setItem('user', JSON.stringify(userData));
-      // }
       localStorage.setItem('user',JSON.stringify(user));
-      // console.log(this.activeUser);
     },
     userSignOut(){
         this.activeUser = null;
