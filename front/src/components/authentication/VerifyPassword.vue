@@ -107,7 +107,7 @@ export default {
         if(res.data.user.role === 'admin'){
           this.$router.push("/admin").catch(()=>{});
         }else if(res.data.user.role === 'alumni'){
-          this.$router.push("//alumni/profile/"+res.data.user.first_name).catch(()=>{});
+          this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
         }else{
           
           this.$router.push("/ero_officers").catch(()=>{});
