@@ -81,12 +81,14 @@ class AlumniController extends Controller
         $alumni->gender = $request->gender;
         $alumni->batch = $request->batch;
         $alumni->major = $request->major;
-        $alumni->profile = $request->profile;
+        // $alumni->profile = $request->profile;
         $alumni->user_id = $request->user_id;
 
         $alumni->save();
         return response()->json(['message'=> 'Alumni Updated', 'data'=>$alumni], 201);
     }
+
+    
 
     /**
      * Remove the specified resource from storage.

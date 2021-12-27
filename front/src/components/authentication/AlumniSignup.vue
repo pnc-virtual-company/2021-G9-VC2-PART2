@@ -178,16 +178,19 @@ export default {
         }else{
             this.passwordConfirmRules = []
         }
+    },
+    phone_number(){
+      this.phoneRules = [
+        (v) => !!v || "Phone Number is required",
+        (v) => /^\d+$/.test(v) || 'Must be a number',
+        (v) => v.length>=9 && v.length<=10 || "Phone Number must be valid",]
     }
-
-
 
   },
   methods: {
     loginToUserAlumni(){
       if (this.password === this.confirmPassword){
         let id = this.alumnis.filter(alumni => alumni.user_id === this.userId);
-        console.log(id);
         let userData = {
           id: this.userId,
           first_name: this.first_name,
