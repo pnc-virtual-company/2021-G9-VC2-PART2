@@ -87,7 +87,18 @@ class AlumniController extends Controller
         return response()->json(['message'=> 'Alumni Updated', 'data'=>$alumni], 201);
     }
 
-    
+    public function updateAlumniPrifile(Request $request, $id){
+        $request->validate([
+            'profile'=>'image|mimes:jpg,png,jpeg,gif|max:19999',
+        ]);
+        $request->file('profile')->store('public/profiles');
+
+        $profile = Alumni::findOrFail($id);
+        $profile->profile = $request->file('profile')->hashName();
+
+        $profile->save();
+        return response()->json(['message'=> 'Profile Updated'], 201);
+    }
 
     /**
      * Remove the specified resource from storage.

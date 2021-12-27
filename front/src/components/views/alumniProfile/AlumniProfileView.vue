@@ -3,7 +3,7 @@
     <v-card height="22vh" class="elevation-0"> </v-card>
     <v-container class="header d-flex elevation-0">
         <v-avatar size="170" class="avatar">
-          <v-img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt="John"></v-img>          
+          <v-img :src="profile" alt="John"></v-img>          
         </v-avatar>
         <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
         <input type="file" id="profile" hidden @change="selectProfile">
@@ -202,7 +202,7 @@ export default {
   },
   data() {
     return {
-      profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
+      // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       checkPassword: false,
       password: '',
@@ -211,14 +211,14 @@ export default {
       currentEmployments: [],
       major: ["WEB", "SNA"],
       batch: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-      passwordRules: [
-        
-      ],
+      passwordRules: [],
       phoneRule: [],
       emailRules: [],
       email: '',
       phoneNumber: '',
       userId: localStorage.getItem('userId'),
+      profile: 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png',
+      image: '',
 
     };
   },
@@ -235,18 +235,27 @@ export default {
     }
   },
   methods: {
-    closeDialog(){
-      this.dialog = false;
-      this.checkPassword = false;
+    getOneAlumni(){
       axios.get('/users/'+ this.userId).then((res)=>{
         this.alumni = res.data;
         this.alumniData = this.alumni.alumni;
+        this.profile = 'http://localhost:8000/storage/profiles/' + this.alumniData.profile;
       })
+    },
+    closeDialog(){
+      this.dialog = false;
+      this.checkPassword = false;
       this.phoneRule = [];
     },
     selectProfile(event) {
       let image = event.target.files[0];
       this.profile = URL.createObjectURL(image);
+      let userProfile = new FormData();
+      userProfile.append('profile', image);
+      userProfile.append("_method",  "PUT")
+      axios.post('/alumnisProfile/'+ this.alumniData.id, userProfile).then(()=> {
+        this.getOneAlumni();
+      })
     },
     editData(){
       this.dialog = true;
@@ -280,7 +289,7 @@ export default {
         })
         axios.put('/alumnis/'+ this.alumniData.id, this.alumniData).then(()=>{
           this.closeDialog();
-
+          this.getOneAlumni();
         })
         this.password = "";
         
@@ -295,7 +304,7 @@ export default {
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
     
-    this.closeDialog()
+    this.getOneAlumni()
     let emplotment = {
       companyName: "PNC",
       position: "Full-Stack Developer",

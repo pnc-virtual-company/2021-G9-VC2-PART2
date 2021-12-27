@@ -23,6 +23,7 @@ Route::get('alumnis',[AlumniController::class,'getAllAlumni']);
 Route::post('alumnis',[AlumniController::class,'createAlumni']);
 Route::get('alumnis/{alumni_id}',[AlumniController::class,'getOneAlumni']);
 Route::put('alumnis/{alumni_id}',[AlumniController::class,'updateAlumni']);
+Route::put('alumnisProfile/{alumni_id}',[AlumniController::class,'updateAlumniPrifile']);
 Route::delete('alumnis/{alumni_id}',[AlumniController::class,'deleteAlumni']);
 // Route::get('/alumnis/search/{name}', [AlumniController::class, 'searchCategory']);
 
