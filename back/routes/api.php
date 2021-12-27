@@ -9,10 +9,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\AlumniPositionController;
 use App\Http\Controllers\WorkExperienceController;
 
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+// USER SIGN, SIGN UP, SIGN OUT
 Route::post('signin',[UserController::class, "signIn"]);
 Route::post('signout',[UserController::class, "signOut"]);
 

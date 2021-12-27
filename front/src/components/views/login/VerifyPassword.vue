@@ -13,24 +13,29 @@
       <v-row class="sub-container">
         <v-col cols="12" xs="12" sm="10" md="6" lg="6">
           <v-card color="transparent" elevation="0" class="pa-5">
-            <h1 class="text-center white--text">SIGN IN</h1>
+            <h1 class="text-center white--text mb-3">Sign in</h1>
 
-            <v-row no-gutters class="mt-6">
+            <v-row no-gutters>
               <v-col cols="12">
                 <v-text-field
                   dense
-                  placeholder="E-mail"
-                  :rules="emailRules"
-                  type="email"
-                  outlined
+                  class="mr-1 mt-4"
                   background-color="white"
-                  v-model="email"
+                  placeholder="Password"
+                  :rules="passwordRules"
+                  outlined
+                  :type="showPassword ? 'text' : 'password'"
+                  v-model="password"
                 ></v-text-field>
-              
-
               </v-col>
             </v-row>
-            <v-row class="ma-0 pa-0">
+            
+            <v-checkbox
+              class="ma-0 pa-0"
+              v-model="showPassword"
+              :label="showPassword ? 'Hide password' : 'Show password'"    
+            ></v-checkbox>
+            <v-row>
               <v-col cols="12">
                 <v-card
                   dense
@@ -38,9 +43,8 @@
                   color="transparent"
                   elevation="0"
                 >
-                  <v-btn color="#FF9933" class="white--text" @click="verifyEmail"
-                    >NEXT</v-btn
-                  >
+                  
+                <v-btn color="#FF9933" class="white--text" @click="verifyPassword">NEXT</v-btn>
                 </v-card>
               </v-col>
             </v-row>
@@ -68,46 +72,56 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js";
+import axios from "../../../api/api.js"
+
 export default {
-  
+  props:['userDataSignIn'],
+  emits: ['signin'],
   data() {
     return {
-      email: null,
-      emailRules: [
+      passwordRules: [
         (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
       ],
-      userList: [],
-
+      password: "",
+      showPassword: false,
     };
   },
-  methods: {
-    verifyEmail() {
-      let user = this.userList.filter(user=> user.email === this.email);
-      console.log(user[0]);
-      if (user.length === 0){
-        this.emailRules = ['Your Email does not exist'];
-      }else{
-        if (user[0].first_name === null && user[0].last_name === null){
-          this.$router.push('/alumni-signup');
+  watch: {
+    password(){
+      this.passwordRules = [
+        (v) => !!v || "E-mail is required",
+        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
+      ]
+    }
+  },
+  methods:{
+    verifyPassword(){
+      let user = { 
+        email: JSON.parse(localStorage.getItem('user')).email,
+        password: this.password
+      };
+      axios.post("/signin", user)
+      .then((res)=>{
+        if(res.data.user.role === 'admin'){
+          this.$router.push("/admin_view").catch(()=>{});
+        }else if(res.data.user.role === 'alumni'){
+          this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
         }else{
-          this.$router.push('/verify-password');
+          
+          this.$router.push("/ero_officers").catch(()=>{});
         }
-        let userEmail = {
-          email: user[0].email,
-          role: user[0].role,
-        }
-        localStorage.setItem('user', JSON.stringify(userEmail));
-
-      }
-    },
+        this.$emit('signin', res.data.user);
+      })
+      .catch(()=>{
+        this.passwordRules = ['Your Password does not exist']
+      })
+      
+    }
   },
-  mounted() {
-    axios.get('/users').then((res)=>{
-      this.userList = res.data;
-    })
-  },
+  mounted(){
+    
+  }
 };
 </script>
 

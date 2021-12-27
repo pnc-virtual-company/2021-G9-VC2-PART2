@@ -130,9 +130,10 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js"
+import axios from "../../../api/api.js"
 
 export default {
+  props:['userDataSignIn'],
   data() {
     return {
       first_name: '',
@@ -190,7 +191,7 @@ export default {
   methods: {
     loginToUserAlumni(){
       if (this.password === this.confirmPassword){
-        let id = this.alumnis.filter(alumni => alumni.user_id === this.userId);
+        let id = this.alumnis.filter(alumni => alumni.user_id == this.userId);
         let userData = {
           id: this.userId,
           first_name: this.first_name,
@@ -208,10 +209,8 @@ export default {
         axios.put('/alumnis/'+ id[0].id, alumniData).then(()=>{
         })
         axios.put('/users/'+ this.userId, userData).then(()=>{
-
-          // localStorage.setItem('user', JSON.stringify(userData));
           this.$emit('signin', userData);
-          this.$router.push('/alumni/profile/' + this.first_name);
+          this.$router.push('/alumni/profile/' + this.first_name).catch(()=>{});
         })
       }
     }

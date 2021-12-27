@@ -1,35 +1,62 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import View from './../components/views/Example.vue'
-import Admin from '../components/views/admin/Admin.vue'
-import EroOfficer from '../components/views/ero/View.vue'
-import VerifyEmail from '../components/authentication/VerifyEmail.vue'
-import VerifyPassword from '../components/authentication/VerifyPassword.vue'
-import AlumniSignup from '../components/authentication/AlumniSignup.vue'
+import EroOfficer from '../components/views/ero/EroView.vue'
+import VerifyEmail from '../components/views/login/VerifyEmail.vue'
+import VerifyPassword from '../components/views/login/VerifyPassword.vue'
+import AlumniSignup from '../components/views/login/AlumniSignup.vue'
 import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileView.vue'
 import Event from '../components/views/event/EventView.vue'
+import Admin from '../components/views/admin/AdminView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-    { path: "/admin", component: Admin },
+    { path: "/admin_view", component: Admin },
     { path: "/ero_officers", component: EroOfficer },
-    // { path: "/alumni_profile", component: Admin },
     { path: "/alumni/profile/:name", component: AlumniProfileView },
     { path: "/alumni_users", component: Admin },
-    { path: "/verify-email", component: VerifyEmail },
-    { path: "/verify-password", component: VerifyPassword },
-    { path: "/alumni-signup", component: AlumniSignup },
-    { path: "/event", component: Event },
+    { path: "/verify_email", component: VerifyEmail},
+    { path: "/verify_password", component: VerifyPassword},
+    { path: "/alumni_signup", component: AlumniSignup},
+    { path: "/event", component: Event},
 
-    { path: "/", redirect: "/verify-email" },
-  
+    { path: "/", redirect: "/verify_email" },
 ]
+
+// let authenticationGuard = (to, from, next) => {
+//   let needLogin = to.meta.needLogin;
+
+//   if (needLogin) {
+//     // let isLoggedIn = localStorage.getItem("userId") !== null;
+//     if (!isLoggedIn) {
+//       next("/login");
+//     } else {
+//       let needAdmin = to.meta.needAdmin;
+//       if (needAdmin) {
+//         // let isAdmin = localStorage.getItem("userRole") == "ADMIN";
+
+//         if (isAdmin) {
+//           next();
+//         } else {
+//           next("/unauthorized");
+//         }
+//       } else {
+//         next();
+//       }
+//     }
+//   } else {
+//     next();
+//   }
+// };
+
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeEach(authenticationGuard);
+
 
 export default router

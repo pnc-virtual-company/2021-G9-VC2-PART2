@@ -74,7 +74,6 @@ class AlumniController extends Controller
             'gender'=>'nullable',
             'batch'=>'nullable',
             'major'=>'nullable',
-            'profile' =>'nullable'
         ]);
         $alumni = Alumni::findOrFail($id);
         $alumni->phone_number = $request->phone_number;

@@ -121,7 +121,6 @@
                     outlined
                     :items="batch"
                   ></v-select>
-                  <!-- </v-row>  -->
                   <v-radio-group row class="mt-0 pt-0" v-model="alumniData.gender">
                     <v-radio label="Female" value="female"></v-radio>
                     <v-radio label="Male" value="male"></v-radio>
@@ -239,7 +238,6 @@ export default {
     closeDialog(){
       this.dialog = false;
       this.checkPassword = false;
-      // this.alumni = JSON.parse(localStorage.getItem('user'));
       axios.get('/users/'+ this.userId).then((res)=>{
         this.alumni = res.data;
         this.alumniData = this.alumni.alumni;
@@ -257,7 +255,6 @@ export default {
 
     },
     completedData(){
-      console.log(this.phoneNumber.length, this.email.split('@')[0]+ '@gmail.com' === this.email, this.phoneNumber.length >= 9, this.phoneNumber.length <= 10);
       if (this.email.split('@')[0]+ '@gmail.com' === this.email && this.phoneNumber[0] == 0 && this.phoneNumber.length >= 9 && this.phoneNumber.length <= 10){
         this.dialog = false;
         this.checkPassword = true;
@@ -266,7 +263,6 @@ export default {
         this.emailRules = [ "E-mail must be valid",]
       
       }
-      
     },
     updateData(){
       let object = {
@@ -286,7 +282,6 @@ export default {
           this.closeDialog();
 
         })
-        // this.checkPassword = false;
         this.password = "";
         
       })

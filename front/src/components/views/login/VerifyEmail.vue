@@ -13,29 +13,22 @@
       <v-row class="sub-container">
         <v-col cols="12" xs="12" sm="10" md="6" lg="6">
           <v-card color="transparent" elevation="0" class="pa-5">
-            <h1 class="text-center white--text mb-3">Sign in</h1>
+            <h1 class="text-center white--text">SIGN IN</h1>
 
-            <v-row no-gutters>
+            <v-row no-gutters class="mt-6">
               <v-col cols="12">
-                <v-text-field
+                <v-text-field v-if="true"
                   dense
-                  class="mr-1 mt-4"
-                  background-color="white"
-                  placeholder="Password"
-                  :rules="passwordRules"
+                  placeholder="E-mail"
+                  :rules="emailRules"
+                  type="email"
                   outlined
-                  :type="showPassword ? 'text' : 'password'"
-                  v-model="password"
+                  background-color="white"
+                  v-model="email"
                 ></v-text-field>
               </v-col>
             </v-row>
-            
-            <v-checkbox
-              class="ma-0 pa-0"
-              v-model="showPassword"
-              :label="showPassword ? 'Hide password' : 'Show password'"    
-            ></v-checkbox>
-            <v-row>
+            <v-row class="ma-0 pa-0">
               <v-col cols="12">
                 <v-card
                   dense
@@ -43,8 +36,9 @@
                   color="transparent"
                   elevation="0"
                 >
-                  
-                <v-btn color="#FF9933" class="white--text" @click="verifyPassword">NEXT</v-btn>
+                  <v-btn color="#FF9933" class="white--text" @click="verifyEmail"
+                    >NEXT</v-btn
+                  >
                 </v-card>
               </v-col>
             </v-row>
@@ -72,57 +66,46 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js"
-
+import axios from "../../../api/api.js";
 export default {
-  emits: ['signin'],
+  
   data() {
     return {
-      passwordRules: [
+      email: null,
+      emailRules: [
         (v) => !!v || "E-mail is required",
-        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
+        (v) => /.+@.+/.test(v) || "E-mail must be valid",
       ],
-      password: "",
-      showPassword: false,
-      
+      userList: [],
+      userLogin:null,
+
     };
   },
-  watch: {
-    password(){
-      this.passwordRules = [
-        (v) => !!v || "E-mail is required",
-        (v) => (v && v.length >= 8) || "Confirm Password at leaste 8 characters",
-      ]
-    }
-  },
-  methods:{
-    verifyPassword(){
-      let user = {
-        email: JSON.parse(localStorage.getItem('user')).email,
-        password: this.password
-      };
-      axios.post("/signin", user)
-      .then((res)=>{
-        console.log(res.data);
-        if(res.data.user.role === 'admin'){
-          this.$router.push("/admin").catch(()=>{});
-        }else if(res.data.user.role === 'alumni'){
-          this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
+  methods: {
+    verifyEmail() {
+      let user = this.userList.filter(user=> user.email === this.email);
+      if (user.length === 0){
+        this.emailRules = ['Your Email does not exist'];
+      }else{
+        if (user[0].first_name === null && user[0].last_name === null){
+          this.$router.push('/alumni_signup').catch(()=>{});
         }else{
-          
-          this.$router.push("/ero_officers").catch(()=>{});
+          this.$router.push('/verify_password').catch(()=>{});
         }
-        this.$emit('signin', res.data.user);
-      })
-      .catch(()=>{
-        this.passwordRules = ['Your Password does not exist']
-      })
-      
-    }
+        let userEmail = {
+          email: user[0].email,
+          role: user[0].role,
+        }
+        localStorage.setItem('user', JSON.stringify(userEmail));
+        localStorage.setItem('userId', user[0].id);
+      }
+    },
   },
-  mounted(){
-    
-  }
+  mounted() {
+    axios.get('/users').then((res)=>{
+      this.userList = res.data;
+    })
+  },
 };
 </script>
 
