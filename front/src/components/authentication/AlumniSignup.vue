@@ -143,7 +143,7 @@ export default {
       confirmPassword: "",
       checkbox: false,
       isShowPassword: false,
-      userId: JSON.parse(localStorage.getItem('user')).id,
+      userId: localStorage.getItem('userId'),
       alumnis: [],
       
       phoneRules: [(v) => !!v || "Phone number is required"],
@@ -187,20 +187,26 @@ export default {
     loginToUserAlumni(){
       if (this.password === this.confirmPassword){
         let id = this.alumnis.filter(alumni => alumni.user_id === this.userId);
+        console.log(id);
         let userData = {
+          id: this.userId,
           first_name: this.first_name,
           last_name: this.last_name,
           password: this.password,
           email: JSON.parse(localStorage.getItem('user')).email,
           role: 'alumni',
+        }
+        let alumniData = {
           phone_number: this.phone_number,
           gender: this.gender,
-          alumni_id: id[0].id,
-          id: this.userId
-
+          user_id: this.userId,
+          id: id[0].id
         }
-        // localStorage.setItem('user', JSON.stringify(userData));
+        axios.put('/alumnis/'+ id[0].id, alumniData).then(()=>{
+        })
         axios.put('/users/'+ this.userId, userData).then(()=>{
+
+          // localStorage.setItem('user', JSON.stringify(userData));
           this.$emit('signin', userData);
           this.$router.push('/alumni/profile/' + this.first_name);
         })

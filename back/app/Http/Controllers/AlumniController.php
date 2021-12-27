@@ -71,9 +71,9 @@ class AlumniController extends Controller
     {
         $request->validate([
             'phone_number'=>'required',
-            'gender'=>'required',
-            'batch'=>'required',
-            'major'=>'required',
+            'gender'=>'nullable',
+            'batch'=>'nullable',
+            'major'=>'nullable',
             'profile' =>'nullable'
         ]);
         $alumni = Alumni::findOrFail($id);

@@ -71,7 +71,7 @@
             <v-spacer></v-spacer>
 
             <v-btn
-              color="orange"
+              color="#FF9933"
               text
               @click="dialog = false"
             >

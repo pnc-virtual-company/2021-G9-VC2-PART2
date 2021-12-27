@@ -85,6 +85,7 @@ export default {
   methods: {
     verifyEmail() {
       let user = this.userList.filter(user=> user.email === this.email);
+      console.log(user[0]);
       if (user.length === 0){
         this.emailRules = ['Your Email does not exist'];
       }else{
@@ -93,7 +94,11 @@ export default {
         }else{
           this.$router.push('/verify-password');
         }
-        localStorage.setItem('user', JSON.stringify(user[0]));
+        let userEmail = {
+          email: user[0].email,
+          role: user[0].role,
+        }
+        localStorage.setItem('user', JSON.stringify(userEmail));
 
       }
     },

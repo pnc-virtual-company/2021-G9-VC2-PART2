@@ -32,7 +32,7 @@ export default {
 
     userSignin(user){
       this.activeUser = user;
-      localStorage.setItem('user',JSON.stringify(user));
+      localStorage.setItem('userId',user.id);
     },
     userSignOut(){
         this.activeUser = null;

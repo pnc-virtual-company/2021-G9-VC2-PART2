@@ -62,13 +62,6 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        if ($request->role === 'alumni'){
-            $alumni = Alumni::findorfail($request->alumni_id);
-            $alumni->phone_number = $request->phone_number;
-            $alumni->gender = $request->gender;
-
-            $alumni->save();
-        }
         return response()->json(["message"=>"Post Updated","user"=>$user],201);
     }
 
