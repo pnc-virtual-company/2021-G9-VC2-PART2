@@ -53,7 +53,6 @@ export default {
       this.activeUser = null;
     },
   },
-
   mounted() {
     if (JSON.parse(localStorage.getItem("userID")) !== null) {
       axios.get("/users").then((res) => {

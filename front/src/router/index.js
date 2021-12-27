@@ -8,6 +8,9 @@ import AlumniProfileView from '../components/views/alumniProfile/AlumniProfileVi
 import Event from '../components/views/event/EventView.vue'
 import Admin from '../components/views/admin/AdminView.vue'
 
+import ExploreAlumniView from '../components/views/ero/ExploreAlumniView.vue'
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,8 +22,13 @@ const routes = [
     { path: "/verify_password", component: VerifyPassword},
     { path: "/alumni_signup", component: AlumniSignup},
     { path: "/event", component: Event},
+    { path: "/explore_alumni", component: ExploreAlumniView },
 
     { path: "/", redirect: "/verify_email" },
+
+
+
+  
 ]
 
 // let authenticationGuard = (to, from, next) => {

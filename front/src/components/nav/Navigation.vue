@@ -31,7 +31,7 @@
         >My Profile</v-tab
       >   
       <v-tab
-        :to="{ path: '/alumni_users' }"
+        :to="{ path: '/explore_alumni' }"
         class="text-h6 blue--text"
         color="black"
         v-if="alumni.role === 'admin'"
@@ -100,7 +100,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.activeUser);
+    
   },
 };
 </script>
