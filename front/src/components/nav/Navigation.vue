@@ -16,33 +16,35 @@
       <v-tab
         :to="{ path: '/admin' }"
         class="text-h6 blue--text"
-        v-if="role === 'admin'"
+        v-if="alumni.role === 'admin'"
         >Manager Users</v-tab
       >
       <v-tab
         :to="{ path: '/ero_officers' }"
         class="text-h6 blue--text"
-        v-if="role === 'ero'"
+        v-if="alumni.role === 'ero'"
         >Ero Officer</v-tab>
       <v-tab
-        :to="{ path: '/alumni/profile' }"
+        :to="{ path: '/alumni/profile/' + alumni.first_name }"
         class="text-h6 blue--text"
         color="black"
-        v-if="role === 'alumni'"
+        v-if="alumni.role === 'alumni'"
         >My Profile</v-tab
+      >
+      <v-tab
+        :to="{ path: '/event' }"
+        class="text-h6 blue--text"
+        color="black"
+        >Events</v-tab
       >
       <v-tab
         :to="{ path: '/alumni_users' }"
         class="text-h6 blue--text"
         color="black"
-        v-if="role === 'admin'"
-        >Explore Alumnis</v-tab>
-      <v-tab
-        :to="{ path: '/alumni_users' }"
-        class="text-h6 blue--text"
-        color="black"
-        v-if="role === 'admin' || role === 'ero'"
-        >Events</v-tab>
+        v-if="alumni.role === 'admin'"
+        >
+        Explore Alumnis
+      </v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -95,7 +97,7 @@ export default {
   data() {
     return {
       dialog: false,
-      role: JSON.parse(localStorage.getItem('user')).role,
+      alumni: JSON.parse(localStorage.getItem('user')),
     };
   },
   methods:{

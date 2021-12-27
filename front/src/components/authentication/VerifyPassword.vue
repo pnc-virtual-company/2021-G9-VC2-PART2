@@ -112,7 +112,6 @@ export default {
           
           this.$router.push("/ero_officers").catch(()=>{});
         }
-        // localStorage.setItem('user',JSON.stringify(res.data.user));
         this.$emit('signin', res.data.user);
       })
       .catch(()=>{

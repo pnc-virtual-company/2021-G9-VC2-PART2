@@ -202,7 +202,7 @@ export default {
         // localStorage.setItem('user', JSON.stringify(userData));
         axios.put('/users/'+ this.userId, userData).then(()=>{
           this.$emit('signin', userData);
-          this.$router.push('/alumni/profile');
+          this.$router.push('/alumni/profile/' + this.first_name);
         })
       }
     }

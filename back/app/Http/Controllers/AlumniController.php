@@ -27,21 +27,24 @@ class AlumniController extends Controller
     public function createAlumni(Request $request)
     {
         $request->validate([
-            // 'phone_number'=>'required',
-            // 'gender'=>'required',
-            // 'batch'=>'required',
-            // 'major'=>'required',
-            'profile' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+            'phone_number'=>'required',
+            'gender'=>'required',
+            'batch'=>'required',
+            'major'=>'required',
+            'profile' =>'nullable|image|mimes:jpg,png,jpeg,gif|max:19999',
         ]);
-        $request->file('profile')->store('public/profile');
-        $alumni = new Alumni();
-        // $alumni->phone_number = $request->phone_number;
-        // $alumni->gender = $request->gender;
-        // $alumni->batch = $request->batch;
-        // $alumni->major = $request->major;
-        // $alumni->user_id = $request->user_id;
-        $alumni->profile = $request->file('profile')->hashName();
+        if ($request->profile !== null){
+            $request->file('profile')->store('public/profile');
 
+        }
+        $alumni = new Alumni();
+        $alumni->phone_number = $request->phone_number;
+        $alumni->gender = $request->gender;
+        $alumni->batch = $request->batch;
+        $alumni->major = $request->major;
+        $alumni->user_id = $request->user_id;
+        $alumni->profile = 'profile.png';
+        $alumni->status = $request->status;
         $alumni->save();
         return response()->json(['message'=>'Alumni created','data'=>$alumni],201);
     }
