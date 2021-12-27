@@ -133,6 +133,7 @@
 import axios from "../../../api/api.js"
 
 export default {
+  props:['userDataSignIn'],
   data() {
     return {
       first_name: '',
@@ -143,7 +144,7 @@ export default {
       confirmPassword: "",
       checkbox: false,
       isShowPassword: false,
-      userId: JSON.parse(localStorage.getItem('user')).id,
+      userId: this.userDataSignIn.id,
       alumnis: [],
       
       phoneRules: [(v) => !!v || "Phone number is required"],
@@ -191,7 +192,7 @@ export default {
           first_name: this.first_name.toUpperCase(),
           last_name: this.last_name.toUpperCase(),
           password: this.password,
-          email: JSON.parse(localStorage.getItem('user')).email,
+          email: this.userDataSignIn.email,
           role: 'alumni',
           phone_number: this.phone_number,
           gender: this.gender,

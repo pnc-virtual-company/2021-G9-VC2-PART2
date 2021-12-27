@@ -1,15 +1,16 @@
 <template>
   <v-app>
-    <navagation v-if="activeUser" @sign-out="userSignOut"></navagation>
+    <navagation v-if="activeUser" @sign-out="userSignOut" :activeUser="activeUser"></navagation>
     <v-main>
-      <router-view @signin="userSignin"/>
+      <router-view @signin="userSignin" @verify-email="emailChecking" :userDataSignIn="userDataSignIn"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Navagation from "./components/nav/Navigation.vue";
 
+import axios from "./api/api.js"
+import Navagation from "./components/nav/Navigation.vue";
 
 export default {
   name: 'App',
@@ -18,6 +19,7 @@ export default {
   },
   data(){
     return{
+        userDataSignIn:null,
         activeUser:null,
         alumnis: [],
         isLogin: false,
@@ -29,26 +31,25 @@ export default {
     }
   },
   methods: {
+    emailChecking(user){
+      this.userDataSignIn = user;
+    },
     userSignin(user){
       this.activeUser = user;
-      localStorage.setItem('user',JSON.stringify(user));
+      localStorage.setItem("userID",JSON.stringify(user.id));
     },
     userSignOut(){
         this.activeUser = null;
       }
   },
+  
   mounted(){
-    if ((window.localStorage.getItem("user") !== null) && this.$route.path == "/signIn" ) {
-      this.activeUser = JSON.parse(localStorage.getItem("user"));
+    if(JSON.parse(localStorage.getItem("userID")) !==null){
+        axios.get('/users').then((res)=>{
+        let users = res.data;
+        this.activeUser = users.filter(user => user.id === JSON.parse(localStorage.getItem("userID")));
+    });
     }
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(user !== null){
-        this.activeUser = JSON.parse(localStorage.getItem("user"));
-
-    }
-    else{
-       this.activeUser = user;
-    }
-  }
+  },
 };
 </script>

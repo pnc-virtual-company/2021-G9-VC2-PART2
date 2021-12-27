@@ -78,20 +78,24 @@
 </template>
 <script>
 export default {
+  props: ["activeUser"],
   emits: ["sign-out"],
   data() {
     return {
       dialog: false,
-      role: JSON.parse(localStorage.getItem("user")).role,
+      role: this.activeUser.role,
     };
   },
   methods: {
     logoutAcout() {
       this.dialog = false;
-      localStorage.clear();
       this.$emit("sign-out");
+      localStorage.clear();
       this.$router.push("/verify_email").catch(() => {});
     },
+  },
+  mounted() {
+    console.log(this.activeUser);
   },
 };
 </script>

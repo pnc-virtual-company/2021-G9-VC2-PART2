@@ -75,6 +75,7 @@
 import axios from "../../../api/api.js"
 
 export default {
+  props:['userDataSignIn'],
   emits: ['signin'],
   data() {
     return {
@@ -84,7 +85,6 @@ export default {
       ],
       password: "",
       showPassword: false,
-      
     };
   },
   watch: {
@@ -97,8 +97,9 @@ export default {
   },
   methods:{
     verifyPassword(){
-      let user = {
-        email: JSON.parse(localStorage.getItem('user')).email,
+      console.log(this.userDataSignIn)
+      let user = { 
+        email: this.userDataSignIn.email,
         password: this.password
       };
       axios.post("/signin", user)

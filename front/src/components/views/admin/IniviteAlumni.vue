@@ -66,28 +66,28 @@ export default {
     nonce: 1,
   }),
 
-  watch: {
-    model(val, prev) {
-      if (val.length === prev.length) return;
-      const emailRegex = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
-      this.model = val.map((v) => {
-        if (typeof v === "string") {
-          if (emailRegex.test(v)) {
-            v = {
-              text: v,
-              color: this.colors[this.nonce - 1],
-            };
+  // watch: {
+  //   model(val, prev) {
+  //     if (val.length === prev.length) return;
+  //     const emailRegex = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
+  //     this.model = val.map((v) => {
+  //       if (typeof v === "string") {
+  //         if (emailRegex.test(v)) {
+  //           v = {
+  //             text: v,
+  //             color: this.colors[this.nonce - 1],
+  //           };
 
-            this.items.push(v);
+  //           this.items.push(v);
 
-            this.nonce++;
-          }
-        }
+  //           this.nonce++;
+  //         }
+  //       }
 
-        return v;
-      });
-    },
-  },
+  //       return v;
+  //     });
+  //   },
+  // },
   methods: {
     inviteAlumni() {
       this.alert = true;

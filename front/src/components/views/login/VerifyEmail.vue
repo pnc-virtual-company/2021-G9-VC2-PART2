@@ -26,8 +26,6 @@
                   background-color="white"
                   v-model="email"
                 ></v-text-field>
-              
-
               </v-col>
             </v-row>
             <v-row class="ma-0 pa-0">
@@ -79,6 +77,7 @@ export default {
         (v) => /.+@.+/.test(v) || "E-mail must be valid",
       ],
       userList: [],
+      userLogin:null,
 
     };
   },
@@ -93,7 +92,8 @@ export default {
         }else{
           this.$router.push('/verify_password').catch(()=>{});
         }
-        localStorage.setItem('user', JSON.stringify(user[0]));
+        this.$emit("verify-email",user[0]);
+        
 
       }
     },

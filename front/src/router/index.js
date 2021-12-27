@@ -13,17 +13,46 @@ const routes = [
     { path: "/ero_officers", component: EroOfficer },
     { path: "/alumni/profile/:name", component: AlumniProfileView },
     { path: "/alumni_users", component: Admin },
-    { path: "/verify_email", component: VerifyEmail },
-    { path: "/verify_password", component: VerifyPassword },
-    { path: "/alumni_signup", component: AlumniSignup },
+    { path: "/verify_email", component: VerifyEmail},
+    { path: "/verify_password", component: VerifyPassword},
+    { path: "/alumni_signup", component: AlumniSignup},
     { path: "/", redirect: "/verify_email" },
-  
 ]
+
+// let authenticationGuard = (to, from, next) => {
+//   let needLogin = to.meta.needLogin;
+
+//   if (needLogin) {
+//     // let isLoggedIn = localStorage.getItem("userId") !== null;
+//     if (!isLoggedIn) {
+//       next("/login");
+//     } else {
+//       let needAdmin = to.meta.needAdmin;
+//       if (needAdmin) {
+//         // let isAdmin = localStorage.getItem("userRole") == "ADMIN";
+
+//         if (isAdmin) {
+//           next();
+//         } else {
+//           next("/unauthorized");
+//         }
+//       } else {
+//         next();
+//       }
+//     }
+//   } else {
+//     next();
+//   }
+// };
+
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeEach(authenticationGuard);
+
 
 export default router
