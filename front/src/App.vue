@@ -37,7 +37,7 @@ export default {
       }
   },
   mounted(){
-    if ((window.localStorage.getItem("user") !== null) && this.$route.path == "/signIn" ) {
+    if ((window.localStorage.getItem("user") !== null) && this.$route.path == "/explore_alumni" ) {
       this.activeUser = JSON.parse(localStorage.getItem("user"));
 
     }
@@ -48,7 +48,7 @@ export default {
     }
     else{
        this.activeUser = user;
-       this.$router.push('/signIn');
+       this.$router.push('/explore_alumni').catch(()=>{});
 
     }
     // window.onpopstate = () => {

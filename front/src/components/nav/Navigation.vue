@@ -97,7 +97,7 @@ export default {
       this.dialog = false
       localStorage.clear();
       this.$emit("sign-out");
-      this.$router.push('/signin');
+      this.$router.push('/signin').catch(()=>{});
       localStorage.setItem('path', '/signin');
     }
   }
