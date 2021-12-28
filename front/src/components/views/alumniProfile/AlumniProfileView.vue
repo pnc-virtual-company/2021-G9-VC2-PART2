@@ -7,7 +7,6 @@
         </v-avatar>
         <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
         <input type="file" id="profile" hidden @change="selectProfile">
-
       <v-card-text class="mt-0 pt-0 mb-0 pb-0">
         <v-card-title class="mt-0 pt-0 text-h4 white--text"
           >{{ alumni.first_name }} {{ alumni.last_name }}</v-card-title
@@ -31,7 +30,6 @@
     <v-card tile color=" pt-6" class="d-flex">
       <v-col cols="4">
         <v-card-title class="justify-center font-weight-bold mb-0 pb-0 text-h5"> More Information </v-card-title>
-
         <v-col class="ml-5">
           <p class="pt-0">
             <v-icon>mdi-gender-transgender</v-icon>
@@ -53,7 +51,7 @@
             <v-dialog v-model="dialog" persistent max-width="500px">
               <v-card class="rounded-lg">
                 <v-card-title class="justify-center">
-                  <span class="text-h5">User Profile</span>
+                  <span class="text-h5 text-color">USER PROFILE</span>
                 </v-card-title>
                 <v-card-text>
                   <v-divider
@@ -135,7 +133,7 @@
                     <v-dialog v-model="checkPassword" persistent max-width="500px">
                       <v-card class="rounded-lg">
                         <v-card-title class="justify-center">
-                          <span class="text-h5">Verify you password</span>
+                          <span class="text-h5 text-color">VERIFY YOUR PASSWORD</span>
                         </v-card-title>
                         <v-card-text>
                           <v-divider
@@ -179,7 +177,6 @@
         <v-card-text class="d-flex justify-center align-center">
           <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
           <v-spacer></v-spacer>
-          <!-- <v-btn class="blue rounded-circle" width="10px"> -->
             <v-icon
             @click="dialogCreate = !dialogCreate"
             class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
@@ -258,15 +255,20 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-            <!-- Add
-          </v-btn> -->
         </v-card-text>
         <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
         <alumni-current-employment
         v-for="work of workExperience" :key="work.id"
         :work='work'
+        @get-work-experience = "getWorkExperience"
+        :companies='companies'
+        :positions='positions'
+        :workExperience='workExperience'
+        :objectCompanies='objectCompanies'
+        :objectPositions='objectPositions'
+        :startYears='startYears'
+        :endYears='endYears'
         />
-      
       </v-card>
     </v-card>
   </v-container>
@@ -314,9 +316,6 @@ export default {
       userId: localStorage.getItem('userId'),
       profile: 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png',
       image: '',
-      
-    
-
     };
   },
   watch:{
@@ -358,21 +357,17 @@ export default {
       this.dialog = true;
       this.email = this.alumni.email;
       this.phoneNumber = this.alumniData.phone_number;
-
     },
     completedData(){
-      console.log(this.email.split('@')[0]+ '@gmail.com' === this.email, this.phoneNumber[0] == 0, this.phoneNumber.length >= 9, this.phoneNumber.length <= 10);
       if (this.email.split('@')[0]+ '@gmail.com' === this.email && this.phoneNumber[0] == 0 && this.phoneNumber.length >= 9 && this.phoneNumber.length <= 10){
         this.dialog = false;
         this.checkPassword = true;
       }else{
         this.phoneRule = [(v) => v.length>=9 && v.length<=10  && v[0] == 0 || "Phone Number must be valid"]
         this.emailRules = ["E-mail must be valid",]
-      
       }
     },
     updateData(){
-      // console.log("updated")
       let object = {
         email: this.alumni.email,
         password: this.password,
@@ -395,8 +390,6 @@ export default {
       .catch(()=>{   
         this.passwordRules = ['Your Password does not exist'];
       })
-      
-
     },
     closeCreateDialog(){
       this.dialogCreate = false;
@@ -430,14 +423,22 @@ export default {
         };
         axios.post('work_experiences',newWork).then(()=>{
           this.getWorkExperience();
+          axios.get('companies').then(res=>{
+          this.objectCompanies = res.data;
+          for(let company of this.objectCompanies){
+            this.companies.push(company.companyName)
+          }
+          });
+          axios.get('positions').then(res=>{
+            this.objectPositions = res.data;
+            for(let position of this.objectPositions){
+              this.positions.push(position.positionName);
+            }
+          });
         })
        this.closeCreateDialog()
-        
-      
       }
       },
-      
-
     getWorkExperience(){
       axios.get('work_experiences/'+this.user.alumni.id).then(res=>{
         this.workExperience = res.data;
@@ -446,7 +447,6 @@ export default {
   },
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
-    
     this.getOneAlumni()
     let emplotment = {
       companyName: "PNC",
@@ -465,18 +465,14 @@ export default {
       for(let position of this.objectPositions){
         this.positions.push(position.positionName);
       }
-    });
-    console.log(this.alumni);
-    
+    }); 
     axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
       this.user = res.data;
       this.getWorkExperience();
     })
-    
   },
 };
 </script>
-
 
 <style scoped>
 .avatar {

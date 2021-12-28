@@ -70,7 +70,7 @@ class WorkExperienceController extends Controller
                 ->join('alumnis', 'alumnis.id', '=', 'work_experiences.alumni_id')
                 ->where([['work_experiences.alumni_id','=',$alumniId]])
                 ->orderBy('work_experiences.id','DESC')
-                ->get(['companyName','positionName','start_year','end_year']);
+                ->get(['work_experiences.id','work_experiences.alumni_id','companyName','positionName','start_year','end_year']);
         return $workExperiences;
         
     
@@ -85,7 +85,30 @@ class WorkExperienceController extends Controller
      */
     public function updateWorkExperience(Request $request, $id)
     {
-        //
+        $workExperience = WorkExperience::findOrFail($id);
+        $workExperience->alumni_id = $request->alumni_id;
+        
+       if (is_numeric($request->company_id)){
+           $workExperience->company_id = $request->company_id;
+       }else{
+           $company = new Company();
+           $company->companyName = $request->company_id;
+           $company->save();
+           $workExperience->company_id = $company->id;
+       }
+       if (is_numeric($request->position_id)){
+           $workExperience->position_id = $request->position_id;
+       }else{
+           $position = new Position();
+           $position->positionName = $request->position_id;
+           $position->save();
+           $workExperience->position_id = $position->id;
+       }
+       $workExperience->start_year = $request->start_year;
+       $workExperience->end_year = $request->end_year;
+       $workExperience->save();
+       
+       return response()->json(['message'=>'Work Experience updated','data'=>$workExperience],200);
     }
 
     /**
@@ -96,6 +119,12 @@ class WorkExperienceController extends Controller
      */
     public function deleteWorkExperience($id)
     {
-        //
+
+        $isDelete = WorkExperience::destroy($id);
+        if($isDelete){
+            return response()->json(['message'=>'Work Experience deleted'],200);
+        }else{
+            return response()->json(['message'=>'Delete error'],404);
+        }
     }
 }
