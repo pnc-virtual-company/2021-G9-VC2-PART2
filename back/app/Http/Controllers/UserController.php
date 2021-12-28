@@ -19,34 +19,38 @@ class UserController extends Controller
         return User::findOrFail($id);
     }
 
-    public function createUser(Request $request)
+    public function createUser(Request $data)
     {
-        $request->validate([
-        "first_name"=>"nullable",
-        "last_name"=>"nullable",
-        "password"=>"nullable",
-        'email' => 'required|email|unique:users,email',
-        'role' => "required"
-        ]);
-        //move image to storage
-        $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->role = $request->role;
-        $user->save();
-
-        if ($request->role === 'alumni'){
-            $alumni = new Alumni();
-            $alumni->phone_number = $request->phone_number;
-            $alumni->gender = $request->gender;
-            $alumni->batch = $request->batch;
-            $alumni->major = $request->major;
-            $alumni->user_id = $user->id;
-            $alumni->profile = 'default_profile.jpg';
-            $alumni->save();
-        }
+        // $request = $request->toArray();
+        // foreach($request as $data){
+            dd($data);
+            $data->validate([
+            "first_name"=>"nullable",
+            "last_name"=>"nullable",
+            "password"=>"nullable",
+            'email' => 'required|email|unique:users,email',
+            'role' => "required"
+            ]);
+            //move image to storage
+            $user = new User();
+            $user->first_name = $data->first_name;
+            $user->last_name = $data->last_name;
+            $user->email = $data->email;
+            $user->password = bcrypt($data->password);
+            $user->role = $data->role;
+            $user->save();
+    
+            if ($data->role === 'alumni'){
+                $alumni = new Alumni();
+                $alumni->phone_number = $data->phone_number;
+                $alumni->gender = $data->gender;
+                $alumni->batch = $data->batch;
+                $alumni->major = $data->major;
+                $alumni->user_id = $user->id;
+                $alumni->profile = 'default_profile.jpg';
+                $alumni->save();
+            }
+        // }
         return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
 
