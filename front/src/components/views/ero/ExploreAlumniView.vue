@@ -6,7 +6,7 @@
         <v-card class="grey lighten-1 pa-5">
           <v-text-field
             dense
-            placeholder="Search alumni"
+            placeholder="Search alumni's name"
             type="text"
             outlined
             background-color="white"
@@ -21,7 +21,7 @@
             outlined
             background-color="white"
             v-model="searchBatch"
-             @input="findAlumniInfo"
+            @input="findAlumniInfo"
           ></v-select>
           <v-select
             :items="genders"
@@ -61,7 +61,13 @@
         <v-card class="grey lighten-1 pa-5">
           <!-- one card -->
           <!-- one card -->
-          <v-card class="mx-auto mb-2 pa-2 d-flex" color="white" width="100%" v-for="alumni of alumniList" :key="alumni.id">
+          <v-card
+            class="mx-auto mb-2 pa-2 d-flex"
+            color="white"
+            width="100%"
+            v-for="alumni of alumniList"
+            :key="alumni.id"
+          >
             <v-img
               class="white--text align-end rounded-circle"
               max-height="80"
@@ -79,16 +85,17 @@
               "
               width="85%"
             >
-              <h2>{{alumni.name}}</h2>
+              <h2>{{ alumni.name }}</h2>
               <div>
                 <div>WEB Development at PNC</div>
-                <div class="ml-4 d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
                   <img
-                    style="width: 30px; border-radius: 50%; height: 26px"
+                    
+                    style="width: 30px; border-radius: 50%; height: 30px;"
                     src="https://www.passerellesnumeriques.org/wp-content/uploads/2016/03/pn-logo.png"
                     alt=""
                   />
-                  <div>BATCH: {{alumni.major}} - {{alumni.batch}}</div>
+                  <div class="ml-2">BATCH: {{ alumni.major }} - {{ alumni.batch }}</div>
                 </div>
               </div>
             </v-card-text>
@@ -104,63 +111,109 @@
 <script>
 export default {
   data: () => ({
-    companies: ["PNC", "MANGOBYTE", "REAL WAT INT", "BIKAY", "SUOSDEY","ZINATION"],
-    genders: ["FEMALE", "MALE", "OTHER"],
-    batches: [
-      "2021",
-      "2022",
-      "2020",
-      "2021",
+    companies: [
+      "NONE",
+      "PNC",
+      "MANGOBYTE",
+      "REAL WAT INT",
+      "BIKAY",
+      "SUOSDEY",
+      "ZINATION",
     ],
-    majors: ["WEB", "SNA"],
-    alumniList:[
+    genders: ["NONE", "FEMALE", "MALE", "OTHER"],
+    batches: ["NONE", "2021", "2022", "2020", "2021"],
+    majors: ["NONE", "WEB", "SNA"],
+    alumniList: [
       // {name:"kaka",gender:'female',batch:"Batch - 2021 -WEB",company:'PNC',major:"WEB"},
       // {name:"yaya",gender:'female',batch:"Batch - 2022 -WEB",company:'BIKAY',major:"SNA"},
       // {name:"yuyu",gender:'male',batch:"Batch - 2020 -WEB",company:'ZINATION',major:"WEB"},
       // {name:"kuku",gender:'female',batch:"Batch - 2021 - SNA",company:'MANGOBYTE',major:"WEB"},
-
     ],
-    searchName:"",
-    searchBatch:"",
-    searchGender:"",
-    searchCompany:"",
-    searchMajor:"",
+    searchName: "",
+    searchBatch: "",
+    searchGender: "",
+    searchCompany: "",
+    searchMajor: "",
   }),
   methods: {
-    findAlumniInfo(){
-     
+    findAlumniInfo() {
       let alumniLists = [
-        {id:1,name:"kaka",gender:'female',batch:"2021",company:'PNC',major:"WEB"},
-        {id:2,name:"yaya",gender:'female',batch:"2020",company:'BIKAY',major:"SNA"},
-        {id:3,name:"yuyu",gender:'male',batch:"2020",company:'ZINATION',major:"WEB"},
-        {id:4,name:"kuku",gender:'female',batch:"2021",company:'MANGOBYTE',major:"WEB"},
-
-      ]
-      if(this.searchName!=="" && this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
-        && alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
-        ))
-        
-      }else if(this.searchName!=="" ){
-        this.alumniList = alumniLists.filter((alumni) =>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase()) ))
-        
-      }else if(this.searchBatch!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()))
-      }else if(this.searchGender!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
-      }else if(this.searchMajor!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
-      }else if(this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.company.toLowerCase()===this.searchCompany.toLowerCase()))
+        {
+          id: 1,
+          name: "kaka",
+          gender: "female",
+          batch: "2021",
+          company: "PNC",
+          major: "WEB",
+        },
+        {
+          id: 2,
+          name: "yaya",
+          gender: "female",
+          batch: "2020",
+          company: "BIKAY",
+          major: "SNA",
+        },
+        {
+          id: 3,
+          name: "yuyu",
+          gender: "male",
+          batch: "2020",
+          company: "ZINATION",
+          major: "WEB",
+        },
+        {
+          id: 4,
+          name: "kuku",
+          gender: "female",
+          batch: "2021",
+          company: "MANGOBYTE",
+          major: "WEB",
+        },
+      ];
+      if (
+        this.searchName !== "" &&
+        this.searchBatch !== "" &&
+        this.searchGender !== "" &&
+        this.searchMajor !== "" &&
+        this.searchCompany !== ""
+      ) {
+        this.alumniList = alumniLists.filter(
+          (alumni) =>
+            alumni.name.toLowerCase().includes(this.searchName.toLowerCase()) &&
+            alumni.batch.toLowerCase() === this.searchBatch.toLowerCase() &&
+            alumni.gender.toLowerCase() === this.searchGender.toLowerCase() &&
+            alumni.major.toLowerCase() === this.searchMajor.toLowerCase() &&
+            alumni.company.toLowerCase() === this.searchCompany.toLowerCase()
+        );
+      } else if (this.searchName !== "") {
+        this.alumniList = alumniLists.filter((alumni) =>
+          alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
+        );
+      } else if (this.searchBatch !== "" && this.searchBatch !== "NONE") {
+        this.alumniList = alumniLists.filter(
+          (alumni) =>
+            alumni.batch.toLowerCase() === this.searchBatch.toLowerCase()
+        );
+      } else if (this.searchGender !== "" && this.searchGender !== "NONE") {
+        this.alumniList = alumniLists.filter(
+          (alumni) =>
+            alumni.gender.toLowerCase() === this.searchGender.toLowerCase()
+        );
+      } else if (this.searchMajor !== ""  && this.searchMajor !== "NONE") {
+        this.alumniList = alumniLists.filter(
+          (alumni) =>
+            alumni.major.toLowerCase() === this.searchMajor.toLowerCase()
+        );
+      } else if (this.searchCompany !== "" && this.searchCompany !== "NONE") {
+        this.alumniList = alumniLists.filter(
+          (alumni) =>
+            alumni.company.toLowerCase() === this.searchCompany.toLowerCase()
+        );
+      } else {
+        this.alumniList = alumniLists;
       }
-      else{
-        this.alumniList= alumniLists;
-      }
-
-    }
+    },
   },
   mounted() {
     this.findAlumniInfo();
