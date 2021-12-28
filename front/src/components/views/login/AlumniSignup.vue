@@ -130,9 +130,10 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js"
+import axios from "../../../api/api.js"
 
 export default {
+  props:['userDataSignIn'],
   data() {
     return {
       first_name: '',
@@ -143,7 +144,7 @@ export default {
       confirmPassword: "",
       checkbox: false,
       isShowPassword: false,
-      userId: JSON.parse(localStorage.getItem('user')).id,
+      userId: localStorage.getItem('userId'),
       alumnis: [],
       
       phoneRules: [(v) => !!v || "Phone number is required"],
@@ -178,31 +179,38 @@ export default {
         }else{
             this.passwordConfirmRules = []
         }
+    },
+    phone_number(){
+      this.phoneRules = [
+        (v) => !!v || "Phone Number is required",
+        (v) => /^\d+$/.test(v) || 'Must be a number',
+        (v) => v.length>=9 && v.length<=10 || "Phone Number must be valid",]
     }
-
-
 
   },
   methods: {
     loginToUserAlumni(){
       if (this.password === this.confirmPassword){
-        let id = this.alumnis.filter(alumni => alumni.user_id === this.userId);
+        let id = this.alumnis.filter(alumni => alumni.user_id == this.userId);
         let userData = {
+          id: this.userId,
           first_name: this.first_name,
           last_name: this.last_name,
           password: this.password,
           email: JSON.parse(localStorage.getItem('user')).email,
           role: 'alumni',
+        }
+        let alumniData = {
           phone_number: this.phone_number,
           gender: this.gender,
-          alumni_id: id[0].id,
-          id: this.userId
-
+          user_id: this.userId,
+          id: id[0].id
         }
-        // localStorage.setItem('user', JSON.stringify(userData));
+        axios.put('/alumnis/'+ id[0].id, alumniData).then(()=>{
+        })
         axios.put('/users/'+ this.userId, userData).then(()=>{
           this.$emit('signin', userData);
-          this.$router.push('/alumni/profile/' + this.first_name);
+          this.$router.push('/alumni/profile/' + this.first_name).catch(()=>{});
         })
       }
     }

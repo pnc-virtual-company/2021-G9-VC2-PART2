@@ -1,4 +1,3 @@
-
 <template>
   <div
     class="d-flex justify-center align-center flex-column"
@@ -72,9 +71,10 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js"
+import axios from "../../../api/api.js"
 
 export default {
+  props:['userDataSignIn'],
   emits: ['signin'],
   data() {
     return {
@@ -84,7 +84,6 @@ export default {
       ],
       password: "",
       showPassword: false,
-      
     };
   },
   watch: {
@@ -97,15 +96,14 @@ export default {
   },
   methods:{
     verifyPassword(){
-      let user = {
+      let user = { 
         email: JSON.parse(localStorage.getItem('user')).email,
         password: this.password
       };
       axios.post("/signin", user)
       .then((res)=>{
-        console.log(res.data);
         if(res.data.user.role === 'admin'){
-          this.$router.push("/admin").catch(()=>{});
+          this.$router.push("/admin_view").catch(()=>{});
         }else if(res.data.user.role === 'alumni'){
           this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
         }else{

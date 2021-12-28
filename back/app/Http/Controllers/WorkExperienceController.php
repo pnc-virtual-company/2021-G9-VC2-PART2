@@ -63,9 +63,17 @@ class WorkExperienceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getOneWorkExperience($id)
+    public function getOneWorkExperience($alumniId)
     {
-        //
+        $workExperiences = WorkExperience::join('companies', 'companies.id', '=', 'work_experiences.company_id')
+                ->join('positions', 'positions.id', '=', 'work_experiences.position_id')
+                ->join('alumnis', 'alumnis.id', '=', 'work_experiences.alumni_id')
+                ->where([['work_experiences.alumni_id','=',$alumniId]])
+                ->orderBy('work_experiences.id','DESC')
+                ->get(['companyName','positionName','start_year','end_year']);
+        return $workExperiences;
+        
+    
     }
 
     /**

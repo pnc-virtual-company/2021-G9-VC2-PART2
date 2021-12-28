@@ -71,21 +71,33 @@ class AlumniController extends Controller
     {
         $request->validate([
             'phone_number'=>'required',
-            'gender'=>'required',
-            'batch'=>'required',
-            'major'=>'required',
-            'profile' =>'nullable'
+            'gender'=>'nullable',
+            'batch'=>'nullable',
+            'major'=>'nullable',
         ]);
         $alumni = Alumni::findOrFail($id);
         $alumni->phone_number = $request->phone_number;
         $alumni->gender = $request->gender;
         $alumni->batch = $request->batch;
         $alumni->major = $request->major;
-        $alumni->profile = $request->profile;
+        // $alumni->profile = $request->profile;
         $alumni->user_id = $request->user_id;
 
         $alumni->save();
         return response()->json(['message'=> 'Alumni Updated', 'data'=>$alumni], 201);
+    }
+
+    public function updateAlumniPrifile(Request $request, $id){
+        $request->validate([
+            'profile'=>'image|mimes:jpg,png,jpeg,gif|max:19999',
+        ]);
+        $request->file('profile')->store('public/profiles');
+
+        $profile = Alumni::findOrFail($id);
+        $profile->profile = $request->file('profile')->hashName();
+
+        $profile->save();
+        return response()->json(['message'=> 'Profile Updated'], 201);
     }
 
     /**

@@ -17,7 +17,7 @@
 
             <v-row no-gutters class="mt-6">
               <v-col cols="12">
-                <v-text-field
+                <v-text-field v-if="true"
                   dense
                   placeholder="E-mail"
                   :rules="emailRules"
@@ -26,8 +26,6 @@
                   background-color="white"
                   v-model="email"
                 ></v-text-field>
-              
-
               </v-col>
             </v-row>
             <v-row class="ma-0 pa-0">
@@ -68,7 +66,7 @@
 </template>
 
 <script>
-import axios from "./../../api/api.js";
+import axios from "../../../api/api.js";
 export default {
   
   data() {
@@ -79,6 +77,7 @@ export default {
         (v) => /.+@.+/.test(v) || "E-mail must be valid",
       ],
       userList: [],
+      userLogin:null,
 
     };
   },
@@ -89,12 +88,16 @@ export default {
         this.emailRules = ['Your Email does not exist'];
       }else{
         if (user[0].first_name === null && user[0].last_name === null){
-          this.$router.push('/alumni-signup').catch(()=>{});
+          this.$router.push('/alumni_signup').catch(()=>{});
         }else{
-          this.$router.push('/verify-password').catch(()=>{});
+          this.$router.push('/verify_password').catch(()=>{});
         }
-        localStorage.setItem('user', JSON.stringify(user[0]));
-
+        let userEmail = {
+          email: user[0].email,
+          role: user[0].role,
+        }
+        localStorage.setItem('user', JSON.stringify(userEmail));
+        localStorage.setItem('userId', user[0].id);
       }
     },
   },

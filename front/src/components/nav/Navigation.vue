@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-app app>  -->
   <v-app-bar class="" width="100%" height="70" app color="white">
     <v-img
       src="./../../assets/PN-Cambodia-Alumni-Association.png"
@@ -14,7 +13,7 @@
       color="#FF9933"
     >
       <v-tab
-        :to="{ path: '/admin' }"
+        :to="{ path: '/admin_view' }"
         class="text-h6 blue--text"
         v-if="alumni.role === 'admin'"
         >Manager Users</v-tab
@@ -30,21 +29,20 @@
         color="black"
         v-if="alumni.role === 'alumni'"
         >My Profile</v-tab
-      >
+      >   
       <v-tab
-        :to="{ path: '/event' }"
-        class="text-h6 blue--text"
-        color="black"
-        >Events</v-tab
-      >
-      <v-tab
-        :to="{ path: '/alumni_users' }"
+        :to="{ path: '/explore_alumni' }"
         class="text-h6 blue--text"
         color="black"
         v-if="alumni.role === 'admin'"
         >
         Explore Alumnis
       </v-tab>
+      <v-tab
+        :to="{ path: '/event' }"
+        class="text-h6 blue--text"
+        color="black"
+        >Events</v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -54,37 +52,28 @@
         width="20px"
         dark
         @click.stop="dialog = true"
-        class="mr-6 "
+        class="mr-13 px-12"
       >
         Logout
       </v-btn>
 
-      <v-dialog
-        v-model="dialog"
-        max-width="290"
-      >
+      <v-dialog v-model="dialog" max-width="290">
         <v-card>
           <v-card-title class="text-h5">
-            Are you want to logout your account?
+            Are you sure to logout your account?
           </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
 
             <v-btn
-              color="orange"
+              color="#FF9933"
               text
               @click="dialog = false"
             >
               No
             </v-btn>
 
-            <v-btn
-              color="#22BBEA"
-              text
-              @click="logoutAcout"
-            >
-              Yes
-            </v-btn>
+            <v-btn color="#22BBEA" text @click="logoutAcout"> Yes </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -93,20 +82,25 @@
 </template>
 <script>
 export default {
-  emits:['sign-out'],
+  props: ["activeUser"],
+  emits: ["sign-out"],
   data() {
     return {
       dialog: false,
       alumni: JSON.parse(localStorage.getItem('user')),
+      role: this.activeUser.role,
     };
   },
-  methods:{
-    logoutAcout(){
-      this.dialog = false
-      localStorage.clear();
+  methods: {
+    logoutAcout() {
+      this.dialog = false;
       this.$emit("sign-out");
-      this.$router.push('/verify-email');
-    }
-  }
+      localStorage.clear();
+      this.$router.push("/verify_email").catch(() => {});
+    },
+  },
+  mounted() {
+    
+  },
 };
 </script>
