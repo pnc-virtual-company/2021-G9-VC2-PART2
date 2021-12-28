@@ -14,14 +14,14 @@
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Company</v-list-item-title>
-            <v-list-item-subtitle class="mt-2">Mango Byte</v-list-item-subtitle>
+            <v-list-item-subtitle class="mt-2">{{work.companyName}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Position</v-list-item-title>
             <v-list-item-subtitle class="mt-2"
-              >Web Developer</v-list-item-subtitle
+              >{{work.positionName}}</v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
@@ -29,13 +29,13 @@
           <v-list-item-content>
             <v-list-item-title>Years</v-list-item-title>
             <v-list-item-subtitle class="mt-2"
-              >2010-present</v-list-item-subtitle
+              >{{work.start_year}}- {{work.end_year}}</v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <v-icon v-if="hover" @click="dialog = !dialog" class="edit pa-2 white elevation-6 rounded-circle">mdi-pen</v-icon>
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
           <v-form class="pt-5 px-5">
             <v-card-title class="d-flex justify-center my-0 py-0">
@@ -80,9 +80,12 @@
           </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
-            <v-btn color="#22BBEA" @click="dialog = false">
-              <span class="white--text">Update</span>
+            <v-btn dark color="#FF9933" @click="dialog = false">
+              <span >Cancel</span>
             </v-btn>
+            <v-btn color="#22BBEA" @click="dialog = false">
+                <span class="white--text">Submit</span>
+              </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -92,6 +95,7 @@
 
 <script>
 export default {
+  props:['work'],
   data() {
     return {
       dialog: false,

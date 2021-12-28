@@ -1,4 +1,3 @@
-
 <template>
   <div
     class="d-flex justify-center align-center flex-column"

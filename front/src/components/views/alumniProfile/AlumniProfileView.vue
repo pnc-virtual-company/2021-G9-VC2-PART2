@@ -158,13 +158,12 @@
                               ></v-text-field>
                             </v-col>
                           </v-row>
-
                           <v-card-actions class="justify-end">
-                            <v-btn dark color="#FF9933">
-                              <span @click="closeDialog">Cancel</span>
+                            <v-btn dark color="#FF9933" @click="closeDialog">
+                              <span >Cancel</span>
                             </v-btn>
-                            <v-btn dark color="#22BBEA">
-                              <span @click="updateData">Confirm</span>
+                            <v-btn dark color="#22BBEA" @click="updateData">
+                              <span >Confirm</span>
                             </v-btn>
                           </v-card-actions>
                         </v-card-text>
@@ -180,13 +179,94 @@
         <v-card-text class="d-flex justify-center align-center">
           <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
           <v-spacer></v-spacer>
-          <v-icon class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text">mdi-plus</v-icon>
+          <!-- <v-btn class="blue rounded-circle" width="10px"> -->
+            <v-icon
+            @click="dialogCreate = !dialogCreate"
+            class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
+            >mdi-plus</v-icon
+          >
+          <v-dialog v-model="dialogCreate" persistent max-width="500px">
+        <v-card>
+          <v-form class="pt-5 px-5">
+            <v-card-title class="d-flex justify-center my-0 py-0">
+              <span class="text-h5 text-color">CREATE EMPLOYMENT</span>
+            </v-card-title>
+            <v-divider
+              color="#FF9933"
+              class="mx-auto mt-4"
+              width="95%"
+            ></v-divider>
+
+            <v-container>
+              <v-row no-gutters>
+                <v-col cols="12" class="mt-4">
+                   <v-combobox
+                        dense
+                     
+                        outlined
+                        v-model="modelCompany"
+                        :items="companies"
+                        :search-input.sync="searchComapany"
+                        label="Company"
+                    >
+                    </v-combobox>
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col cols="12">
+                   <v-combobox
+                        dense
+                        outlined
+                        v-model="modelPosition"
+                        :items="positions"
+                        :search-input.sync="searchPosition"
+                        label="Position"
+                      >
+                      </v-combobox>
+                </v-col>
+              </v-row>
+              <v-row class="mt-0 pb-0" dense>
+                <v-col cols="6">
+                  <v-select
+                    v-model="startYear"
+                    :items="startYears"
+                    label="Start Year"
+                    dense
+                    outlined
+                  ></v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    v-model="endYear"
+                    :items="endYears"
+                    label="End Year"
+                    dense
+                    outlined
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
+          <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
+            <v-spacer></v-spacer>
+            <v-btn dark color="#FF9933" @click="closeCreateDialog">
+              <span >Cancel</span>
+            </v-btn>
+            <v-btn color="#22BBEA" @click="createWorkExperience">
+                <span class="white--text">Submit</span>
+              </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+            <!-- Add
+          </v-btn> -->
         </v-card-text>
         <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
-        <alumni-current-employment/>
-        <alumni-current-employment/>
-        <alumni-current-employment/>
-        <alumni-current-employment/>
+        <alumni-current-employment
+        v-for="work of workExperience" :key="work.id"
+        :work='work'
+        />
+      
       </v-card>
     </v-card>
   </v-container>
@@ -204,14 +284,29 @@ export default {
     return {
       // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
+      dialogCreate:false,
       checkPassword: false,
       password: '',
       alumni: {},
+      user:{},
       alumniData: {},
       currentEmployments: [],
+      startYears: ['2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
+      endYears: ['Prenent', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
+      startYear : '',
+      endYear:'',
       major: ["WEB", "SNA"],
       batch: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
       passwordRules: [],
+      companies:[],
+      positions:[],
+      workExperience:[],
+      objectCompanies:[],
+      objectPositions:[],
+      modelPosition:'',
+      modelCompany:'',
+      searchComapany:null,
+      searchPosition:null,
       phoneRule: [],
       emailRules: [],
       email: '',
@@ -219,6 +314,8 @@ export default {
       userId: localStorage.getItem('userId'),
       profile: 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png',
       image: '',
+      
+    
 
     };
   },
@@ -231,7 +328,7 @@ export default {
       this.phoneRule = [
         (v) => !!v || "Phone Number is required",
         (v) => /^\d+$/.test(v) || 'Must be a number',
-        (v) => v.length>=9 && v.length<=10 || "Phone Number must be valid",]
+        (v) => v.length>=9 && v.length<=10  && v[0] == 0 || "Phone Number must be valid",]
     }
   },
   methods: {
@@ -264,16 +361,18 @@ export default {
 
     },
     completedData(){
+      console.log(this.email.split('@')[0]+ '@gmail.com' === this.email, this.phoneNumber[0] == 0, this.phoneNumber.length >= 9, this.phoneNumber.length <= 10);
       if (this.email.split('@')[0]+ '@gmail.com' === this.email && this.phoneNumber[0] == 0 && this.phoneNumber.length >= 9 && this.phoneNumber.length <= 10){
         this.dialog = false;
         this.checkPassword = true;
       }else{
-        this.phoneRule = ["Phone Number must be valid"]
-        this.emailRules = [ "E-mail must be valid",]
+        this.phoneRule = [(v) => v.length>=9 && v.length<=10  && v[0] == 0 || "Phone Number must be valid"]
+        this.emailRules = ["E-mail must be valid",]
       
       }
     },
     updateData(){
+      // console.log("updated")
       let object = {
         email: this.alumni.email,
         password: this.password,
@@ -292,13 +391,57 @@ export default {
           this.getOneAlumni();
         })
         this.password = "";
-        
       })
       .catch(()=>{   
         this.passwordRules = ['Your Password does not exist'];
       })
       
 
+    },
+    closeCreateDialog(){
+      this.dialogCreate = false;
+      this.modelCompany="";
+      this.modelPosition="";
+      this.startYear="";
+      this.endYear="";
+    },
+    createWorkExperience(){
+      if(this.modelPosition!=="" && this.modelCompany!=="" && this.startYear!=="" && this.endYear!==""){
+        let objectOfCompany = this.objectCompanies.filter(company=>company.companyName == this.modelCompany);
+        let objectOfPosition = this.objectPositions.filter(position=>position.positionName == this.modelPosition);
+        let company = null;
+        let position = null;
+        if (objectOfCompany.length !==0){
+          company = objectOfCompany[0].id
+        }else{
+          company = this.modelCompany;
+        }
+        if (objectOfPosition.length !==0){
+          position = objectOfPosition[0].id
+        }else{
+          position = this.modelPosition;
+        }
+        let newWork={
+          alumni_id : this.user.alumni.id,
+          company_id: company,
+          position_id : position,
+          start_year : this.startYear,
+          end_year : this.endYear,
+        };
+        axios.post('work_experiences',newWork).then(()=>{
+          this.getWorkExperience();
+        })
+       this.closeCreateDialog()
+        
+      
+      }
+      },
+      
+
+    getWorkExperience(){
+      axios.get('work_experiences/'+this.user.alumni.id).then(res=>{
+        this.workExperience = res.data;
+      })
     }
   },
   mounted() {
@@ -311,6 +454,25 @@ export default {
       year: "2019-Present",
     };
     this.currentEmployments.push(emplotment);
+    axios.get('companies').then(res=>{
+      this.objectCompanies = res.data;
+      for(let company of this.objectCompanies){
+        this.companies.push(company.companyName)
+      }
+    });
+    axios.get('positions').then(res=>{
+      this.objectPositions = res.data;
+      for(let position of this.objectPositions){
+        this.positions.push(position.positionName);
+      }
+    });
+    console.log(this.alumni);
+    
+    axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
+      this.user = res.data;
+      this.getWorkExperience();
+    })
+    
   },
 };
 </script>
@@ -324,11 +486,14 @@ export default {
 }
 .icon {
   position: absolute;
-  top: 19%;
-  left: 23%;
+  top: 17%;
+  left: 22%;
   height: 33px;
 }
 .header{
   background: #22BBEA;
+}
+.text-color {
+  color: #22bbea;
 }
 </style>
