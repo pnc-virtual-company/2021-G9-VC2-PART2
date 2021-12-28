@@ -81,8 +81,9 @@
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
             <v-btn color="#22BBEA" @click="dialog = false">
-              <span class="white--text">Update</span>
-            </v-btn>
+                <span class="white--text">Submit</span>
+                <v-icon right class="white--text">mdi-account-edit</v-icon>
+              </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
