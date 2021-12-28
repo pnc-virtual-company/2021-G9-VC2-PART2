@@ -15,26 +15,21 @@
       <v-tab
         :to="{ path: '/admin_view' }"
         class="text-h6 blue--text"
-        v-if="alumni.role === 'admin'"
-        >Manager Users
-      </v-tab>
+        v-if="role === 'admin' || role === 'ero'"
+        >Manager Users</v-tab
+      >
       <v-tab
-        :to="{ path: '/ero_officers' }"
-        class="text-h6 blue--text"
-        v-if="alumni.role === 'ero'"
-        >Ero Officer</v-tab>
-      <v-tab
-        :to="{ path: '/alumni/profile/' + alumni.first_name }"
+        :to="{ path: '/alumni/profile' }"
         class="text-h6 blue--text"
         color="black"
-        v-if="alumni.role === 'alumni'"
+        v-if="role === 'alumni'"
         >My Profile</v-tab
       >   
       <v-tab
         :to="{ path: '/explore_alumni' }"
         class="text-h6 blue--text"
         color="black"
-        v-if="alumni.role === 'admin'"
+        v-if="role === 'admin'"
         >
         Explore Alumnis
       </v-tab>
@@ -82,13 +77,11 @@
 </template>
 <script>
 export default {
-  props: ["activeUser"],
   emits: ["sign-out"],
   data() {
     return {
       dialog: false,
-      alumni: JSON.parse(localStorage.getItem('user')),
-      role: this.activeUser.role,
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
   methods: {

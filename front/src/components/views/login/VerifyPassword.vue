@@ -102,13 +102,10 @@ export default {
       };
       axios.post("/signin", user)
       .then((res)=>{
-        if(res.data.user.role === 'admin'){
+        if(res.data.user.role === 'admin' || res.data.user.role === 'ero'){
           this.$router.push("/admin_view").catch(()=>{});
         }else if(res.data.user.role === 'alumni'){
           this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
-        }else{
-          
-          this.$router.push("/ero_officers").catch(()=>{});
         }
         this.$emit('signin', res.data.user);
       })
