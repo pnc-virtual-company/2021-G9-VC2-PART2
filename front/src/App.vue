@@ -50,6 +50,14 @@ export default {
         this.activeUser = users.filter(user => user.id === JSON.parse(localStorage.getItem("userID")));
     });
     }
+    let user = JSON.parse(localStorage.getItem("user"));
+    if(user !== null){
+        this.activeUser = JSON.parse(localStorage.getItem("user"));
+
+    }
+    else{
+       this.activeUser = user;
+    }
   },
 };
 </script>
