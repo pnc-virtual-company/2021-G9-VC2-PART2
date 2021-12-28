@@ -35,7 +35,7 @@
         </v-list-item>
       </v-list>
       <v-icon v-if="hover" @click="dialog = !dialog">mdi-pen</v-icon>
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
           <v-form class="pt-5 px-5">
             <v-card-title class="d-flex justify-center my-0 py-0">
@@ -77,18 +77,20 @@
               <v-row class="mt-0 pb-0" dense>
                 <v-col cols="6">
                   <v-select
-                    :items="startYear"
+                    :items="startYears"
                     label="Start Year"
                     dense
                     outlined
+                    v-model="startYear"
                   ></v-select>
                 </v-col>
                 <v-col cols="6">
                   <v-select
-                    :items="endYear"
+                    :items="endYears"
                     label="End Year"
                     dense
                     outlined
+                    v-model="endYear"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -96,9 +98,11 @@
           </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
-            <v-btn color="#22BBEA" @click="dialog = false">
+            <v-btn dark color="#FF9933" @click="closeDialog">
+              <span >Cancel</span>
+            </v-btn>
+            <v-btn color="#22BBEA" @click="closeDialog">
                 <span class="white--text">Submit</span>
-                <v-icon right class="white--text">mdi-account-edit</v-icon>
               </v-btn>
           </v-card-actions>
         </v-card>
@@ -118,11 +122,21 @@ export default {
       modelPosition: "",
       searchCompany: null,
       searchPosition: null,
-      startYear: ["2021", "2020", "2019", "2018"],
-      endYear: ["Present", "2021", "2020", "2019", "2018"],
+      startYears: ["2021", "2020", "2019", "2018"],
+      endYears: ["Present", "2021", "2020", "2019", "2018"],
+      startYear : "",
+      endYear : "",
     };
   },
-  methods: {},
+  methods: {
+    closeDialog(){
+      this.dialog = false;
+      this.modelPosition = "";
+      this.modelCompany = "";
+      this.startYear = "";
+      this.endYear =  "";
+    }
+  },
 };
 </script>
 
