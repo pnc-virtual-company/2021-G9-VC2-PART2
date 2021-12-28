@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <navagation v-if="activeUser" @sign-out="userSignOut" :activeUser="activeUser"></navagation>
+    <navagation v-if="activeUser" @sign-out="userSignOut"></navagation>
     <v-main>
       <router-view @signin="userSignin" @verify-email="emailChecking" :userDataSignIn="userDataSignIn"/>
     </v-main>
@@ -50,14 +50,12 @@ export default {
         this.activeUser = users.filter(user => user.id === JSON.parse(localStorage.getItem("userID")));
     });
     }
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(user !== null){
-        this.activeUser = JSON.parse(localStorage.getItem("user"));
-
-    }
-    else{
-       this.activeUser = user;
-    }
+    this.activeUser = JSON.parse(localStorage.getItem("user"));
+    // if(user !== null){
+    //     this.activeUser = JSON.parse(localStorage.getItem("user"));}
+    // else{
+    //    this.activeUser = null;
+    // }
   },
 };
 </script>

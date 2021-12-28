@@ -15,14 +15,8 @@
       <v-tab
         :to="{ path: '/admin_view' }"
         class="text-h6 blue--text"
-        v-if="role === 'admin'"
+        v-if="role === 'admin' || role === 'ero'"
         >Manager Users</v-tab
-      >
-      <v-tab
-        :to="{ path: '/ero_officers' }"
-        class="text-h6 blue--text"
-        v-if="role === 'ero'"
-        >Ero Officer</v-tab
       >
       <v-tab
         :to="{ path: '/alumni/profile' }"
@@ -78,12 +72,11 @@
 </template>
 <script>
 export default {
-  props: ["activeUser"],
   emits: ["sign-out"],
   data() {
     return {
       dialog: false,
-      role: this.activeUser.role,
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
   methods: {
@@ -95,7 +88,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.activeUser);
+    
   },
 };
 </script>

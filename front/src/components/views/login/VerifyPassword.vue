@@ -97,19 +97,18 @@ export default {
   },
   methods:{
     verifyPassword(){
-      console.log(this.userDataSignIn)
       let user = { 
         email: this.userDataSignIn.email,
         password: this.password
       };
       axios.post("/signin", user)
       .then((res)=>{
+        localStorage.setItem('user', JSON.stringify({email: this.userDataSignIn.email, role: res.data.user.role}));
         if(res.data.user.role === 'admin'){
           this.$router.push("/admin_view").catch(()=>{});
         }else if(res.data.user.role === 'alumni'){
           this.$router.push("/alumni/profile/"+res.data.user.first_name).catch(()=>{});
         }else{
-          
           this.$router.push("/ero_officers").catch(()=>{});
         }
         this.$emit('signin', res.data.user);

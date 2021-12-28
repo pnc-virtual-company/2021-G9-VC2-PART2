@@ -33,6 +33,7 @@
                   <v-row>
                     <v-col cols="6" class="mb-0 pb-0 pt-0">
                       <v-text-field
+                        v-model="firstName"
                         type="text"
                         dense
                         label="First name"
@@ -42,6 +43,7 @@
                     </v-col>
                     <v-col cols="6" class="mb-0 pb-0 pt-0">
                       <v-text-field
+                        v-model="lastName"
                         type="text"
                         dense
                         :rules="nameRules"
@@ -53,6 +55,7 @@
                   <v-row>
                     <v-col cols="12" class="mb-0 pb-0 pt-0">
                       <v-text-field
+                        v-model="email"
                         type="email"
                         dense
                         :rules="emailRules"
@@ -111,8 +114,12 @@
 
     
 <script>
+import axios from './../../../api/api.js';
 export default {
   data: () => ({
+    firstName: "",
+    lastName: "",
+    email: "",
     password: "",
     confirmPassword: "",
     passwordRules: [
@@ -133,15 +140,28 @@ export default {
     checkbox: false,
     alert: false,
     dialog: false,
+    
   }),
   methods: {
     createAnEro() {
+      let eroData = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        password: this.password,
+        role: 'ero'
+      };
+      axios.post('/users', eroData).then((res)=>{
+        console.log(res.data);
+      })
+      // console.log(eroData);
       this.alert = true;
       this.dialog = false;
       this.alert = true;
       setTimeout(() => {
         this.alert = false;
-      }, 4000);
+      }, 2000);
+
     },
   },
   watch: {

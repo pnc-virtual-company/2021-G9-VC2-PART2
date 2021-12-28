@@ -21,7 +21,8 @@
 <script>
 // import axios from "./../../../api/api.js";
 import InviteAlumni from "./IniviteAlumni.vue";
-import userData from "../../UI/UserData.vue";
+import userData from "./../../ui/UserData.vue";
+// import userData from "../../ui/UserData.vue";
 import ManagerEroUser from "./ManageEroUser.vue";
 export default {
   components: {
@@ -31,15 +32,23 @@ export default {
   },
   data: () => ({
     select: { state: "ALUMNI LIST" },
-    item: [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }],
+    item: [],
     isAlumni: false,
+   
   }),
   watch: {
     select() {
       this.isAlumni = !this.isAlumni;
     },
   },
-  mounted() {},
+  mounted() {
+    const role = JSON.parse(localStorage.getItem('user')).role;
+    if (role === 'admin'){
+      this.item = [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }];
+    }else if(role === 'ero'){
+      this.item = [{ state: "ALUMNI LIST" }]
+    }
+  },
 };
 </script>
 
