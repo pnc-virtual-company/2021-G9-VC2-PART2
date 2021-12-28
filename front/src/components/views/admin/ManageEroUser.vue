@@ -29,68 +29,74 @@
                 width="95%"
               ></v-divider>
               <v-container>
-                <v-row>
-                  <v-col cols="12" lg="6" sm="12" md="6" class="mb-0 pb-0 pt-0">
-                    <v-text-field
-                      type="text"
-                      dense
-                      label="First name"
-                      :rules="nameRules"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" lg="6" sm="12" md="6" class="mb-0 pb-0 pt-0">
-                    <v-text-field
-                      type="text"
-                      dense
-                      :rules="nameRules"
-                      label="Last name"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" class="mb-0 pb-0 pt-0">
-                    <v-text-field
-                      type="email"
-                      dense
-                      :rules="emailRules"
-                      label="E-mail"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" lg="6" sm="12" md="6" class="mb-0 pb-0 pt-0">
-                    <v-text-field
-                      :type="isShowPassword ? 'text' : 'password'"
-                      dense
-                      label="Password"
-                      v-model="password"
-                      :rules="passwordRules"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" lg="6" sm="12" md="6" class="mb-0 pb-0 pt-0">
-                    <v-text-field
-                      :type="isShowPassword ? 'text' : 'password'"
-                      dense
-                      label="Confirm password"
-                      v-model="confirmPassword"
-                      :rules="passwordConfirmRules"
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" class="mt-0 pt-0">
+                <!-- <v-row> -->
+                  <v-row>
+                    <v-col cols="6" class="mb-0 pb-0 pt-0">
+                      <v-text-field
+                        type="text"
+                        dense
+                        label="First name"
+                        :rules="nameRules"
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="mb-0 pb-0 pt-0">
+                      <v-text-field
+                        type="text"
+                        dense
+                        :rules="nameRules"
+                        label="Last name"
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" class="mb-0 pb-0 pt-0">
+                      <v-text-field
+                        type="email"
+                        dense
+                        :rules="emailRules"
+                        label="E-mail"
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6" class="mb-0 pb-0 pt-0">
+                      <v-text-field
+                        :type="isShowPassword ? 'text' : 'password'"
+                        dense
+                        label="Password"
+                        v-model="password"
+                        :rules="passwordRules"
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="mb-0 pb-0 pt-0">
+                      <v-text-field
+                        :type="isShowPassword ? 'text' : 'password'"
+                        dense
+                        label="Confirm password"
+                        v-model="confirmPassword"
+                        :rules="passwordConfirmRules"
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-col cols="12" class="mt-0 pt-0 ml-0 pl-0">
                     <v-checkbox
                       class="ma-0 pa-0"
                       v-model="checkbox"
                       label="Show password"
                     ></v-checkbox>
                   </v-col>
-                </v-row>
+                <!-- </v-row> -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="dialog = false">
+                  <v-btn color="#FF9933" dark @click="dialog = false">
                     Close
                   </v-btn>
-                  <v-btn color="blue darken-1" text @click="createAnEro">
+                  <v-btn color="#22BBEA" dark @click="createAnEro">
                     Create
                   </v-btn>
                 </v-card-actions>

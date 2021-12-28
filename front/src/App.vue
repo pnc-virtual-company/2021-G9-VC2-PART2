@@ -62,11 +62,19 @@ export default {
         );
       });
     }
-    let user = JSON.parse(localStorage.getItem("user"));
-    if (user !== null) {
+    let userData = JSON.parse(localStorage.getItem("user"));
+    if (userData !== null) {
       this.activeUser = JSON.parse(localStorage.getItem("user"));
     } else {
-      this.activeUser = user;
+      this.activeUser = userData;
+    }
+    let user = JSON.parse(localStorage.getItem("user"));
+    if(user !== null){
+        this.activeUser = JSON.parse(localStorage.getItem("user"));
+
+    }
+    else{
+       this.activeUser = user;
     }
   },
 };

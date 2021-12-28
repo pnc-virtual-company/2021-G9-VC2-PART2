@@ -38,7 +38,12 @@ export default {
       this.isAlumni = !this.isAlumni;
     },
   },
-  mounted() {},
+  mounted() {
+   
+  },
+  
+
+  
 };
 </script>
 

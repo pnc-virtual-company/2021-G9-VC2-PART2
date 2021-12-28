@@ -16,8 +16,8 @@
         :to="{ path: '/admin_view' }"
         class="text-h6 blue--text"
         v-if="alumni.role === 'admin'"
-        >Manager Users</v-tab
-      >
+        >Manager Users
+      </v-tab>
       <v-tab
         :to="{ path: '/ero_officers' }"
         class="text-h6 blue--text"
