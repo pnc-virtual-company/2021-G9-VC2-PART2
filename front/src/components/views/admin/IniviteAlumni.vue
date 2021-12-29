@@ -59,6 +59,7 @@
 <script>
 import axios from './../../../api/api.js';
 export default {
+  emits:['alumni'],
   data: () => ({
     items: [],
     dialog: false,
@@ -79,11 +80,11 @@ export default {
         if (pattern.test(v)){
             let object = {
               email: v,
-              role: 'alumni'
+              role: 'alumni',
+              status: 'invited'
             }
             this.items.push(object);
         }
-        console.log(this.items);
         return v;
       });
     },
@@ -94,6 +95,7 @@ export default {
             axios.post('/users', value).then(()=>{
               this.model = [];
               this.items = [];
+              this.$emit('alumni', 'alumni');
             })
         })
       this.alert = true;

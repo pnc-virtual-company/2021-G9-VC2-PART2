@@ -19,7 +19,7 @@
         >Manager Users</v-tab
       >
       <v-tab
-        :to="{ path: '/alumni/profile' }"
+        :to="{ path: '/alumni/profile/'+ activeUser.first_name }"
         class="text-h6 blue--text"
         color="black"
         v-if="role === 'alumni'"
@@ -77,6 +77,7 @@
 </template>
 <script>
 export default {
+  inject: ['activeUser'],
   emits: ["sign-out"],
   data() {
     return {

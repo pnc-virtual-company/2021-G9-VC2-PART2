@@ -71,5 +71,8 @@ export default {
     //    this.activeUser = null;
     // }
   },
+  provide(){
+    return {activeUser : this.activeUser};
+  }
 };
 </script>

@@ -116,6 +116,7 @@
 <script>
 import axios from './../../../api/api.js';
 export default {
+  emits: ['ero'],
   data: () => ({
     firstName: "",
     lastName: "",
@@ -151,10 +152,10 @@ export default {
         password: this.password,
         role: 'ero'
       };
-      axios.post('/users', eroData).then((res)=>{
-        console.log(res.data);
+      axios.post('/users', eroData).then(()=>{
+        this.$emit('ero', 'ero');
       })
-      // console.log(eroData);
+      
       this.alert = true;
       this.dialog = false;
       this.alert = true;

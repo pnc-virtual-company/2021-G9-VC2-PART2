@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function getUsers(){
 
-        return User::with('alumni')->get();
+        return User::with('alumni')->latest()->get();
     }
 
     public function getUser(Request $request, $id){
@@ -47,6 +47,7 @@ class UserController extends Controller
                 $alumni->gender = $request->gender;
                 $alumni->batch = $request->batch;
                 $alumni->major = $request->major;
+                $alumni->status = $request->status;
                 $alumni->user_id = $user->id;
                 $alumni->profile = 'default_profile.jpg';
                 $alumni->save();

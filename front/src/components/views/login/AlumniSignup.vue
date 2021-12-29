@@ -203,6 +203,7 @@ export default {
         let alumniData = {
           phone_number: this.phone_number,
           gender: this.gender,
+          status: 'active',
           user_id: this.userId,
           id: id[0].id
         }
