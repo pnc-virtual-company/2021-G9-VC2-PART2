@@ -77,12 +77,12 @@
 </template>
 <script>
 export default {
-  inject: ['activeUser'],
   emits: ["sign-out"],
   data() {
     return {
       dialog: false,
       role: JSON.parse(localStorage.getItem('user')).role,
+      activeUser: localStorage.getItem('userName')
     };
   },
   methods: {

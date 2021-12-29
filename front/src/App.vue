@@ -37,6 +37,7 @@ export default {
     userSignin(user) {
       this.activeUser = user;
       localStorage.setItem("userId", user.id);
+      localStorage.setItem("userName", user.first_name);
     },
     emailChecking(user) {
       this.userDataSignIn = user;
@@ -71,8 +72,6 @@ export default {
     //    this.activeUser = null;
     // }
   },
-  provide(){
-    return {activeUser : this.activeUser};
-  }
+  
 };
 </script>
