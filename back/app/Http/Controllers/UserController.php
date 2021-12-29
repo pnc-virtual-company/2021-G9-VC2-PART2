@@ -49,7 +49,7 @@ class UserController extends Controller
                 $alumni->major = $request->major;
                 $alumni->status = $request->status;
                 $alumni->user_id = $user->id;
-                $alumni->profile = 'default_profile.jpg';
+                $alumni->profile = 'default_profile.png';
                 $alumni->save();
             }
         // }

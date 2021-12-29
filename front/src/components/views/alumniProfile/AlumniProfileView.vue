@@ -314,7 +314,7 @@ export default {
       email: '',
       phoneNumber: '',
       userId: localStorage.getItem('userId'),
-      profile: 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png',
+      profile: '',
       image: '',
     };
   },

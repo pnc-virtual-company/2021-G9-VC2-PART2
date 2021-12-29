@@ -19,7 +19,7 @@
         >Manager Users</v-tab
       >
       <v-tab
-        :to="{ path: '/alumni/profile/'+ activeUser.first_name }"
+        :to="{ path: '/alumni/profile/'+ activeUser }"
         class="text-h6 blue--text"
         color="black"
         v-if="role === 'alumni'"

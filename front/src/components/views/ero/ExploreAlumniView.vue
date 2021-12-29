@@ -85,7 +85,7 @@
               "
               width="85%"
             >
-              <h2>{{ alumni.name }}</h2>
+              <h2>{{ alumni.first_name }} {{alumni.last_name}}</h2>
               <div>
                 <div>WEB Development at PNC</div>
                 <div class="d-flex align-center">
@@ -109,6 +109,7 @@
   </v-container>
 </template>
 <script>
+import axios from './../../../api/api.js';
 export default {
   data: () => ({
     companies: [
@@ -137,40 +138,15 @@ export default {
   }),
   methods: {
     findAlumniInfo() {
-      let alumniLists = [
-        {
-          id: 1,
-          name: "kaka",
-          gender: "female",
-          batch: "2021",
-          company: "PNC",
-          major: "WEB",
-        },
-        {
-          id: 2,
-          name: "yaya",
-          gender: "female",
-          batch: "2020",
-          company: "BIKAY",
-          major: "SNA",
-        },
-        {
-          id: 3,
-          name: "yuyu",
-          gender: "male",
-          batch: "2020",
-          company: "ZINATION",
-          major: "WEB",
-        },
-        {
-          id: 4,
-          name: "kuku",
-          gender: "female",
-          batch: "2021",
-          company: "MANGOBYTE",
-          major: "WEB",
-        },
-      ];
+      let alumniLists = [ ];
+      axios.get("/users").then((res)=> {
+        
+        alumniLists = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
+        this.alumniList = alumniLists
+      })
+      for(let i of alumniLists){
+        console.log(i)
+      }
       if (
         this.searchName !== "" &&
         this.searchBatch !== "" &&
@@ -217,6 +193,7 @@ export default {
   },
   mounted() {
     this.findAlumniInfo();
+    
   },
 };
 </script>
