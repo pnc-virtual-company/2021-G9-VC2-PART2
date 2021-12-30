@@ -372,7 +372,6 @@ export default {
       }
     },
     updateData(){
-      // console.log("updated")
       let object = {
         email: this.alumni.email,
         password: this.password,
