@@ -29,10 +29,11 @@
                     outlined
                     append-icon
                     v-model="model"
-                    :items="items"
+                    :items="model"
                     :search-input.sync="search"
                     multiple
                     small-chips
+                    label="Enter Email"
                   >
                   </v-combobox>
                 </v-row>
@@ -40,10 +41,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">
+              <v-btn color="#FF9933" dark @click="dialog = false">
                 Close
               </v-btn>
-              <v-btn color="blue darken-1" text @click="inviteAlumni">
+              <v-btn color="#22BBEA" dark @click="inviteAlumni">
                 invite
               </v-btn>
             </v-card-actions>
@@ -56,46 +57,61 @@
 
     
 <script>
+import axios from './../../../api/api.js';
 export default {
+  emits:['alumni'],
   data: () => ({
     items: [],
     dialog: false,
     alert: false,
     model: [],
     search: null,
-    nonce: 1,
+    userList: [],
   }),
 
-  // watch: {
-  //   model(val, prev) {
-  //     if (val.length === prev.length) return;
-  //     const emailRegex = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
-  //     this.model = val.map((v) => {
-  //       if (typeof v === "string") {
-  //         if (emailRegex.test(v)) {
-  //           v = {
-  //             text: v,
-  //             color: this.colors[this.nonce - 1],
-  //           };
-
-  //           this.items.push(v);
-
-  //           this.nonce++;
-  //         }
-  //       }
-
-  //       return v;
-  //     });
-  //   },
-  // },
+  watch: {
+    model(val, prev) {
+      if (val.length === prev.length) return;
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      this.model = val.filter((v) => pattern.test(v) && this.userList.filter(user=> user.email === v).length === 0);
+      this.items = [];
+      
+      val.map((v)=>{
+        if (pattern.test(v)){
+            let object = {
+              email: v,
+              role: 'alumni',
+              status: 'invited'
+            }
+            this.items.push(object);
+        }
+        return v;
+      });
+    },
+  },
   methods: {
     inviteAlumni() {
+        this.items.map((value)=>{
+            axios.post('/users', value).then(()=>{
+              this.model = [];
+              this.items = [];
+              this.$emit('alumni', 'alumni');
+            })
+        })
       this.alert = true;
       this.dialog = false;
       setTimeout(() => {
         this.alert = false;
-      }, 4000);
+      }, 2000);
     },
+    
   },
+  mounted(){
+     axios.get('/users').then((res)=>{
+        this.userList = res.data;
+    })
+
+    
+  }
 };
 </script>

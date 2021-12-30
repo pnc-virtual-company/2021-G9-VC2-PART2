@@ -10,7 +10,7 @@
       <v-toolbar class="pr-0 pl-0 pt-0 pb-0 ma-0" dark color="#22BBEA">
         <v-card width="100%" elevation="0" color="transparent">
           <v-card-title class="d-flex justify-between px-0">
-            <h2 v-if="isAlumni">ERO</h2>
+            <h2 v-if="isAlumni == 'ero' || isAlumni == 'newEro'">ERO</h2>
             <h2 v-else>ALUMNI</h2>
             <v-spacer></v-spacer>
             <v-text-field
@@ -82,13 +82,14 @@
       <v-icon small @click="deleteItem(item)" color="#FF9933"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+      <v-btn color="primary"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
 <script>
+// import axios from './../../api/api.js';
 export default {
-  props: ["isAlumni"],
+  props: ["isAlumni", "desserts"],
   data: () => ({
     dialog: false,
     dialogDelete: false,
@@ -104,7 +105,7 @@ export default {
       { text: "E-mail", value: "email" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
+    // desserts: [],
     editedIndex: -1,
     editedItem: {
       first_name: "",
@@ -116,9 +117,10 @@ export default {
       last_name: "",
       email: "",
     },
+    users: [],
+    role: ''
+  
   }),
-  mounted() {
-  },
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -134,41 +136,11 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
-  },
+  // created() {
+  //   this.initialize();
+  // },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          first_name: "Vuthy",
-          last_name: "YIB",
-          email: "vuthy@gmail.com",
-        },
-        {
-          first_name: "Somphors",
-          last_name: "NGOUN",
-          email: "somphors@gmail.com",
-        },
-        {
-          first_name: "Pros",
-          last_name: "NOB",
-          email: "pros@gmail.com",
-        },
-        {
-          first_name: "Sinet",
-          last_name: "SEN",
-          email: "sinet@gmail.com",
-        },
-        {
-          first_name: "Sophanna",
-          last_name: "CHHORN",
-          email: "sophanna@gmail.com",
-        },
-      ];
-    },
-
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -211,6 +183,8 @@ export default {
       this.close();
     },
   },
+  mounted(){
+  }
 };
 </script>
 <style scoped>

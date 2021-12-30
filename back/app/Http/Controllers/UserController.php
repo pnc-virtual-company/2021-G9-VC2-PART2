@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function getUsers(){
 
-        return User::with('alumni')->get();
+        return User::with('alumni')->latest()->get();
     }
 
     public function getUser(Request $request, $id){
@@ -22,33 +22,37 @@ class UserController extends Controller
 
     public function createUser(Request $request)
     {
-        $request->validate([
-        "first_name"=>"nullable",
-        "last_name"=>"nullable",
-        "password"=>"nullable",
-        'email' => 'required|email|unique:users,email',
-        'role' => "required"
-        ]);
-        //move image to storage
-        $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->role = $request->role;
-        $user->save();
-                                                        
-        if ($request->role === 'alumni'){
-            $alumni = new Alumni();
-            $alumni->phone_number = $request->phone_number;
-            $alumni->gender = $request->gender;
-            $alumni->batch = $request->batch;
-            $alumni->major = $request->major;
-            $alumni->status = $request->status;
-            $alumni->user_id = $user->id;
-            $alumni->profile = 'default_profile.jpg';
-            $alumni->save();
-        }
+        // $request = $request->toArray();
+        // foreach($request as $data){
+            // dd($data);
+            $request->validate([
+            "first_name"=>"nullable",
+            "last_name"=>"nullable",
+            "password"=>"nullable",
+            'email' => 'required|email|unique:users,email',
+            'role' => "required"
+            ]);
+            //move image to storage
+            $user = new User();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->role = $request->role;
+            $user->save();
+    
+            if ($request->role === 'alumni'){
+                $alumni = new Alumni();
+                $alumni->phone_number = $request->phone_number;
+                $alumni->gender = $request->gender;
+                $alumni->batch = $request->batch;
+                $alumni->major = $request->major;
+                $alumni->status = $request->status;
+                $alumni->user_id = $user->id;
+                $alumni->profile = 'default_profile.png';
+                $alumni->save();
+            }
+        // }
         return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
 

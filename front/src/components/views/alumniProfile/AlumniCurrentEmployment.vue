@@ -6,7 +6,7 @@
       tile
       width="93%"
     >
-      <v-list class="d-flex" width="92%">
+      <v-list class="d-flex" width="85%">
         <v-img
           src="http://www.topjobcambodia.com/photos/social/20191010-182540-mango_byte_technology_co_ltd.png"
           width="90"
@@ -34,8 +34,9 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-icon v-if="hover" @click="dialog = !dialog" class="edit pa-2 white elevation-6 rounded-circle">mdi-pen</v-icon>
-      <v-dialog v-model="dialog" persistent max-width="500px">
+      <v-icon v-if="hover" @click="getDataToUpdate(work)" class="edit pa-2 mr-1 white elevation-6 rounded-circle">mdi-pen</v-icon>
+      <v-icon v-if="hover" @click="deleteWorkExperience(work.id)" class="edit pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
+       <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
           <v-form class="pt-5 px-5">
             <v-card-title class="d-flex justify-center my-0 py-0">
@@ -50,18 +51,35 @@
             <v-container>
               <v-row no-gutters>
                 <v-col cols="12" class="mt-4">
-                  <v-text-field dense label="Company" outlined></v-text-field>
+                   <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompany"
+                        :items="companies"
+                        :search-input.sync="searchComapany"
+                        label="Company"
+                    >
+                    </v-combobox>
                 </v-col>
               </v-row>
               <v-row no-gutters>
                 <v-col cols="12">
-                  <v-text-field dense label="Position" outlined></v-text-field>
+                   <v-combobox
+                        dense
+                        outlined
+                        v-model="modelPosition"
+                        :items="positions"
+                        :search-input.sync="searchPosition"
+                        label="Position"
+                      >
+                      </v-combobox>
                 </v-col>
               </v-row>
               <v-row class="mt-0 pb-0" dense>
                 <v-col cols="6">
                   <v-select
-                    :items="startYear"
+                    v-model="startYear"
+                    :items="startYears"
                     label="Start Year"
                     dense
                     outlined
@@ -69,7 +87,8 @@
                 </v-col>
                 <v-col cols="6">
                   <v-select
-                    :items="endYear"
+                    v-model="endYear"
+                    :items="endYears"
                     label="End Year"
                     dense
                     outlined
@@ -80,10 +99,10 @@
           </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
-            <v-btn dark color="#FF9933" @click="dialog = false">
+            <v-btn dark color="#FF9933" @click="closeDialog">
               <span >Cancel</span>
             </v-btn>
-            <v-btn color="#22BBEA" @click="dialog = false">
+            <v-btn color="#22BBEA" @click="updateworkExperience()">
                 <span class="white--text">Submit</span>
               </v-btn>
           </v-card-actions>
@@ -94,16 +113,87 @@
 </template>
 
 <script>
+import axios from './../../../api/api.js';
 export default {
-  props:['work'],
+  emits:['get-work-experience'],
+  props:['work','companies','positions','workExperiences','objectCompanies','objectPositions','startYears','endYears'],
   data() {
     return {
       dialog: false,
-      startYear: ['2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
-      endYear: ['Prenent', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
+      startYear:null,
+      endYear:null,
+      searchComapany:null,
+      searchPosition:null,
+      modelPosition:'',
+      modelCompany:'',
+      id:null,
+      alumni_id:null,
     };
   },
-  methods: {},
+  methods: {
+    closeDialog(){
+      this.dialog = false;
+    },
+    getDataToUpdate(work){
+      this.dialog = true;
+      this.id = work.id;
+      this.alumni_id = work.alumni_id
+      this.modelCompany = work.companyName;
+      this.modelPosition = work.positionName;
+      this.startYear = JSON.stringify(work.start_year);
+      this.endYear = work.end_year;
+    },
+    updateworkExperience(){
+      if(this.modelPosition!=="" && this.modelCompany!=="" && this.startYear!=="" && this.endYear!==""){
+        let objectOfCompany = this.objectCompanies.filter(company=>company.companyName == this.modelCompany);
+        let objectOfPosition = this.objectPositions.filter(position=>position.positionName == this.modelPosition);
+        let company = null;
+        let position = null;
+        if (objectOfCompany.length !==0){
+          company = objectOfCompany[0].id
+        }else{
+          company = this.modelCompany;
+        }
+        if (objectOfPosition.length !==0){
+          position = objectOfPosition[0].id
+        }else{
+          position = this.modelPosition;
+        }
+        let updateWork={
+          alumni_id : this.alumni_id,
+          company_id: company,
+          position_id : position,
+          start_year : this.startYear,
+          end_year : this.endYear,
+        };
+        axios.put('work_experiences/'+ this.id,updateWork).then(()=>{
+          axios.get('companies').then(res=>{
+          this.objectCompanies = res.data;
+          for(let company of this.objectCompanies){
+            this.companies.push(company.companyName)
+          }
+          });
+          axios.get('positions').then(res=>{
+            this.objectPositions = res.data;
+            for(let position of this.objectPositions){
+              this.positions.push(position.positionName);
+            }
+          });
+          this.$emit('get-work-experience');
+        })
+       this.closeDialog()
+      }
+    },
+    deleteWorkExperience(id){
+      console.log(id)
+      axios.delete('work_experiences/'+ id).then(()=>{  
+          this.$emit('get-work-experience');
+        })
+    }
+  },
+  mounted() {
+    
+  },
 };
 </script>
 
