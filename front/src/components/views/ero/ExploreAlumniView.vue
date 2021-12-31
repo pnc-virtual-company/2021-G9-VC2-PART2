@@ -72,7 +72,7 @@
               class="white--text align-end rounded-circle"
               max-height="80"
               max-width="80"
-              src="https://simg.nicepng.com/png/small/136-1366211_group-of-10-guys-login-user-icon-png.png"
+              :src="'http://localhost:8000/storage/profiles/' + alumni.alumni.profile"
             >
             </v-img>
             <v-card-text
@@ -95,7 +95,7 @@
                     src="https://www.passerellesnumeriques.org/wp-content/uploads/2016/03/pn-logo.png"
                     alt=""
                   />
-                  <div class="ml-2">BATCH: {{ alumni.major }} - {{ alumni.batch }}</div>
+                  <div class="ml-2">{{ alumni.alumni.major }} - {{ alumni.alumni.batch }}</div>
                 </div>
               </div>
             </v-card-text>
@@ -112,41 +112,21 @@
 import axios from './../../../api/api.js';
 export default {
   data: () => ({
-    companies: [
-      "NONE",
-      "PNC",
-      "MANGOBYTE",
-      "REAL WAT INT",
-      "BIKAY",
-      "SUOSDEY",
-      "ZINATION",
-    ],
+    companies: [],
     genders: ["NONE", "FEMALE", "MALE", "OTHER"],
-    batches: ["NONE", "2021", "2022", "2020", "2021"],
+    batches: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
     majors: ["NONE", "WEB", "SNA"],
-    alumniList: [
-      // {name:"kaka",gender:'female',batch:"Batch - 2021 -WEB",company:'PNC',major:"WEB"},
-      // {name:"yaya",gender:'female',batch:"Batch - 2022 -WEB",company:'BIKAY',major:"SNA"},
-      // {name:"yuyu",gender:'male',batch:"Batch - 2020 -WEB",company:'ZINATION',major:"WEB"},
-      // {name:"kuku",gender:'female',batch:"Batch - 2021 - SNA",company:'MANGOBYTE',major:"WEB"},
-    ],
+    alumniList: [],
     searchName: "",
     searchBatch: "",
     searchGender: "",
     searchCompany: "",
     searchMajor: "",
+    alumniLists: [],
   }),
   methods: {
     findAlumniInfo() {
-      let alumniLists = [ ];
-      axios.get("/users").then((res)=> {
-        
-        alumniLists = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
-        this.alumniList = alumniLists
-      })
-      for(let i of alumniLists){
-        console.log(i)
-      }
+      
       if (
         this.searchName !== "" &&
         this.searchBatch !== "" &&
@@ -154,46 +134,53 @@ export default {
         this.searchMajor !== "" &&
         this.searchCompany !== ""
       ) {
-        this.alumniList = alumniLists.filter(
+        this.alumniList = this.alumniLists.filter(
           (alumni) =>
-            alumni.name.toLowerCase().includes(this.searchName.toLowerCase()) &&
+            alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase()) &&
             alumni.batch.toLowerCase() === this.searchBatch.toLowerCase() &&
             alumni.gender.toLowerCase() === this.searchGender.toLowerCase() &&
             alumni.major.toLowerCase() === this.searchMajor.toLowerCase() &&
             alumni.company.toLowerCase() === this.searchCompany.toLowerCase()
         );
       } else if (this.searchName !== "") {
-        this.alumniList = alumniLists.filter((alumni) =>
-          alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
+        this.alumniList = this.alumniLists.filter((alumni) =>
+          alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
         );
       } else if (this.searchBatch !== "" && this.searchBatch !== "NONE") {
-        this.alumniList = alumniLists.filter(
+        this.alumniList = this.alumniLists.filter(
           (alumni) =>
-            alumni.batch.toLowerCase() === this.searchBatch.toLowerCase()
+            alumni.alumni.batch === this.searchBatch
         );
       } else if (this.searchGender !== "" && this.searchGender !== "NONE") {
-        this.alumniList = alumniLists.filter(
+        this.alumniList = this.alumniLists.filter(
           (alumni) =>
-            alumni.gender.toLowerCase() === this.searchGender.toLowerCase()
+            alumni.alumni.gender.toLowerCase() === this.searchGender.toLowerCase()
         );
       } else if (this.searchMajor !== ""  && this.searchMajor !== "NONE") {
-        this.alumniList = alumniLists.filter(
+        this.alumniList = this.alumniLists.filter(
           (alumni) =>
-            alumni.major.toLowerCase() === this.searchMajor.toLowerCase()
+            alumni.alumni.major.toLowerCase() === this.searchMajor.toLowerCase()
         );
       } else if (this.searchCompany !== "" && this.searchCompany !== "NONE") {
-        this.alumniList = alumniLists.filter(
+        // axios.get('/work_experiences?' + )
+        this.alumniList = this.alumniLists.filter(
           (alumni) =>
             alumni.company.toLowerCase() === this.searchCompany.toLowerCase()
         );
       } else {
-        this.alumniList = alumniLists;
+        this.alumniList = this.alumniLists;
       }
     },
   },
   mounted() {
+    axios.get("/users").then((res)=> {
+        this.alumniLists = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
+        this.alumniList = this.alumniLists;
+      })
     this.findAlumniInfo();
-    
+    axios.get('/companies').then((res)=>{
+      this.companies = res.data;
+    })
   },
 };
 </script>

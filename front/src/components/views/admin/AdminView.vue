@@ -1,76 +1,111 @@
 <template>
-  <v-container>
-    <v-row align="center">
-      <v-col class="d-flex" cols="12" sm="6">
-        <v-select
-          v-model="select"
-          :items="item"
-          item-text="state"
-          return-object
-        ></v-select>
+  <v-container >    
+    <!-- <v-row class="pa-0 ma-0 mt-5"> -->
+      <v-col cols="10" lg="5" md="6" sm="8" xs="12" class="mx-auto pb-0 mt-6">
+        <v-card elevation="2" id="listContainer">
+          <v-tabs fixed-tabs color="#FF9933" height="45px">
+            <v-tab class="v-tab-item blue--text" @click="showAlumniData" style="font-size: 13px"
+              >ALUMNI LIST</v-tab>
+            <v-tab
+              @click="showEroData"
+              class="v-tab-item blue--text"
+              style="font-size: 13px"
+              >ERO OFFICER LIST</v-tab>
+          </v-tabs>
+        </v-card>
+        
       </v-col>
-    </v-row>
-
-    <invite-alumni v-if="select.state == 'ALUMNI LIST'" @alumni="getNewUser"></invite-alumni>
-    <manage-ero-user @ero="getNewUser" v-else></manage-ero-user>
-    <user-data :isAlumni="isAlumni" :desserts="users"></user-data>
+      <v-row>
+        <v-spacer></v-spacer>
+      <v-col cols="2">
+          <invite-alumni v-if="isSwitched == 'alumni'"></invite-alumni>
+          <manage-ero-user v-else></manage-ero-user>
+      </v-col>
+      </v-row>
+     
+    <!-- </v-row> -->
+    <v-col cols="12" class="">
+        <search-button @searchValue="searchValue"></search-button>
+    </v-col>
+     <v-col>
+        <user-data :isAlumni="isSwitched" :desserts="userList" :headers="headers"></user-data>
+      </v-col>
   </v-container>
 </template>
-
-
 <script>
 import InviteAlumni from "./IniviteAlumni.vue";
-import userData from "./../../UI/UserData.vue";
-import ManagerEroUser from "./ManageEroUser.vue";
-import axios from "./../../../api/api.js";
+import userData from "../../UI/UserData.vue";
+// import ManagerEroUser from "./ManageEroUser.vue";
+import SearchButton from "../../UI/SearchButton.vue";
+import ManageEroUser from './ManageEroUser.vue';
+import axios from './../../../api/api.js';
 export default {
   components: {
+    "search-button": SearchButton,
     "invite-alumni": InviteAlumni,
     "user-data": userData,
-    "manage-ero-user": ManagerEroUser,
+    ManageEroUser,
+    // "manage-ero-user": ManagerEroUser,
   },
   data: () => ({
-    select: {},
-    item: [],
-    isAlumni: 'alumni',
-    users: [],
-   
+    select: { state: "ALUMNI LIST" },
+    item: [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }],
+    isSwitched: 'alumni',
+    search:"",
+    userList: [],
+    allUsers: [],
+    headers: [],
+    headersAlumni: [
+      {text: "First name", align: "start", sortable: false, value: "first_name",},
+      { text: "Last name", value: "last_name" },
+      { text: "E-mail", value: "email" },
+      { text: "Status", value: "status" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    headersEro: [
+      {text: "First name", align: "start", sortable: false, value: "first_name",},
+      { text: "Last name", value: "last_name" },
+      { text: "E-mail", value: "email" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
   }),
-  watch: {
-    select(val) {
-      if(val.state === "ERO USER LIST"){
-        this.isAlumni = 'ero';
-      }else if(val.state === "ALUMNI LIST"){
-        this.isAlumni = 'alumni'; 
-      }
-      axios.get('/users').then((res)=>{
-        console.log(res.data)
-        this.users = res.data.filter(user => user.role == this.isAlumni);
-      })
+  watch: {},
+  methods: {
+    showEroData() {
+      this.headers = this.headersEro;
+      this.isSwitched = 'ero';
+      this.userList = this.allUsers.filter(user => user.role == 'ero');
     },
-  },
-  methods:{
-    getNewUser(role){
-      this.isAlumni = role;
-      axios.get('/users').then((res)=>{
-        console.log(res.data)
-        this.users = res.data.filter(user => user.role == this.isAlumni);
-      })
+    showAlumniData(){
+      this.headers = this.headersAlumni;
+      this.isSwitched = 'alumni';
+      this.userList = this.allUsers.filter(user => user.role == 'alumni');
+    },
+    searchValue(value){
+      this.search = value;
+      
+      // this.userList = this.allUsers.filter(object=> (object.first_name.toLowerCase().includes(this.search.toLowerCase())
+      // || object.last_name.toLowerCase().includes(this.search.toLowerCase()) 
+      // || object.email.toLowerCase().includes(this.search.toLowerCase())) 
+      // && object.role == this.isSwitched);
     }
   },
   mounted() {
-    const role = JSON.parse(localStorage.getItem('user')).role;
-    if (role === 'admin'){
-      this.item = [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }];
-      this.select = { state: "ALUMNI LIST" };
-    }else if(role === 'ero'){
-      this.item = [{ state: "ALUMNI LIST" }]
-      this.select = { state: "ERO USER LIST" };
-    }
+    axios.get('/users').then((res)=>{
+      this.allUsers = res.data;
+      this.showAlumniData();
 
-    
+    })
+
   },
 };
 </script>
+<style>
+@media screen and (min-width: 300px) and (max-width: 760px) {
+  #listContainer {
+    width: 100%;
+  }
+}
+</style>
 
 
