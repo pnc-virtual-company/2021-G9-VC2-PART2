@@ -65,7 +65,7 @@
             class="mx-auto mb-2 pa-2 d-flex"
             color="white"
             width="100%"
-            v-for="alumni of alumniList"
+            v-for="alumni of alumniLists"
             :key="alumni.id"
           >
             <v-img
@@ -85,7 +85,7 @@
               "
               width="85%"
             >
-              <h2>{{ alumni.name }}</h2>
+              <h2>{{ alumni.first_name }} {{ alumni.last_name }}</h2>
               <div>
                 <div>WEB Development at PNC</div>
                 <div class="d-flex align-center">
@@ -109,6 +109,7 @@
   </v-container>
 </template>
 <script>
+// import axios from 'axios';
 export default {
   data: () => ({
     companies: [
@@ -129,6 +130,7 @@ export default {
       // {name:"yuyu",gender:'male',batch:"Batch - 2020 -WEB",company:'ZINATION',major:"WEB"},
       // {name:"kuku",gender:'female',batch:"Batch - 2021 - SNA",company:'MANGOBYTE',major:"WEB"},
     ],
+    alumniLists: [],
     searchName: "",
     searchBatch: "",
     searchGender: "",
@@ -137,6 +139,9 @@ export default {
   }),
   methods: {
     findAlumniInfo() {
+      // axios.get('/alumnis').then((res)=>{
+      //   this.alumniLists = res.data;
+      // })
       let alumniLists = [
         {
           id: 1,

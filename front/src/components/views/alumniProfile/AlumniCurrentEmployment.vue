@@ -99,7 +99,7 @@
           </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
-            <v-btn dark color="#FF9933" @click="closeDialog">
+            <v-btn dark color="grey" text @click="closeDialog">
               <span >Cancel</span>
             </v-btn>
             <v-btn color="#22BBEA" @click="updateworkExperience()">

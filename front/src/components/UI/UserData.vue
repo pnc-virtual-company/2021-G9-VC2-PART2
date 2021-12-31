@@ -87,7 +87,7 @@
   </v-data-table>
 </template>
 <script>
-import axios from './../../api/api.js';
+// import axios from './../../api/api.js';
 export default {
   props: ["isAlumni", "desserts"],
   data: () => ({
