@@ -57,7 +57,7 @@
                   <v-row class="mt-4 pb-0" dense>
                     <v-col cols="6" class="pb-0">
                       <v-text-field
-                        v-model="alumni.first_name"
+                        v-model="firstName"
                         label="First Name"
                         placeholder="First Name"
                         outlined
@@ -67,7 +67,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                        v-model="alumni.last_name"
+                        v-model="lastName"
                         label="Last Name"
                         placeholder="Last Name"
                         outlined
@@ -101,20 +101,20 @@
                   ></v-text-field>
 
                   <v-select
-                    v-model="alumniData.major"
+                    v-model="userMajor"
                     label="Major"
                     dense
                     outlined
                     :items="major"
                   ></v-select>
                   <v-select
-                    v-model="alumniData.batch"
+                    v-model="userBatch"
                     label="Batch"
                     dense
                     outlined
                     :items="batch"
                   ></v-select>
-                  <v-radio-group row class="mt-0 pt-0" v-model="alumniData.gender">
+                  <v-radio-group row class="mt-0 pt-0" v-model="gender">
                     <v-radio label="Female" value="female"></v-radio>
                     <v-radio label="Male" value="male"></v-radio>
                   </v-radio-group>
@@ -299,7 +299,7 @@ export default {
       alumniData: {},
       currentEmployments: [],
       startYears: ['2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
-      endYears: ['Prenent', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
+      endYears: ['Present', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007'],
       startYear : '',
       endYear:'',
       major: ["WEB", "SNA"],
@@ -318,8 +318,13 @@ export default {
       emailRules: [],
       email: '',
       phoneNumber: '',
+      firstName: '',
+      lastName: '',
+      userBatch: '',
+      userMajor: '',
+      gender: '',
       userId: localStorage.getItem('userId'),
-      profile: 'https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png',
+      profile: '',
       image: '',
     };
   },
@@ -361,7 +366,12 @@ export default {
     editData(){
       this.dialog = true;
       this.email = this.alumni.email;
+      this.firstName = this.alumni.first_name;
+      this.lastName = this.alumni.last_name;
       this.phoneNumber = this.alumniData.phone_number;
+      this.userMajor = this.alumniData.major;
+      this.userBatch = this.alumniData.batch;
+      this.gender = this.alumniData.gender;
     },
     completedData(){
       if (this.email.split('@')[0]+ '@gmail.com' === this.email && this.phoneNumber[0] == 0 && this.phoneNumber.length >= 9 && this.phoneNumber.length <= 10){
@@ -377,16 +387,26 @@ export default {
         email: this.alumni.email,
         password: this.password,
       }
-      this.alumni.email = this.email;
-      this.alumniData.phone_number = this.phoneNumber;
-      this.alumni.alumni = this.alumniData;
-      this.$set(this.alumni, 'password', this.password);
-
+      let userData = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        password: this.password,
+        role: 'alumni'
+      }
+      let alumniData = {
+        phone_number: this.phoneNumber,
+        gender: this.gender,
+        batch: this.userBatch,
+        major: this.userMajor,
+        user_id: this.alumni.id,
+        status: 'active'
+      }
       axios.post('/signin', object)
       .then(()=>{
-        axios.put('/users/'+ this.alumni.id, this.alumni).then(()=>{
+        axios.put('/users/'+ this.alumni.id, userData).then(()=>{
         })
-        axios.put('/alumnis/'+ this.alumniData.id, this.alumniData).then(()=>{
+        axios.put('/alumnis/'+ this.alumniData.id, alumniData).then(()=>{
           this.closeDialog();
           this.getOneAlumni();
         })
@@ -486,9 +506,6 @@ export default {
   border: 5px solid white;
 }
 .icon {
-  /* position: absolute; */
-  /* top: 28%;
-  left: 20%; */
   margin-left: -9%;
   height: 33px;
 }

@@ -17,7 +17,8 @@
 
             <v-row no-gutters class="mt-6">
               <v-col cols="12">
-                <v-text-field v-if="true"
+                <v-text-field
+                  v-if="true"
                   dense
                   placeholder="E-mail"
                   :rules="emailRules"
@@ -36,7 +37,10 @@
                   color="transparent"
                   elevation="0"
                 >
-                  <v-btn color="#FF9933" class="white--text" @click="verifyEmail"
+                  <v-btn
+                    color="#FF9933"
+                    class="white--text"
+                    @click="verifyEmail"
                     >NEXT</v-btn
                   >
                 </v-card>
@@ -68,43 +72,52 @@
 <script>
 import axios from "../../../api/api.js";
 export default {
-  
   data() {
     return {
       email: null,
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      ],
+      emailRules: [],
       userList: [],
-      userLogin:null,
-
+      userLogin: null,
     };
   },
   methods: {
     verifyEmail() {
-      let user = this.userList.filter(user=> user.email === this.email);
-      if (user.length === 0){
-        this.emailRules = ['Your Email does not exist'];
-      }else{
-        if (user[0].first_name === null && user[0].last_name === null){
-          this.$router.push('/alumni_signup').catch(()=>{});
-        }else{
-          this.$router.push('/verify_password').catch(()=>{});
+      let user = this.userList.filter((user) => user.email === this.email);
+      if (user.length === 0) {
+        this.emailRules = ["Your Email does not exist"];
+      } else {
+        if (user[0].first_name === null && user[0].last_name === null) {
+          this.$router.push("/alumni_signup").catch(() => {});
+        } else {
+          this.$router.push("/verify_password").catch(() => {});
         }
         let userEmail = {
           email: user[0].email,
           role: user[0].role,
-        }
-        localStorage.setItem('user', JSON.stringify(userEmail));
-        localStorage.setItem('userId', user[0].id);
+        };
+        localStorage.setItem("user", JSON.stringify(userEmail));
+        localStorage.setItem("userId", user[0].id);
       }
     },
   },
   mounted() {
-    axios.get('/users').then((res)=>{
+    axios.get("/users").then((res) => {
       this.userList = res.data;
-    })
+    });
+  },
+  watch: {
+    email(val) {
+      const emailRegex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/;
+      if (!emailRegex.test(val)) {
+        this.emailRules = ["E-mail must be valid"];
+      } else {
+        this.emailRules = [];
+      }
+      if (val == "") {
+        this.emailRules = ["E-mail is required"];
+      }
+    },
   },
 };
 </script>
