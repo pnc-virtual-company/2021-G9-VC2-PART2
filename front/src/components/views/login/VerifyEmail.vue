@@ -6,7 +6,7 @@
   >
     <v-form ref="form" v-model="valid">
       <v-card
-        width="100%"
+        width="750px"
         color="#22BBEA"
         elevation="15"
         class="main-container pa-3 d-flex justify-center align-center"
