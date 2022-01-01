@@ -96,6 +96,8 @@ export default {
               this.model = [];
               this.items = [];
               this.$emit('alumni', 'alumni');
+              // console.log(res.data)
+              // console.log(res.request)
             })
         })
       this.alert = true;

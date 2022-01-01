@@ -24,11 +24,8 @@ const routes = [
     { path: "/event", component: Event},
     { path: "/explore_alumni", component: ExploreAlumniView },
 
-    { path: "/", redirect: "/verify_email" },
+    { path: "/", redirect: "/verify_email"},
 
-
-
-  
 ]
 
 // let authenticationGuard = (to, from, next) => {
