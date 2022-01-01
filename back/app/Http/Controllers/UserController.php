@@ -14,10 +14,12 @@ class UserController extends Controller
     public function getUsers(){
 
         return User::with('alumni')->latest()->get();
+        
     }
 
     public function getUser(Request $request, $id){
         return User::with('alumni')->findOrFail($id);
+        
     }
 
     public function createUser(Request $request)
