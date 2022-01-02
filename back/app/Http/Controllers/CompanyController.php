@@ -24,9 +24,18 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function createCompany(Request $request)
-    {
+    {   
+        $request -> validate([
+            'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+        ]);
+        $request->file('logo')->store('public/pictures');
         $company = new Company();
         $company->companyName = $request->companyName;
+        $company -> email = $request->email;
+        $company->address = $request -> address;
+        $company-> phone = $request->phone;
+        $company->domain = $request->domain;
+        $company-> logo = $request->file('logo')->hashName();
         $company->save();
         return response()->json(['message'=>'Company created','data'=>$company],201);
     }
@@ -51,8 +60,18 @@ class CompanyController extends Controller
      */
     public function updateCompany(Request $request, $id)
     {
+        $request -> validate([
+            'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+        ]);
+        $request->file('logo')->store('public/pictures');
         $company = Company::findOrFail($id);
         $company->companyName = $request->companyName;
+        $company -> email = $request->email;
+        $company->address = $request -> address;
+        $company-> phone = $request->phone;
+        $company-> domain = $request-> domain;
+        $company-> logo = $request->file('logo')->hashName();
+        // $company -> logo = $request -> logo;
         $company->save();
         return response()->json(['message'=>'Company updated','data'=>$company],201);
     }

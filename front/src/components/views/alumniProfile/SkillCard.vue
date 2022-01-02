@@ -109,6 +109,8 @@ export default {
       "Creative Writing",
     ],
     dialog: false,
+    model:'',
+    search: '',
   }),
 };
 </script>

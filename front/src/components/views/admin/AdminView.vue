@@ -123,6 +123,7 @@ export default {
     axios.get('/users').then((res)=>{
       this.allUsers = res.data;
       this.showAlumniData();
+      // console.log(res.data)
 
     })
 
