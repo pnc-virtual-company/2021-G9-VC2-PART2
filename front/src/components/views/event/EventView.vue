@@ -1,3 +1,3 @@
 <template>
-    <h1>Comming Soon</h1>
+    <h1 class="text-center mt-16">Coming Soon🎁</h1>
 </template>

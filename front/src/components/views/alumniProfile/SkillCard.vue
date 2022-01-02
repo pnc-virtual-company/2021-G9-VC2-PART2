@@ -7,17 +7,17 @@
         <v-expansion-panel>
           <v-expansion-panel-header
             width="100px"
-            class="elevation-0 title ml-4 text-h5 blue--text"
+            class="title elevation-0 title ml-4 text-h5 "
             >Skills</v-expansion-panel-header
           >
           <v-expansion-panel-content>
             <v-chip-group active-class="primary--text" column>
-              <v-chip v-for="tag in tags" :key="tag">
+              <v-chip v-for="(skill, index) in skills" :key="index">
               <v-hover v-slot="{hover}">
 
                 <v-card-text class="px-0">
-                  {{ tag }}
-                <v-icon v-if="hover" right>mdi-close-circle-outline</v-icon>
+                  {{ skill }}
+                <v-icon v-if="hover" right @click="deleteSkill(index)">mdi-close-circle-outline</v-icon>
                 </v-card-text>
               </v-hover>
               </v-chip>
@@ -40,8 +40,8 @@
                     <v-container class="pb-0 px-0">
                       <v-col cols="12" class="pb-0">
                         <v-combobox
-                          v-model="model"
-                          :items="tags"
+                          v-model="newSkills"
+                          :items="skills"
                           :search-input.sync="search"
                           hide-selected
                           label="Add some tags"
@@ -49,6 +49,7 @@
                           persistent-hint
                           small-chips
                           outlined
+                          @change="getData"
                         >
                           <template v-slot:no-data>
                             <v-list-item scroll>
@@ -73,7 +74,7 @@
                       <span>Cancel</span>
                     </v-btn>
                     <v-btn color="#22BBEA" >
-                      <span class="white--text" @click="dialog = false">Save</span>
+                      <span class="white--text" @click="addNewSkills">Save</span>
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -89,28 +90,49 @@
 </template>
 
 <script>
+import axios from './../../../api/api.js';
 export default {
   data: () => ({
-    tags: [
-      "Work",
-      "Home Improvement",
-      "Vacation",
-      "Food",
-      "Drawers",
-      "Shopping",
-      "Art",
-      "Tech",
-      "Creative Writing",
-      "Creative Writing",
-      "Creative Writing",
-      "Creative Writing",
-      "Creative Writing",
-      "Creative Writing",
-      "Creative Writing",
-    ],
+    skills: [],
     dialog: false,
-    model:'',
+    // model:'',
+    newSkills: [],
     search: '',
   }),
+  methods:{
+    getData(){
+      let array = [];
+      for(let skill of this.newSkills){
+        for(let sk of skill.split(' ')){
+          array.push(sk);
+        }
+      }
+      this.newSkills = array
+    },
+    getSkils(){
+      axios.get('/skills').then((res)=>{
+        this.skills = res.data;
+      })
+    },
+    deleteSkill(id){
+      axios.delete('/skills/'+id).then(()=>{
+        this.getSkils();
+      })
+    },
+    addNewSkills(){
+      axios.post('/skills', this.newSkills).then(()=>{
+        this.getSkils();
+        this.dialog = false;
+      })
+    }
+  },
+  mounted(){
+    this.getSkils();
+  }
 };
 </script>
+<style scoped>
+  .title{
+    color: #22bbea;
+  }
+</style>

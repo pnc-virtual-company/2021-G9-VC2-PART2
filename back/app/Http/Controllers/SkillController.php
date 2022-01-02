@@ -14,7 +14,12 @@ class SkillController extends Controller
      */
     public function getAllSkill()
     {
-        return Skill::latest()->get();
+        $skills = Skill::latest()->get();
+        $allSkills = [];
+        foreach($skills as $skill){
+            array_push($allSkills, $skill->Title);
+        }
+        return $allSkills;
     }
 
     /**
@@ -25,10 +30,13 @@ class SkillController extends Controller
      */
     public function createSkill(Request $request)
     {
-        $skill = new Skill();
-        $skill->Title = $request->Title;
-        $skill->save();
-        return response()->json(['message'=>'Skill created','data'=>$skill],201);
+        $skillData = $request->input();
+        foreach($skillData as $key => $value){
+            $skill = new Skill();
+            $skill->Title = $value;
+            $skill->save();
+        }
+        return response()->json(['message'=>'Skill created','data'=>$skill],200);
     }
 
     /**
