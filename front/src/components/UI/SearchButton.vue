@@ -14,6 +14,7 @@
 </template>
 <script>
 export default {
+    emits:['searchValue'],
     data() {
         return {
            search:"",
@@ -22,6 +23,7 @@ export default {
     watch:{
         search(value){
             this.$emit("searchValue",value);
+
         }
     }
 }

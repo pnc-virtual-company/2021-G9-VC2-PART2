@@ -1,54 +1,49 @@
 <template>
   <v-container width="50%">
     <v-card height="22vh" class="elevation-0"> </v-card>
+    <v-hover v-slot="{ hover }">
     <v-container class="header d-flex elevation-0">
+      <v-col cols="5">
         <v-avatar size="170" class="avatar">
           <v-img :src="profile" alt="John"></v-img>          
         </v-avatar>
         <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
         <input type="file" id="profile" hidden @change="selectProfile">
-      <v-card-text class="mt-0 pt-0 mb-0 pb-0">
-        <v-card-title class="mt-0 pt-0 text-h4 white--text"
-          >{{ alumni.first_name }} {{ alumni.last_name }}</v-card-title
-        >
-        <v-card-text class="d-flex ml-0 pl-0">
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
-            <v-icon>mdi-briefcase</v-icon>
-            Web developer at Mango Byte co, ltd
-          </v-card-subtitle>
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+        <v-card color="transparent" width="60%" class="elevation-0">
+          <v-card-title class="justify-center text-h4 white--text">
+            {{ alumni.first_name }} {{ alumni.last_name }}
+            <v-icon v-if="alumniData.gender === 'female'" class="ml-2">mdi-gender-female</v-icon>
+            <v-icon v-else class="ml-2" >mdi-gender-male</v-icon>
+          </v-card-title>
+        </v-card>
+      </v-col>
+      <v-card-text class=" mb-0 pb-0">
+        <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+          <v-card-subtitle class=" white--text">
             <v-icon>mdi-phone-classic</v-icon>
             {{ alumniData.phone_number }}
           </v-card-subtitle>
-          <v-card-subtitle class="mt-0 pt-0 white--text">
+          <v-card-subtitle class=" white--text">
             <v-icon>mdi-email</v-icon>
             {{ alumni.email }}
           </v-card-subtitle>
         </v-card-text>
-      </v-card-text>
-    </v-container>
-    <v-card tile color=" pt-6" class="d-flex">
-      <v-col cols="4">
-        <v-card-title class="justify-center font-weight-bold mb-0 pb-0 text-h5"> More Information </v-card-title>
-        <v-col class="ml-5">
-          <p class="pt-0">
-            <v-icon>mdi-gender-transgender</v-icon>
-            : {{ alumniData.gender }}
-          </p>
-          <p class="pt-0">
+        <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+             <v-icon>mdi-briefcase</v-icon>
+            Web developer at Mango Byte co, ltd
+          </v-card-subtitle>
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
             <v-icon>mdi-cloud-tags</v-icon>
-            : {{ alumniData.major }}
-          </p>
-          <p class="pt-0">
+             {{ alumniData.major }}
+          </v-card-subtitle>
+          <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text">
             <v-icon>mdi-certificate</v-icon>
-            : {{ alumniData.batch }}
-          </p>
-          <!-- <p class="pt-0">Skills: HTML, JS, Node, Laravel, PHP, MySQL, OOP</p> -->
-
-        </v-col>
-         <v-row class="d-flex justify-center mt-2" tile >
-            <v-btn class="justify-center white--text" color="#22BBEA" @click="editData">Edit</v-btn>
-            <v-dialog v-model="dialog" persistent max-width="500px">
+             {{ alumniData.batch }}
+          </v-card-subtitle>
+          <v-spacer></v-spacer>
+          <v-icon v-if="hover" class="edit pa-2 mr-1 white  elevation-6 rounded-circle" @click="editData">mdi-pen</v-icon>
+          <v-dialog v-model="dialog" persistent max-width="500px">
               <v-card class="rounded-lg">
                 <v-card-title class="justify-center">
                   <span class="text-h5 text-color">USER PROFILE</span>
@@ -124,7 +119,7 @@
                     <v-radio label="Male" value="male"></v-radio>
                   </v-radio-group>
                   <v-card-actions class="justify-end">
-                    <v-btn color="#FF9933" dark @click="closeDialog">
+                    <v-btn color="grey" text @click="closeDialog">
                       <span>Cancel</span>
                     </v-btn>
                     <v-btn color="#22BBEA" dark @click="completedData">
@@ -157,7 +152,7 @@
                             </v-col>
                           </v-row>
                           <v-card-actions class="justify-end">
-                            <v-btn dark color="#FF9933" @click="closeDialog">
+                            <v-btn dark color="grey" text @click="closeDialog">
                               <span >Cancel</span>
                             </v-btn>
                             <v-btn dark color="#22BBEA" @click="updateData">
@@ -171,9 +166,17 @@
                 </v-card-text>
               </v-card>
             </v-dialog>
-          </v-row>
-      </v-col>
-      <v-card width="68%" class="ml-6 mr-6">
+        </v-card-text>
+      </v-card-text>
+    </v-container>
+    </v-hover>
+    
+    <v-card tile color=" pt-6" class="">
+      
+        
+        <skill-card ></skill-card>
+          
+      <v-card width="100%" class=" pb-6">
         <v-card-text class="d-flex justify-center align-center">
           <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
           <v-spacer></v-spacer>
@@ -246,7 +249,7 @@
           </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
-            <v-btn dark color="#FF9933" @click="closeCreateDialog">
+            <v-btn dark color="grey" text @click="closeCreateDialog">
               <span >Cancel</span>
             </v-btn>
             <v-btn color="#22BBEA" @click="createWorkExperience">
@@ -277,10 +280,12 @@
 <script>
 import axios from "./../../../api/api.js";
 import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
+import SkillCard from "./SkillCard.vue";
 
 export default {
   components: {
     AlumniCurrentEmployment,
+    SkillCard
   },
   data() {
     return {
@@ -501,15 +506,16 @@ export default {
   border: 5px solid white;
 }
 .icon {
-  position: absolute;
-  top: 32%;
-  left: 26%;
+  margin-left: -9%;
   height: 33px;
 }
 .header{
   background: #22BBEA;
 }
 .text-color {
-  color: #22bbea;
+  color: #22bbea; 
+}
+.delete{
+  height: 40px;
 }
 </style>

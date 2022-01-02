@@ -88,12 +88,12 @@ class AlumniController extends Controller
      */
     public function deleteAlumni($id)
     {
-        $alumni = Alumni::find($id);
-        $destination = 'storage/profiles/'.$alumni->profile;
-        if(file::exists($destination))
-        {
-            file::delete($destination);
-        }
-        return Alumni::destroy($id);
+        // $alumni = Alumni::find($id);
+        // $destination = 'storage/profiles/'.$alumni->profile;
+        // if(file::exists($destination))
+        // {
+        //     file::delete($destination);
+        // }
+        // return Alumni::destroy($id);
     }
 }
