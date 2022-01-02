@@ -1,5 +1,5 @@
 <template>
-  <v-container class="ma-0 pa-0 mb-5">
+  <v-container class=" ma-0 pa-0 mb-5">
     <v-alert
       v-model="alert"
       dismissible
@@ -10,8 +10,8 @@
     >
       You've <strong>Invited</strong> new alumni successfully!.
     </v-alert>
-    <v-container>
-      <v-row>
+    <v-container >
+      <v-row class="d-flex justify-end">
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
@@ -41,7 +41,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="#FF9933" dark @click="dialog = false">
+              <v-btn dark color="grey" text  @click="dialog = false">
                 Close
               </v-btn>
               <v-btn color="#22BBEA" dark @click="inviteAlumni">

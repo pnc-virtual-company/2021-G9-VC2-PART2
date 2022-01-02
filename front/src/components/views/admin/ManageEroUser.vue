@@ -10,8 +10,8 @@
     >
       You've <strong>Created</strong> an ERO Officer.
     </v-alert>
-    <v-container>
-      <v-row>
+    <v-container >
+      <v-row class="d-flex justify-end">
         <v-dialog v-model="dialog" persistent max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
@@ -19,7 +19,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-form class="pa-2">
+            <v-form class="pa-2" ref="form" v-model="valid">
               <v-card-title class="d-flex justify-center">
                 <span class="text-h5 text-color">CREATE AN ERO OFFICER</span>
               </v-card-title>
@@ -96,10 +96,10 @@
                 <!-- </v-row> -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="#FF9933" dark @click="dialog = false">
+                  <v-btn dark color="grey" text @click="dialog = false">
                     Close
                   </v-btn>
-                  <v-btn color="#22BBEA" dark @click="createAnEro">
+                  <v-btn color="#22BBEA" class="white--text" :disabled="!valid"  @click="createAnEro">
                     Create
                   </v-btn>
                 </v-card-actions>
@@ -118,6 +118,7 @@ import axios from './../../../api/api.js';
 export default {
   emits: ['ero'],
   data: () => ({
+    valid: true,
     firstName: "",
     lastName: "",
     email: "",
@@ -134,8 +135,7 @@ export default {
 
     nameRules: [(v) => !!v || "Name is required"],
     emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/.test(v) || "E-mail must be valid",
     ],
     isShowPassword: false,
     checkbox: false,
@@ -166,6 +166,20 @@ export default {
     },
   },
   watch: {
+    watch: {
+    email(val) {
+      const emailRegex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/;
+      if (!emailRegex.test(val)) {
+        this.emailRules = ["E-mail must be valid"];
+      } else {
+        this.emailRules = [];
+      }
+      if (val == "") {
+        this.emailRules = ["E-mail is required"];
+      }
+    },
+  },
     checkbox() {
       this.isShowPassword = !this.isShowPassword;
     },
