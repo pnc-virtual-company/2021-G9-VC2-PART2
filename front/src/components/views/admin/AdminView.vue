@@ -15,16 +15,11 @@
         </v-card>
         
       </v-col>
-      <v-row>
-        <v-spacer></v-spacer>
-      <v-col cols="2">
+      <v-col cols="12">
           <invite-alumni v-if="isSwitched == 'alumni'"></invite-alumni>
           <manage-ero-user v-else></manage-ero-user>
       </v-col>
-      </v-row>
-     
-    <!-- </v-row> -->
-    <v-col cols="12" class="">
+    <v-col cols="12" >
         <search-button @searchValue="searchValue"></search-button>
     </v-col>
      <v-col>
