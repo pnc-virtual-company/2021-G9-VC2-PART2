@@ -57,133 +57,147 @@
               >mdi-pen</v-icon
             >
             <v-dialog v-model="dialog" persistent max-width="500px">
-              <v-card class="rounded-lg">
-                <v-card-title class="justify-center">
-                  <span class="text-h5 text-color">USER PROFILE</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-divider
-                    color="#FF9933"
-                    class="mx-auto mt-3"
-                    width="98%"
-                  ></v-divider>
-                  <v-row class="mt-4 pb-0" dense>
-                    <v-col cols="6" class="pb-0">
-                      <v-text-field
-                        v-model="firstName"
-                        label="First Name"
-                        placeholder="First Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="lastName"
-                        label="Last Name"
-                        placeholder="Last Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-0 pt-0" dense>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="phoneNumber"
-                        label="Phone Number"
-                        placeholder="Phone Number"
-                        :rules="phoneRule"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+              <v-form ref="form" v-model="valid">
+                <v-card class="rounded-lg">
+                  <v-card-title class="justify-center">
+                    <span class="text-h5 text-color">USER PROFILE</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-divider
+                      color="#FF9933"
+                      class="mx-auto mt-3"
+                      width="98%"
+                    ></v-divider>
+                    <v-row class="mt-4 pb-0" dense>
+                      <v-col cols="6" class="pb-0">
+                        <v-text-field
+                          v-model="firstName"
+                          label="First Name"
+                          placeholder="First Name"
+                          :rules="[(v) => !!v || 'First name is required']"
+                          outlined
+                          dense
+                          width="100px"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="lastName"
+                          label="Last Name"
+                          placeholder="Last Name"
+                          :rules="[(v) => !!v || 'Last name is required']"
+                          outlined
+                          dense
+                          width="100px"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0 pt-0" dense>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="phoneNumber"
+                          label="Phone Number"
+                          placeholder="Phone Number"
+                          :rules="phoneRule"
+                          outlined
+                          dense
+                          width="100px"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
 
-                  <v-text-field
-                    v-model="email"
-                    label="Email"
-                    placeholder="Email"
-                    :rules="emailRules"
-                    outlined
-                    dense
-                    width="100px"
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="email"
+                      label="Email"
+                      placeholder="Email"
+                      :rules="emailRules"
+                      outlined
+                      dense
+                      width="100px"
+                    ></v-text-field>
 
-                  <v-select
-                    v-model="userMajor"
-                    label="Major"
-                    dense
-                    outlined
-                    :items="major"
-                  ></v-select>
-                  <v-select
-                    v-model="userBatch"
-                    label="Batch"
-                    dense
-                    outlined
-                    :items="batch"
-                  ></v-select>
-                  <v-radio-group row class="mt-0 pt-0" v-model="gender">
-                    <v-radio label="Female" value="female"></v-radio>
-                    <v-radio label="Male" value="male"></v-radio>
-                  </v-radio-group>
-                  <v-card-actions class="justify-end">
-                    <v-btn color="grey" text @click="closeDialog">
-                      <span>Cancel</span>
-                    </v-btn>
-                    <v-btn color="#22BBEA" dark @click="completedData">
-                      <span>Update</span>
-                    </v-btn>
-                    <v-dialog
-                      v-model="checkPassword"
-                      persistent
-                      max-width="500px"
-                    >
-                      <v-card class="rounded-lg">
-                        <v-card-title class="justify-center">
-                          <span class="text-h5 text-color"
-                            >VERIFY YOUR PASSWORD</span
-                          >
-                        </v-card-title>
-                        <v-card-text>
-                          <v-divider
-                            color="#FF9933"
-                            class="mx-auto mt-3"
-                            width="98%"
-                          ></v-divider>
+                    <v-select
+                      v-model="userMajor"
+                      label="Major"
+                      dense
+                      outlined
+                      :items="major"
+                    ></v-select>
+                    <v-select
+                      v-model="userBatch"
+                      label="Batch"
+                      dense
+                      outlined
+                      :items="batch"
+                    ></v-select>
+                    <v-radio-group :rules="[v => !!v || 'Gender is required']" row class="mt-0 pt-0" v-model="gender">
+                      <v-radio label="Female" value="female"></v-radio>
+                      <v-radio label="Male" value="male"></v-radio>
+                    </v-radio-group>
+                    <v-card-actions class="justify-end">
+                      <v-btn color="grey" text @click="closeDialog">
+                        <span>Cancel</span>
+                      </v-btn>
+                      <v-btn
+                        :disabled="!valid"
+                        color="#22BBEA"
+                        class="white--text"
+                        @click="completedData"
+                      >
+                        <span>Update</span>
+                      </v-btn>
+                      <v-dialog
+                        v-model="checkPassword"
+                        persistent
+                        max-width="500px"
+                      >
+                        <v-card class="rounded-lg">
+                          <v-card-title class="justify-center">
+                            <span class="text-h5 text-color"
+                              >VERIFY YOUR PASSWORD</span
+                            >
+                          </v-card-title>
+                          <v-card-text>
+                            <v-divider
+                              color="#FF9933"
+                              class="mx-auto mt-3"
+                              width="98%"
+                            ></v-divider>
 
-                          <v-row class="mt-6 pt-0" dense>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="password"
-                                label="Password"
-                                placeholder="Password"
-                                type="password"
-                                :rules="passwordRules"
-                                outlined
-                                dense
-                                width="100px"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                          <v-card-actions class="justify-end">
-                            <v-btn dark color="grey" text @click="closeDialog">
-                              <span>Cancel</span>
-                            </v-btn>
-                            <v-btn dark color="#22BBEA" @click="updateData">
-                              <span>Confirm</span>
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
-                  </v-card-actions>
-                </v-card-text>
-              </v-card>
+                            <v-row class="mt-6 pt-0" dense>
+                              <v-col cols="12">
+                                <v-text-field
+                                  v-model="password"
+                                  label="Password"
+                                  placeholder="Password"
+                                  type="password"
+                                  :rules="passwordRules"
+                                  outlined
+                                  dense
+                                  width="100px"
+                                ></v-text-field>
+                              </v-col>
+                            </v-row>
+                            <v-card-actions class="justify-end">
+                              <v-btn
+                                dark
+                                color="grey"
+                                text
+                                @click="closeDialog"
+                              >
+                                <span>Cancel</span>
+                              </v-btn>
+                              <v-btn dark color="#22BBEA" @click="updateData">
+                                <span>Confirm</span>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card-text>
+                        </v-card>
+                      </v-dialog>
+                    </v-card-actions>
+                  </v-card-text>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-text>
         </v-card-text>
@@ -227,6 +241,46 @@
                       >
                       </v-combobox>
                     </v-col>
+                    <v-col cols="12">
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompanyAddress"
+                        :items="companyAddresses"
+                        :search-input.sync="searchComapanyAddress"
+                        label="Company Address"
+                      >
+                      </v-combobox>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        dense
+                        outlined
+                        v-model="companyPhoneNumber"
+                        label="Company Phone Number"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        dense
+                        outlined
+                        v-model="companyEmail"
+                        label="Company Email"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompanyDomain"
+                        :items="companyDomain"
+                        :search-input.sync="searchComapanyDomain"
+                        label="Company Domain"
+                      >
+                      </v-combobox>
+                    </v-col>
                   </v-row>
                   <v-row no-gutters>
                     <v-col cols="12">
@@ -248,6 +302,7 @@
                         :items="startYears"
                         label="Start Year"
                         dense
+                        :rules="[v => !!v || 'Start year is required']"
                         outlined
                       ></v-select>
                     </v-col>
@@ -257,6 +312,7 @@
                         :items="endYears"
                         label="End Year"
                         dense
+                        :rules="[v => !!v || 'End year is required']"
                         outlined
                       ></v-select>
                     </v-col>
@@ -308,6 +364,7 @@ export default {
     return {
       // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
+      valid: true,
       dialogCreate: false,
       checkPassword: false,
       password: "",
@@ -370,6 +427,19 @@ export default {
         "Batch-2008",
         "Batch-2007",
       ],
+      companyAddresses: [
+        "Phnom Penh",
+        "Kampong Thom",
+        "Kampong Cham",
+        "Kompot",
+      ],
+      companyDomain: ["Bank", "Insuranc"],
+      searchComapanyDomain: "",
+      modelCompanyDomain: "",
+      modelCompanyAddress: "",
+      searchComapanyAddress: "",
+      companyPhoneNumber: "",
+      companyEmail: "",
       passwordRules: [],
       companies: [],
       positions: [],
@@ -398,7 +468,10 @@ export default {
     email() {
       this.emailRules = [
         (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+        (v) =>
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/.test(
+            v
+          ) || "E-mail must be valid",
       ];
     },
     phoneNumber() {
