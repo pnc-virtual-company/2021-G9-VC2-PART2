@@ -47,6 +47,7 @@ export default {
     ManageEroUser,
     // "manage-ero-user": ManagerEroUser,
   },
+  
   data: () => ({
     select: { state: "ALUMNI LIST" },
     item: [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }],
@@ -54,6 +55,8 @@ export default {
     search:"",
     userList: [],
     allUsers: [],
+    alumnilist:[],
+    eroList:[],
     headers: [],
     headersAlumni: [
       {text: "First name", align: "start", sortable: false, value: "first_name",},
@@ -72,22 +75,48 @@ export default {
   watch: {},
   methods: {
     showEroData() {
+
       this.headers = this.headersEro;
       this.isSwitched = 'ero';
-      this.userList = this.allUsers.filter(user => user.role == 'ero');
+      this.eroList = this.allUsers.filter(user => user.role == 'ero');
+      this.userList = this.eroList;
+      this.searchValue(this.search);
     },
     showAlumniData(){
+
       this.headers = this.headersAlumni;
       this.isSwitched = 'alumni';
-      this.userList = this.allUsers.filter(user => user.role == 'alumni');
+      this.alumnilist = this.allUsers.filter(user => user.role == 'alumni');
+      this.userList =  this.alumnilist
+      this.searchValue(this.search);
+     
+      
     },
     searchValue(value){
       this.search = value;
-      
+      // let users = this.alumnilist;
+     
       // this.userList = this.allUsers.filter(object=> (object.first_name.toLowerCase().includes(this.search.toLowerCase())
       // || object.last_name.toLowerCase().includes(this.search.toLowerCase()) 
       // || object.email.toLowerCase().includes(this.search.toLowerCase())) 
       // && object.role == this.isSwitched);
+      if(this.isSwitched==='alumni'){
+        
+        let users = this.alumnilist;
+        this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
+        || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
+       
+        )
+      }else if(this.isSwitched==='ero'){
+        let users = this.eroList;
+        this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
+        || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
+     
+        )
+      }
+      
+
+      
     }
   },
   mounted() {

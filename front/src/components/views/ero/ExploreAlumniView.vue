@@ -89,9 +89,9 @@ export default {
   },
   data: () => ({
     searchMore: false,
-    genders: ["NONE", "FEMALE", "MALE"],
+    genders: ["FEMALE", "MALE"],
     batches: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-    majors: ["NONE", "WEB", "SNA"],
+    majors: ["WEB", "SNA"],
     skills: [],
     companies: [],
     alumniList: [],
