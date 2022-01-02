@@ -14,14 +14,19 @@
 </template>
 <script>
 export default {
+    emits:['searchValue'],
+   
     data() {
         return {
            search:"",
+
         }
     },
     watch:{
         search(value){
+           
             this.$emit("searchValue",value);
+
         }
     }
 }

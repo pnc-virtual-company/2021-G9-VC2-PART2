@@ -15,6 +15,7 @@ class UserController extends Controller
     public function getUsers(){
 
         return User::with('alumni')->latest()->get();
+        
     }
 
     public function getUser(Request $request, $id){

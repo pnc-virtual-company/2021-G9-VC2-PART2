@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="my-4 d-flex">
       <v-col cols="10">
-        <search-button @searchValue="findAlumniInfo"></search-button>
+        <search-button @searchValue="getSearchName"></search-button>
       </v-col>
       <v-col cols="2">
         <!-- <v-btn color="blue" class="py-5">Search More</v-btn> -->
@@ -89,9 +89,9 @@ export default {
   },
   data: () => ({
     searchMore: false,
-    genders: ["NONE", "FEMALE", "MALE"],
+    genders: ["FEMALE", "MALE"],
     batches: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-    majors: ["NONE", "WEB", "SNA"],
+    majors: ["WEB", "SNA"],
     skills: [],
     companies: [],
     alumniList: [],
@@ -100,118 +100,126 @@ export default {
     searchGender: "",
     searchCompany: "",
     searchMajor: "",
+    alumnis:[],
+    // fullName:'',
   }),
   methods: {
+    getSearchName(userName){
+      this.searchName = userName;
+      this.findAlumniInfo();
+    },
     findAlumniInfo() {
-      let alumniLists = [ ];
-      axios.get("/users").then((res)=> {
-        
-        alumniLists = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
-        this.alumniList = alumniLists
-      })
-    
+      let allAlumni = this.alumnis ;
+      console.log(allAlumni)
+      
+ //==================================================//   
       // filter name, batch, gender, major and company
       if(this.searchName!=="" && this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
-        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
+        && alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
         && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
         ))
+  //===============================================//
       // filter search, gender, major and company 
       }else if(this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
         && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
         && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
         ))
       // filter batch, gender and major
       }else if(this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         ))
+
+    //====================================================//
       // filter batch, gender and company
       }else if(this.searchBatch!=="" && this.searchGender!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
         && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
         ))
+  //==========================================================//
       // filter batch, major and company
       }else if(this.searchBatch!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
         && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
         ))
+  //=============================================//
       // filter gender, major and company
       }else if(this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
         && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
         ))
       // filter batch with gender
       } else if(this.searchBatch!=="" && this.searchGender!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase());
+        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase());
 
       // filter batch with major
       }else if(this.searchBatch!=="" && this.searchMajor!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
-
+        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
+//====================================//
       // filter batch with company
       }else if(this.searchBatch!=="" && this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
+        this.alumniList = allAlumni.filter((alumni)=>alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
 
       // filter gender and major
       }else if(this.searchGender!=="" && this.searchMajor!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
-
+        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
+//=================================================//
       // filter gender with company
       }else if(this.searchGender!=="" && this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
+        this.alumniList = allAlumni.filter((alumni)=>alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
-
+ //=============================================//
       //filter major with company
       }else if(this.searchMajor!=="" && this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>alumni.major.toLowerCase()===this.searchMajor.toLowerCase() 
+        this.alumniList = allAlumni.filter((alumni)=>alumni.major.toLowerCase()===this.searchMajor.toLowerCase() 
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
 
       // filter name
       }else if(this.searchName!=="" ){
-        this.alumniList = alumniLists.filter((alumni) =>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
+        this.alumniList = allAlumni.filter((alumni) =>(alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase())
         ))
       //filter batch
       }else if(this.searchBatch!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()))
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()))
 
       // filter gender
       }else if(this.searchGender!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
 
       // filter major
       }else if(this.searchMajor!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
       
+      //===============================================///
       //filter company
       }else if(this.searchCompany!==""){
-        this.alumniList = alumniLists.filter((alumni)=>(alumni.company.toLowerCase()===this.searchCompany.toLowerCase()))
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.toLowerCase()===this.searchCompany.toLowerCase()))
       } else {
-        this.alumniList = this.alumniLists;
+        this.alumniList = allAlumni;
       }
     },
   },
   mounted() {
     axios.get("/users").then((res)=> {
-        this.alumniLists = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
-        this.alumniList = this.alumniLists;
-      })
-    this.findAlumniInfo();
-  //   axios.get('/companies').then((res)=>{
-  //     this.companies = res.data;
-  //   })
+        
+        this.alumnis = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
+        this.alumniList = this.alumnis;
+    })
+    
   },
 };
 </script>
