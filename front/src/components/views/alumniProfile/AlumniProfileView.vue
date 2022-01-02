@@ -130,7 +130,12 @@
                       outlined
                       :items="batch"
                     ></v-select>
-                    <v-radio-group :rules="[v => !!v || 'Gender is required']" row class="mt-0 pt-0" v-model="gender">
+                    <v-radio-group
+                      :rules="[(v) => !!v || 'Gender is required']"
+                      row
+                      class="mt-0 pt-0"
+                      v-model="gender"
+                    >
                       <v-radio label="Female" value="female"></v-radio>
                       <v-radio label="Male" value="male"></v-radio>
                     </v-radio-group>
@@ -229,8 +234,22 @@
                 ></v-divider>
 
                 <v-container>
-                  <v-row no-gutters>
-                    <v-col cols="12" class="mt-4">
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      class="d-flex justify-center pa-0 mb-3 mt-4"
+                    >
+                      <label for="companyImg">
+                        <v-avatar id="addCompanyImg" size="70">
+                          <v-img
+                            :src="companyLogo"
+                            alt="Company logo"
+                          ></v-img>
+                        </v-avatar>
+                      </label>
+                      <input type="file" accept="image/jpeg, image/png, image/gif" id="companyImg" hidden @change="selectCompanyLogo" />
+                    </v-col>
+                    <v-col cols="12" class="pa-0 ma-0">
                       <v-combobox
                         dense
                         outlined
@@ -241,7 +260,8 @@
                       >
                       </v-combobox>
                     </v-col>
-                    <v-col cols="12">
+
+                    <v-col cols="12" class="pa-0 ma-0">
                       <v-combobox
                         dense
                         outlined
@@ -252,7 +272,7 @@
                       >
                       </v-combobox>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
                       <v-text-field
                         dense
                         outlined
@@ -261,7 +281,7 @@
                       >
                       </v-text-field>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="6" class="pr-0 py-0 ma-0">
                       <v-text-field
                         dense
                         outlined
@@ -270,7 +290,7 @@
                       >
                       </v-text-field>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
                       <v-combobox
                         dense
                         outlined
@@ -281,9 +301,7 @@
                       >
                       </v-combobox>
                     </v-col>
-                  </v-row>
-                  <v-row no-gutters>
-                    <v-col cols="12">
+                    <v-col cols="6" class="pr-0 py-0 ma-0">
                       <v-combobox
                         dense
                         outlined
@@ -294,25 +312,23 @@
                       >
                       </v-combobox>
                     </v-col>
-                  </v-row>
-                  <v-row class="mt-0 pb-0" dense>
-                    <v-col cols="6">
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
                       <v-select
                         v-model="startYear"
                         :items="startYears"
                         label="Start Year"
                         dense
-                        :rules="[v => !!v || 'Start year is required']"
+                        :rules="[(v) => !!v || 'Start year is required']"
                         outlined
                       ></v-select>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="pr-0 py-0 ma-0">
                       <v-select
                         v-model="endYear"
                         :items="endYears"
                         label="End Year"
                         dense
-                        :rules="[v => !!v || 'End year is required']"
+                        :rules="[(v) => !!v || 'End year is required']"
                         outlined
                       ></v-select>
                     </v-col>
@@ -362,6 +378,7 @@ export default {
   },
   data() {
     return {
+      companyLogo: "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
       // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       valid: true,
@@ -497,6 +514,10 @@ export default {
       this.dialog = false;
       this.checkPassword = false;
       this.phoneRule = [];
+    },
+    selectCompanyLogo(event) {
+      let image = event.target.files[0];
+      this.companyLogo = URL.createObjectURL(image);
     },
     selectProfile(event) {
       let image = event.target.files[0];
@@ -670,7 +691,10 @@ export default {
 .avatar {
   margin-top: -100px;
   margin-left: 7%;
-  border: 5px solid white;
+  border: 5px solid rgb(255, 255, 255);
+}
+#addCompanyImg {
+  border: 2px solid rgb(190, 190, 190);
 }
 .icon {
   margin-left: -9%;
