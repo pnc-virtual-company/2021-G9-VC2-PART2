@@ -12,7 +12,7 @@
           >
           <v-expansion-panel-content>
             <v-chip-group active-class="primary--text" column>
-              <v-chip v-for="tag in tags" :key="tag">
+              <v-chip v-for="(tag,index) in tags" :key="index">
               <v-hover v-slot="{hover}">
 
                 <v-card-text class="px-0">
@@ -40,7 +40,7 @@
                     <v-container class="pb-0 px-0">
                       <v-col cols="12" class="pb-0">
                         <v-combobox
-                          v-model="model"
+                          v-model="skills"
                           :items="tags"
                           :search-input.sync="search"
                           hide-selected
@@ -109,6 +109,14 @@ export default {
       "Creative Writing",
     ],
     dialog: false,
+    search:"",
+    skills: [],
   }),
+  methods:{
+
+  },
+  mounted(){
+
+  }
 };
 </script>

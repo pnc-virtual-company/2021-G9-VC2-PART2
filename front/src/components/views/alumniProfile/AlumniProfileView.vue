@@ -10,7 +10,7 @@
         <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
         <input type="file" id="profile" hidden @change="selectProfile">
         <v-card color="transparent" width="60%" class="elevation-0">
-          <v-card-title class="justify-center text-h4 white--text">
+          <v-card-title class="justify-center text-h4 white--text text-wrap">
             {{ alumni.first_name }} {{ alumni.last_name }}
             <v-icon v-if="alumniData.gender === 'female'" class="ml-2">mdi-gender-female</v-icon>
             <v-icon v-else class="ml-2" >mdi-gender-male</v-icon>
@@ -19,25 +19,25 @@
       </v-col>
       <v-card-text class=" mb-0 pb-0">
         <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
-          <v-card-subtitle class=" white--text">
+          <v-card-subtitle class=" white--text text-wrap">
             <v-icon>mdi-phone-classic</v-icon>
             {{ alumniData.phone_number }}
           </v-card-subtitle>
-          <v-card-subtitle class=" white--text">
-            <v-icon>mdi-email</v-icon>
+          <v-card-subtitle class=" white--text text-wrap">
+            <v-icon>mdi-gmail</v-icon>
             {{ alumni.email }}
           </v-card-subtitle>
         </v-card-text>
         <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
              <v-icon>mdi-briefcase</v-icon>
             Web developer at Mango Byte co, ltd
           </v-card-subtitle>
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text">
+          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
             <v-icon>mdi-cloud-tags</v-icon>
              {{ alumniData.major }}
           </v-card-subtitle>
-          <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text">
+          <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text text-wrap">
             <v-icon>mdi-certificate</v-icon>
              {{ alumniData.batch }}
           </v-card-subtitle>
@@ -263,7 +263,7 @@
         <alumni-current-employment
         v-for="work of workExperience" :key="work.id"
         :work='work'
-        @get-work-experience = "getWorkExperience"
+        @get-work-experience = "getOneAlumni"
         :companies='companies'
         :positions='positions'
         :workExperience='workExperience'
@@ -289,7 +289,6 @@ export default {
   },
   data() {
     return {
-      // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       dialogCreate:false,
       checkPassword: false,
@@ -342,11 +341,15 @@ export default {
   },
   methods: {
     getOneAlumni(){
-      axios.get('/users/'+ this.userId).then((res)=>{
-        this.alumni = res.data;
-        this.alumniData = this.alumni.alumni;
+      axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
+        this.alumni = res.data.user;
+        this.alumniData = res.data.user.alumni;
+        this.workExperience = res.data.workExperience;
+        console.log(res.data);
         this.profile = 'http://localhost:8000/storage/profiles/' + this.alumniData.profile;
-      })
+
+      
+    })
     },
     closeDialog(){
       this.dialog = false;
@@ -440,61 +443,44 @@ export default {
           position = this.modelPosition;
         }
         let newWork={
-          alumni_id : this.user.alumni.id,
+          alumni_id : this.alumniData.id,
           company_id: company,
           position_id : position,
           start_year : this.startYear,
           end_year : this.endYear,
         };
         axios.post('work_experiences',newWork).then(()=>{
-          this.getWorkExperience();
-          axios.get('companies').then(res=>{
-          this.objectCompanies = res.data;
-          for(let company of this.objectCompanies){
-            this.companies.push(company.companyName)
-          }
-          });
-          axios.get('positions').then(res=>{
-            this.objectPositions = res.data;
-            for(let position of this.objectPositions){
-              this.positions.push(position.positionName);
-            }
-          });
+          this.getOneAlumni();
+          this.getCompanyAndPosition();
         })
        this.closeCreateDialog()
       }
       },
-    getWorkExperience(){
-      axios.get('work_experiences/'+this.user.alumni.id).then(res=>{
-        this.workExperience = res.data;
-      })
-    }
+      getCompanyAndPosition(){
+        axios.get('companies').then(res=>{
+          this.objectCompanies = res.data;
+          // for(let company of this.objectCompanies){
+          //   this.companies.push(company.companyName)
+          // }
+          this.objectCompanies.map((company)=>{
+            this.companies.push(company.companyName)
+          })
+          console.log(this.companies)
+        });
+        axios.get('positions').then(res=>{
+          this.objectPositions = res.data;
+          for(let position of this.objectPositions){
+            this.positions.push(position.positionName);
+          }
+        }); 
+      }
+
   },
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
     this.getOneAlumni()
-    let emplotment = {
-      companyName: "PNC",
-      position: "Full-Stack Developer",
-      year: "2019-Present",
-    };
-    this.currentEmployments.push(emplotment);
-    axios.get('companies').then(res=>{
-      this.objectCompanies = res.data;
-      for(let company of this.objectCompanies){
-        this.companies.push(company.companyName)
-      }
-    });
-    axios.get('positions').then(res=>{
-      this.objectPositions = res.data;
-      for(let position of this.objectPositions){
-        this.positions.push(position.positionName);
-      }
-    }); 
-    axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
-      this.user = res.data;
-      this.getWorkExperience();
-    })
+    this.getCompanyAndPosition();
+    
   },
 };
 </script>

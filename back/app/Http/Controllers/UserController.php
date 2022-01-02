@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Alumni;
+use App\Models\WorkExperience;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,7 +18,15 @@ class UserController extends Controller
     }
 
     public function getUser(Request $request, $id){
-        return User::with('alumni')->findOrFail($id);
+        $user = User::with('alumni')->findOrFail($id);
+        $workExperience = WorkExperience::join('companies', 'companies.id', '=', 'work_experiences.company_id')
+        ->join('positions', 'positions.id', '=', 'work_experiences.position_id')
+        ->join('alumnis', 'alumnis.id', '=', 'work_experiences.alumni_id')
+        ->where([['work_experiences.alumni_id','=',$user->alumni->id]])
+        ->orderBy('work_experiences.id','DESC')
+        ->get(['work_experiences.id','work_experiences.alumni_id','companyName','positionName','start_year','end_year']);
+        
+        return response()->json(['user'=>$user, 'workExperience'=> $workExperience]);
     }
 
     public function createUser(Request $request)
