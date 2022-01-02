@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\AlumniPositionController;
 use App\Http\Controllers\WorkExperienceController;
+use App\Http\Controllers\SkillController;
 
 // USER SIGN, SIGN UP, SIGN OUT
 Route::post('signin',[UserController::class, "signIn"]);
@@ -44,3 +45,10 @@ Route::get('work_experiences/{id}',[WorkExperienceController::class,'getOneWorkE
 Route::post('work_experiences',[WorkExperienceController::class,'createWorkExperience']);
 Route::put('work_experiences/{id}',[WorkExperienceController::class,'updateWorkExperience']);
 Route::delete('work_experiences/{id}',[WorkExperienceController::class,'deleteWorkExperience']);
+
+
+Route::get('skills',[SkillController::class,'getAllSkill']);
+Route::post('skills',[SkillController::class,'createSkill']);
+Route::get('skills/{skill_id}',[SkillController::class,'getOneSkill']);
+Route::put('skills/{skill_id}',[SkillController::class,'updateSkill']);
+Route::delete('skills/{skill_id}',[SkillController::class,'deleteSkill']);

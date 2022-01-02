@@ -5,21 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Skill extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'company_name',
-        'email',
-        'phone',
-        'address',
-        'logo'
+    protected $fillable =[
+        'Title'
     ];
+    public $table = 'skills';
 
     public function Alumni(){
         return $this->belongsToMany(Alumni::class);
     }
-
-
-    public $table = 'companies';
 }
