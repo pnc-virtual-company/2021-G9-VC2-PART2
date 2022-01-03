@@ -32,7 +32,7 @@ class CompanyController extends Controller
         $company = new Company();
         $company->companyName = $request->companyName;
         $company -> email = $request->email;
-        $company->address = $request -> address;
+        $company->address = $request ->address;
         $company-> phone = $request->phone;
         $company->domain = $request->domain;
         $company-> logo = $request->file('logo')->hashName();
@@ -67,9 +67,9 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
         $company->companyName = $request->companyName;
         $company -> email = $request->email;
-        $company->address = $request -> address;
+        $company->address = $request ->address;
         $company-> phone = $request->phone;
-        $company-> domain = $request-> domain;
+        $company-> domain = $request->domain;
         $company-> logo = $request->file('logo')->hashName();
         // $company -> logo = $request -> logo;
         $company->save();

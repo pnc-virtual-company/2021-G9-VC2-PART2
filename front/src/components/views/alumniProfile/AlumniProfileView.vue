@@ -64,8 +64,8 @@
                 <v-card-text>
                   <v-divider
                     color="#FF9933"
-                    class="mx-auto mt-3"
-                    width="98%"
+                    class="mx-auto "
+                    width="93%"
                   ></v-divider>
                   <v-row class="mt-4 pb-0" dense>
                     <v-col cols="6" class="pb-0">
@@ -162,8 +162,8 @@
                         <v-card-text>
                           <v-divider
                             color="#FF9933"
-                            class="mx-auto mt-3"
-                            width="98%"
+                            class="mx-auto "
+                            width="93%"
                           ></v-divider>
 
                           <v-row class="mt-6 pt-0" dense>
@@ -220,8 +220,8 @@
                 </v-card-title>
                 <v-divider
                   color="#FF9933"
-                  class="mx-auto mt-4"
-                  width="95%"
+                  class="mx-auto "
+                  width="93%"
                 ></v-divider>
 
                 <v-container>
@@ -229,6 +229,7 @@
                     <v-col
                       cols="12"
                       class="d-flex justify-center pa-0 mb-3 mt-4"
+                      v-if="isInputInfoCompany"
                     >
                       <label for="companyImg">
                         <v-avatar id="addCompanyImg" size="70">
@@ -240,6 +241,17 @@
                       </label>
                       <input type="file" accept="image/jpeg, image/png, image/gif" id="companyImg" hidden @change="selectCompanyLogo" />
                     </v-col>
+                     <v-col cols="12" class="pa-0 ma-0">
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelPosition"
+                        :items="positions"
+                        :search-input.sync="searchPosition"
+                        label="Position"
+                      >
+                      </v-combobox>
+                    </v-col>
                     <v-col cols="12" class="pa-0 ma-0">
                       <v-combobox
                         dense
@@ -248,22 +260,12 @@
                         :items="companies"
                         :search-input.sync="searchComapany"
                         label="Company"
+                        @change="findCompanyName"
+                       
                       >
                       </v-combobox>
                     </v-col>
-
-                    <v-col cols="12" class="pa-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompanyAddress"
-                        :items="companyAddresses"
-                        :search-input.sync="searchComapanyAddress"
-                        label="Company Address"
-                      >
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0">
+                    <v-col cols="6" class="pl-0 py-0 ma-0" v-if="isInputInfoCompany">
                       <v-text-field
                         dense
                         outlined
@@ -272,7 +274,7 @@
                       >
                       </v-text-field>
                     </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0">
+                    <v-col cols="6" class="pr-0 py-0 ma-0" v-if="isInputInfoCompany">
                       <v-text-field
                         dense
                         outlined
@@ -281,7 +283,7 @@
                       >
                       </v-text-field>
                     </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0">
+                    <v-col cols="6" class="pl-0 py-0 ma-0" v-if="isInputInfoCompany">
                       <v-combobox
                         dense
                         outlined
@@ -292,14 +294,15 @@
                       >
                       </v-combobox>
                     </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0">
+                   
+                     <v-col  cols="6" class="pr-0 py-0 ma-0" v-if="isInputInfoCompany">
                       <v-combobox
                         dense
                         outlined
-                        v-model="modelPosition"
-                        :items="positions"
-                        :search-input.sync="searchPosition"
-                        label="Position"
+                        v-model="modelCompanyAddress"
+                        :items="companyAddresses"
+                        :search-input.sync="searchComapanyAddress"
+                        label="Company Address"
                       >
                       </v-combobox>
                     </v-col>
@@ -450,6 +453,10 @@ export default {
       userId: localStorage.getItem("userId"),
       profile: "",
       image: "",
+      previewImage:'',
+      companyId : null,
+      positionId : null,
+      isInputInfoCompany:true,
     };
   },
   watch: {
@@ -471,8 +478,21 @@ export default {
           "Phone Number must be valid",
       ];
     },
+    
   },
   methods: {
+    findCompanyName(){
+      console.log('find',this.modelCompany)
+      let companyName = this.objectCompanies.filter(
+          (company) => company.companyName == this.modelCompany
+        );
+      console.log('again',companyName)
+      if(companyName.length!==0){
+        this.isInputInfoCompany = false;
+      }else{
+        this.isInputInfoCompany = true;
+      }
+    },
     getOneAlumni(){
       axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
         this.alumni = res.data.user;
@@ -490,8 +510,14 @@ export default {
       this.phoneRule = [];
     },
     selectCompanyLogo(event) {
-      let image = event.target.files[0];
-      this.companyLogo = URL.createObjectURL(image);
+      this.image = event.target.files[0];
+      this.companyLogo = URL.createObjectURL(this.image);
+      let reader = new FileReader();
+      reader.onloadend = (event) => {
+        this.previewImage = event.target.result;
+      };
+      reader.readAsDataURL(this.image);
+    
     },
     selectProfile(event) {
       let image = event.target.files[0];
@@ -499,6 +525,7 @@ export default {
       let userProfile = new FormData();
       userProfile.append("profile", image);
       userProfile.append("_method", "PUT");
+      
       axios
         .post("/alumnisProfile/" + this.alumniData.id, userProfile)
         .then(() => {
@@ -573,6 +600,7 @@ export default {
       this.modelPosition = "";
       this.startYear = "";
       this.endYear = "";
+      this.isInputInfoCompany = true;
     },
     createWorkExperience() {
       if (
@@ -587,28 +615,32 @@ export default {
         let objectOfPosition = this.objectPositions.filter(
           (position) => position.positionName == this.modelPosition
         );
-        let company = null;
-        let position = null;
+        // var company = null;
         if (objectOfCompany.length !== 0) {
-          company = objectOfCompany[0].id;
-        } else {
-          company = this.modelCompany;
-        }
+          this.companyId = objectOfCompany[0].id;
+        } 
         if (objectOfPosition.length !== 0) {
-          position = objectOfPosition[0].id;
+          this.position = objectOfPosition[0].id;
         } else {
-          position = this.modelPosition;
+          this.position = this.modelPosition;
         }
-        let newWork={
-          alumni_id : this.alumniData.id,
-          company_id: company,
-          position_id: position,
-          start_year: this.startYear,
-          end_year: this.endYear,
-        };
-        axios.post('work_experiences',newWork).then(()=>{
+        let newWork =new FormData();
+        newWork.append('alumni_id',this.alumniData.id);
+        newWork.append('company_id',this.companyId);
+        newWork.append('companyName',this.modelCompany);
+        newWork.append('phone', this.companyPhoneNumber);
+        newWork.append('email',this.companyEmail);
+        newWork.append('address',this.modelCompanyAddress);
+        newWork.append('domain',this.modelCompanyDomain);
+        newWork.append('logo',this.image);
+        newWork.append('position_id',this.position);
+        newWork.append('start_year',this.startYear);
+        newWork.append('end_year',this.endYear);
+        
+        axios.post('work_experiences',newWork).then((res)=>{
           this.getOneAlumni();
           this.getCompanyAndPosition();
+          console.log(res.data);
         })
        this.closeCreateDialog()
       }
@@ -616,9 +648,6 @@ export default {
       getCompanyAndPosition(){
         axios.get('companies').then(res=>{
           this.objectCompanies = res.data;
-          // for(let company of this.objectCompanies){
-          //   this.companies.push(company.companyName)
-          // }
           this.objectCompanies.map((company)=>{
             this.companies.push(company.companyName)
           })
