@@ -1,10 +1,9 @@
 <template>
   <v-container>
-    <v-divider></v-divider>
 
     <v-row justify="center" >
       <v-expansion-panels  accordion flat >
-        <v-expansion-panel class="elevation-1 rounded-0" >
+        <v-expansion-panel class="elevation-1 mt-4 rounded-0" >
           <v-expansion-panel-header
             width="100px"
             class="title  elevation-0 title  text-h5 "
@@ -95,7 +94,6 @@
       </v-expansion-panels>
       
     </v-row>
-    <v-divider></v-divider>
   </v-container>
 </template>
 
