@@ -1,7 +1,7 @@
 <template>
   <!-- <v-container> -->
   <v-hover v-slot="{ hover }">
-    <v-col class="pb-0 px-10">
+    <v-col class="pb-0 px-0">
       <v-expansion-panels accordion>
         <v-expansion-panel class="rounded-lg">
           <v-expansion-panel-header class="pa-0 ma-0" hide-actions>

@@ -1,94 +1,110 @@
 <template>
-  <v-container width="50%">
+  <v-container class="mt-9" width="50%">
     <v-card height="22vh" class="elevation-0"> </v-card>
     <v-hover v-slot="{ hover }">
-    <v-container class="header d-flex elevation-0">
-      <v-col cols="5">
-        <v-avatar size="170" class="avatar">
-          <v-img :src="profile" alt="John"></v-img>          
-        </v-avatar>
-        <label for="profile"><v-icon class="icon align-center rounded-circle pa-1 blue-grey darken-2" color="white">mdi-camera</v-icon></label>
-        <input type="file" id="profile" hidden @change="selectProfile">
-        <v-card color="transparent" width="60%" class="elevation-0">
-          <v-card-title class="justify-center text-h4 white--text text-wrap">
-            {{ alumni.first_name }} {{ alumni.last_name }}
-            <v-icon v-if="alumniData.gender === 'female'" class="ml-2">mdi-gender-female</v-icon>
-            <v-icon v-else class="ml-2" >mdi-gender-male</v-icon>
-          </v-card-title>
-        </v-card>
-      </v-col>
-      <v-card-text class=" mb-0 pb-0">
-        <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
-          <v-card-subtitle class=" white--text text-wrap">
-            <v-icon>mdi-phone-classic</v-icon>
-            {{ alumniData.phone_number }}
-          </v-card-subtitle>
-          <v-card-subtitle class=" white--text text-wrap">
-            <v-icon>mdi-gmail</v-icon>
-            {{ alumni.email }}
-          </v-card-subtitle>
-        </v-card-text>
-        <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
-             <v-icon>mdi-briefcase</v-icon>
-            Web developer at Mango Byte co, ltd
-          </v-card-subtitle>
-          <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
-            <v-icon>mdi-cloud-tags</v-icon>
-             {{ alumniData.major }}
-          </v-card-subtitle>
-          <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text text-wrap">
-            <v-icon>mdi-certificate</v-icon>
-             {{ alumniData.batch }}
-          </v-card-subtitle>
-          <v-spacer></v-spacer>
-          <v-icon v-if="hover" class="edit pa-2 mr-1 white  elevation-6 rounded-circle" @click="editData">mdi-pen</v-icon>
-          <v-dialog v-model="dialog" persistent max-width="500px">
-              <v-card class="rounded-lg">
-                <v-card-title class="justify-center">
-                  <span class="text-h5 text-color">USER PROFILE</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-divider
-                    color="#FF9933"
-                    class="mx-auto mt-3"
-                    width="98%"
-                  ></v-divider>
-                  <v-row class="mt-4 pb-0" dense>
-                    <v-col cols="6" class="pb-0">
-                      <v-text-field
-                        v-model="firstName"
-                        label="First Name"
-                        placeholder="First Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="lastName"
-                        label="Last Name"
-                        placeholder="Last Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-0 pt-0" dense>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="phoneNumber"
-                        label="Phone Number"
-                        placeholder="Phone Number"
-                        :rules="phoneRule"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+      <v-container class="header d-flex elevation-0">
+        <v-col cols="5">
+          <v-avatar size="170" class="avatar">
+            <v-img :src="profile" alt="John"></v-img>
+          </v-avatar>
+          <label for="profile"
+            ><v-icon
+              class="icon align-center rounded-circle pa-1 blue-grey darken-2"
+              color="white"
+              >mdi-camera</v-icon
+            ></label
+          >
+          <input type="file" id="profile" hidden @change="selectProfile" />
+          <v-card color="transparent" width="60%" class="elevation-0">
+            <v-card-title class="justify-center text-h4 white--text text-wrap">
+              {{ alumni.first_name }} {{ alumni.last_name }}
+              <v-icon v-if="alumniData.gender === 'female'" class="ml-2"
+                >mdi-gender-female</v-icon
+              >
+              <v-icon v-else class="ml-2">mdi-gender-male</v-icon>
+            </v-card-title>
+          </v-card>
+        </v-col>
+        <v-card-text class="mb-0 pb-0">
+          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+            <v-card-subtitle class="white--text text-wrap">
+              <v-icon>mdi-phone-classic</v-icon>
+              {{ alumniData.phone_number }}
+            </v-card-subtitle>
+            <v-card-subtitle class="white--text text-wrap">
+              <v-icon>mdi-gmail</v-icon>
+              {{ alumni.email }}
+            </v-card-subtitle>
+          </v-card-text>
+          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+            <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
+              <v-icon>mdi-briefcase</v-icon>
+              Web developer at Mango Byte co, ltd
+            </v-card-subtitle>
+            <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
+              <v-icon>mdi-cloud-tags</v-icon>
+              {{ alumniData.major }}
+            </v-card-subtitle>
+            <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text text-wrap">
+              <v-icon>mdi-certificate</v-icon>
+              {{ alumniData.batch }}
+            </v-card-subtitle>
+            <v-spacer></v-spacer>
+            <v-icon
+              v-if="hover"
+              class="edit pa-2 mr-1 white elevation-6 rounded-circle"
+              @click="editData"
+              >mdi-pen</v-icon
+            >
+            <v-dialog v-model="dialog" persistent max-width="500px">
+              <v-form ref="form" v-model="valid">
+                <v-card class="rounded-lg">
+                  <v-card-title class="justify-center">
+                    <span class="text-h5 text-color">USER PROFILE</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-divider
+                      color="#FF9933"
+                      class="mx-auto mt-3"
+                      width="98%"
+                    ></v-divider>
+                    <v-row class="mt-4 pb-0" dense>
+                      <v-col cols="6" class="pb-0">
+                        <v-text-field
+                          v-model="firstName"
+                          label="First Name"
+                          placeholder="First Name"
+                          outlined
+                          dense
+                          width="100px"
+                          :rules="[v => !!v || 'First name is required']"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="lastName"
+                          label="Last Name"
+                          placeholder="Last Name"
+                          outlined
+                          dense
+                          width="100px"
+                          :rules="[v => !!v || 'Last name is required']"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0 pt-0" dense>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="phoneNumber"
+                          label="Phone Number"
+                          placeholder="Phone Number"
+                          :rules="phoneRule"
+                          outlined
+                          dense
+                          width="100px"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
 
                     <v-text-field
                       v-model="email"
@@ -104,14 +120,14 @@
                       v-model="userMajor"
                       label="Major"
                       dense
-                      outlined
+                      outlined                      
                       :items="major"
                     ></v-select>
                     <v-select
                       v-model="userBatch"
                       label="Batch"
                       dense
-                      outlined
+                      outlined                 
                       :items="batch"
                     ></v-select>
                     <v-radio-group
@@ -186,164 +202,164 @@
                     </v-card-actions>
                   </v-card-text>
                 </v-card>
+              </v-form>
             </v-dialog>
           </v-card-text>
         </v-card-text>
       </v-container>
     </v-hover>
 
-    <v-card tile color=" pt-6" class="">
-      <skill-card></skill-card>
+    <skill-card></skill-card>
 
-      <v-card width="100%" class="pb-6">
-        <v-card-text class="d-flex justify-center align-center">
-          <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
-          <v-spacer></v-spacer>
-          <v-icon
-            @click="dialogCreate = !dialogCreate"
-            class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
-            >mdi-plus</v-icon
-          >
-          <v-dialog v-model="dialogCreate" persistent max-width="500px">
-            <v-card>
-              <v-form class="pt-5 px-5">
-                <v-card-title class="d-flex justify-center my-0 py-0">
-                  <span class="text-h5 text-color">CREATE EMPLOYMENT</span>
-                </v-card-title>
-                <v-divider
-                  color="#FF9933"
-                  class="mx-auto mt-4"
-                  width="95%"
-                ></v-divider>
+    <v-card width="100%" elevation="0" color="transparent" class="pb-6">
+      <v-card-text class="d-flex justify-center align-center px-0">
+        <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
+        <v-spacer></v-spacer>
+        <v-icon
+          @click="dialogCreate = !dialogCreate"
+          class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
+          >mdi-plus</v-icon
+        >
+        <v-dialog v-model="dialogCreate" persistent max-width="500px">
+          <v-card>
+            <v-form class="pt-5 px-5">
+              <v-card-title class="d-flex justify-center my-0 py-0">
+                <span class="text-h5 text-color">CREATE EMPLOYMENT</span>
+              </v-card-title>
+              <v-divider
+                color="#FF9933"
+                class="mx-auto mt-4"
+                width="95%"
+              ></v-divider>
 
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      class="d-flex justify-center pa-0 mb-3 mt-4"
+              <v-container>
+                <v-row>
+                  <v-col cols="12" class="d-flex justify-center pa-0 mb-3 mt-4">
+                    <label for="companyImg">
+                      <v-avatar id="addCompanyImg" size="70">
+                        <v-img :src="companyLogo" alt="Company logo"></v-img>
+                      </v-avatar>
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/jpeg, image/png, image/gif"
+                      id="companyImg"
+                      hidden
+                      @change="selectCompanyLogo"
+                    />
+                  </v-col>
+                  <v-col cols="12" class="pa-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelCompany"
+                      :items="companies"
+                      :search-input.sync="searchComapany"
+                      label="Company"
                     >
-                      <label for="companyImg">
-                        <v-avatar id="addCompanyImg" size="70">
-                          <v-img
-                            :src="companyLogo"
-                            alt="Company logo"
-                          ></v-img>
-                        </v-avatar>
-                      </label>
-                      <input type="file" accept="image/jpeg, image/png, image/gif" id="companyImg" hidden @change="selectCompanyLogo" />
-                    </v-col>
-                    <v-col cols="12" class="pa-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompany"
-                        :items="companies"
-                        :search-input.sync="searchComapany"
-                        label="Company"
-                      >
-                      </v-combobox>
-                    </v-col>
+                    </v-combobox>
+                  </v-col>
 
-                    <v-col cols="12" class="pa-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompanyAddress"
-                        :items="companyAddresses"
-                        :search-input.sync="searchComapanyAddress"
-                        label="Company Address"
-                      >
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0">
-                      <v-text-field
-                        dense
-                        outlined
-                        v-model="companyPhoneNumber"
-                        label="Company Phone Number"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0">
-                      <v-text-field
-                        dense
-                        outlined
-                        v-model="companyEmail"
-                        label="Company Email"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompanyDomain"
-                        :items="companyDomain"
-                        :search-input.sync="searchComapanyDomain"
-                        label="Company Domain"
-                      >
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelPosition"
-                        :items="positions"
-                        :search-input.sync="searchPosition"
-                        label="Position"
-                      >
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0">
-                      <v-select
-                        v-model="startYear"
-                        :items="startYears"
-                        label="Start Year"
-                        dense
-                        :rules="[(v) => !!v || 'Start year is required']"
-                        outlined
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0">
-                      <v-select
-                        v-model="endYear"
-                        :items="endYears"
-                        label="End Year"
-                        dense
-                        :rules="[(v) => !!v || 'End year is required']"
-                        outlined
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-form>
-              <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
-                <v-spacer></v-spacer>
-                <v-btn dark color="grey" text @click="closeCreateDialog">
-                  <span>Cancel</span>
-                </v-btn>
-                <v-btn color="#22BBEA" @click="createWorkExperience">
-                  <span class="white--text">Submit</span>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-card-text>
-        <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
-        <alumni-current-employment
-        v-for="work of workExperience" :key="work.id"
-        :work='work'
-        @get-work-experience = "getOneAlumni"
-        :companies='companies'
-        :positions='positions'
-        :workExperience='workExperience'
-        :objectCompanies='objectCompanies'
-        :objectPositions='objectPositions'
-        :startYears='startYears'
-        :endYears='endYears'
-        />
-      </v-card>
+                  <v-col cols="12" class="pa-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelCompanyAddress"
+                      :items="companyAddresses"
+                      :search-input.sync="searchComapanyAddress"
+                      label="Company Address"
+                    >
+                    </v-combobox>
+                  </v-col>
+                  <v-col cols="6" class="pl-0 py-0 ma-0">
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="companyPhoneNumber"
+                      label="Company Phone Number"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="6" class="pr-0 py-0 ma-0">
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="companyEmail"
+                      label="Company Email"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="6" class="pl-0 py-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelCompanyDomain"
+                      :items="companyDomain"
+                      :search-input.sync="searchComapanyDomain"
+                      label="Company Domain"
+                    >
+                    </v-combobox>
+                  </v-col>
+                  <v-col cols="6" class="pr-0 py-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelPosition"
+                      :items="positions"
+                      :search-input.sync="searchPosition"
+                      label="Position"
+                    >
+                    </v-combobox>
+                  </v-col>
+                  <v-col cols="6" class="pl-0 py-0 ma-0">
+                    <v-select
+                      v-model="startYear"
+                      :items="startYears"
+                      label="Start Year"
+                      dense
+                      :rules="[(v) => !!v || 'Start year is required']"
+                      outlined
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="6" class="pr-0 py-0 ma-0">
+                    <v-select
+                      v-model="endYear"
+                      :items="endYears"
+                      label="End Year"
+                      dense
+                      :rules="[(v) => !!v || 'End year is required']"
+                      outlined
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+            <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
+              <v-spacer></v-spacer>
+              <v-btn dark color="grey" text @click="closeCreateDialog">
+                <span>Cancel</span>
+              </v-btn>
+              <v-btn color="#22BBEA" @click="createWorkExperience">
+                <span class="white--text">Submit</span>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-card-text>
+      <v-divider color="#FF9933" class="mb-4 mx-auto" width="100%"></v-divider>
+      <alumni-current-employment
+        v-for="work of workExperience"
+        :key="work.id"
+        :work="work"
+        @get-work-experience="getOneAlumni"
+        :companies="companies"
+        :positions="positions"
+        :workExperience="workExperience"
+        :objectCompanies="objectCompanies"
+        :objectPositions="objectPositions"
+        :startYears="startYears"
+        :endYears="endYears"
+      />
     </v-card>
   </v-container>
 </template>
@@ -360,7 +376,8 @@ export default {
   },
   data() {
     return {
-      companyLogo: "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
+      companyLogo:
+        "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
       // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       valid: true,
@@ -435,6 +452,7 @@ export default {
       companyDomain: ["Bank", "Insuranc"],
       searchComapanyDomain: "",
       modelCompanyDomain: "",
+      // modelCompanyLogo:'',
       modelCompanyAddress: "",
       searchComapanyAddress: "",
       companyPhoneNumber: "",
@@ -484,16 +502,17 @@ export default {
     },
   },
   methods: {
-    getOneAlumni(){
-      axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
-        this.alumni = res.data.user;
-        this.alumniData = res.data.user.alumni;
-        this.workExperience = res.data.workExperience;
-        console.log(res.data);
-        this.profile = 'http://localhost:8000/storage/profiles/' + this.alumniData.profile;
-
-      
-    })
+    getOneAlumni() {
+      axios
+        .get("users/" + JSON.parse(localStorage.getItem("userId")))
+        .then((res) => {
+          this.alumni = res.data.user;
+          this.alumniData = res.data.user.alumni;
+          this.workExperience = res.data.workExperience;
+          console.log(res.data);
+          this.profile =
+            "http://localhost:8000/storage/profiles/" + this.alumniData.profile;
+        });
     },
     closeDialog() {
       this.dialog = false;
@@ -610,45 +629,43 @@ export default {
         } else {
           position = this.modelPosition;
         }
-        let newWork={
-          alumni_id : this.alumniData.id,
+        let newWork = {
+          alumni_id: this.alumniData.id,
           company_id: company,
           position_id: position,
           start_year: this.startYear,
           end_year: this.endYear,
         };
-        axios.post('work_experiences',newWork).then(()=>{
+        axios.post("work_experiences", newWork).then(() => {
           this.getOneAlumni();
           this.getCompanyAndPosition();
-        })
-       this.closeCreateDialog()
-      }
-      },
-      getCompanyAndPosition(){
-        axios.get('companies').then(res=>{
-          this.objectCompanies = res.data;
-          // for(let company of this.objectCompanies){
-          //   this.companies.push(company.companyName)
-          // }
-          this.objectCompanies.map((company)=>{
-            this.companies.push(company.companyName)
-          })
-          console.log(this.companies)
         });
-        axios.get('positions').then(res=>{
-          this.objectPositions = res.data;
-          for(let position of this.objectPositions){
-            this.positions.push(position.positionName);
-          }
-        }); 
+        this.closeCreateDialog();
       }
-
+    },
+    getCompanyAndPosition() {
+      axios.get("companies").then((res) => {
+        this.objectCompanies = res.data;
+        // for(let company of this.objectCompanies){
+        //   this.companies.push(company.companyName)
+        // }
+        this.objectCompanies.map((company) => {
+          this.companies.push(company.companyName);
+        });
+        console.log(this.companies);
+      });
+      axios.get("positions").then((res) => {
+        this.objectPositions = res.data;
+        for (let position of this.objectPositions) {
+          this.positions.push(position.positionName);
+        }
+      });
+    },
   },
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
-    this.getOneAlumni()
+    this.getOneAlumni();
     this.getCompanyAndPosition();
-    
   },
 };
 </script>

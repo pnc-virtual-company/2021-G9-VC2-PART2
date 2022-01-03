@@ -13,7 +13,8 @@ class Company extends Model
         'email',
         'phone',
         'address',
-        'logo'
+        'logo',
+        'domain'
     ];
 
     public function Alumni(){
