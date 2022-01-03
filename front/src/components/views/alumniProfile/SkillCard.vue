@@ -17,7 +17,7 @@
 
                 <v-card-text class="px-0">
                   {{ skill }}
-                <v-icon v-if="hover" right @click="deleteSkill(index)">mdi-close-circle-outline</v-icon>
+                <v-icon v-if="hover" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
                 </v-card-text>
               </v-hover>
               </v-chip>
@@ -92,6 +92,7 @@
 <script>
 import axios from './../../../api/api.js';
 export default {
+  // props:['skills'],
   data: () => ({
     skills: [],
     dialog: false,
@@ -108,25 +109,25 @@ export default {
       }
       this.newSkills = array
     },
-    getSkils(){
+    getSkills(){
       axios.get('/skills').then((res)=>{
         this.skills = res.data;
       })
     },
     deleteSkill(id){
       axios.delete('/skills/'+id).then(()=>{
-        this.getSkils();
+        this.getSkills();
       })
     },
     addNewSkills(){
       axios.post('/skills', this.newSkills).then(()=>{
-        this.getSkils();
+        this.getSkills();
         this.dialog = false;
       })
     }
   },
   mounted(){
-    this.getSkils();
+    this.getSkills();
   }
 };
 </script>
