@@ -12,4 +12,5 @@ class AlumniSkill extends Model
         'alumni_id',
         'skill_id',
     ];
+    public $table = 'alumni_skills';
 }

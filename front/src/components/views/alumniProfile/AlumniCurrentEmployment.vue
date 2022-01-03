@@ -1,7 +1,7 @@
 <template>
   <!-- <v-container> -->
   <v-hover v-slot="{ hover }">
-    <v-col class="pb-0 px-10">
+    <v-col class="pb-0 px-0">
       <v-expansion-panels accordion>
         <v-expansion-panel class="rounded-lg">
           <v-expansion-panel-header class="pa-0 ma-0" hide-actions>
@@ -72,6 +72,18 @@
                     >
                     </v-combobox>
                 </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelCompanyAddress"
+                      :search-input.sync="searchComapanyAddress"
+                      label="Company Address"
+                    >
+                    </v-combobox>
+                  </v-col>
               </v-row>
               <v-row no-gutters>
                 <v-col cols="12">
@@ -162,9 +174,7 @@
       </v-expansion-panels>
     </v-col>
   </v-hover>
-  <!-- </v-container> -->
 </template>
-
 <script>
 import axios from "./../../../api/api.js";
 export default {
@@ -185,9 +195,11 @@ export default {
       startYear: null,
       endYear: null,
       searchComapany: null,
+      searchComapanyAddress:null,
       searchPosition: null,
       modelPosition: "",
       modelCompany: "",
+      modelCompanyAddress: "",
       id: null,
       alumni_id: null,
     };
@@ -265,15 +277,8 @@ export default {
   mounted() {},
 };
 </script>
-
 <style scoped>
-/* .edit {
-  height: 39px;
-  margin-top: 40px;
-} */
-
 .text-color {
   color: #22bbea;
 }
-
 </style>

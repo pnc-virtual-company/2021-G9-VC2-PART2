@@ -1,5 +1,5 @@
 <template>
-  <v-container width="50%">
+  <v-container class="mt-9" width="50%">
     <v-card height="22vh" class="elevation-0"> </v-card>
     <v-hover v-slot="{ hover }">
       <v-container class="header d-flex elevation-0">
@@ -57,143 +57,151 @@
               >mdi-pen</v-icon
             >
             <v-dialog v-model="dialog" persistent max-width="500px">
-              <v-card class="rounded-lg">
-                <v-card-title class="justify-center">
-                  <span class="text-h5 text-color">USER PROFILE</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-divider
-                    color="#FF9933"
-                    class="mx-auto "
-                    width="93%"
-                  ></v-divider>
-                  <v-row class="mt-4 pb-0" dense>
-                    <v-col cols="6" class="pb-0">
-                      <v-text-field
-                        v-model="firstName"
-                        label="First Name"
-                        placeholder="First Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="lastName"
-                        label="Last Name"
-                        placeholder="Last Name"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row class="mt-0 pt-0" dense>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="phoneNumber"
-                        label="Phone Number"
-                        placeholder="Phone Number"
-                        :rules="phoneRule"
-                        outlined
-                        dense
-                        width="100px"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+              <v-form ref="form" v-model="valid">
+                <v-card class="rounded-lg">
+                  <v-card-title class="justify-center">
+                    <span class="text-h5 text-color">USER PROFILE</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-divider
+                      color="#FF9933"
+                      class="mx-auto mt-3"
+                      width="98%"
+                    ></v-divider>
+                    <v-row class="mt-4 pb-0" dense>
+                      <v-col cols="6" class="pb-0">
+                        <v-text-field
+                          v-model="firstName"
+                          label="First Name"
+                          placeholder="First Name"
+                          outlined
+                          dense
+                          width="100px"
+                          :rules="[v => !!v || 'First name is required']"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="lastName"
+                          label="Last Name"
+                          placeholder="Last Name"
+                          outlined
+                          dense
+                          width="100px"
+                          :rules="[v => !!v || 'Last name is required']"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0 pt-0" dense>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="phoneNumber"
+                          label="Phone Number"
+                          placeholder="Phone Number"
+                          :rules="phoneRule"
+                          outlined
+                          dense
+                          width="100px"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
 
-                  <v-text-field
-                    v-model="email"
-                    label="Email"
-                    placeholder="Email"
-                    :rules="emailRules"
-                    outlined
-                    dense
-                    width="100px"
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="email"
+                      label="Email"
+                      placeholder="Email"
+                      :rules="emailRules"
+                      outlined
+                      dense
+                      width="100px"
+                    ></v-text-field>
 
-                  <v-select
-                    v-model="userMajor"
-                    label="Major"
-                    dense
-                    outlined
-                    :items="major"
-                  ></v-select>
-                  <v-select
-                    v-model="userBatch"
-                    label="Batch"
-                    dense
-                    outlined
-                    :items="batch"
-                  ></v-select>
-                  <v-radio-group
-                    :rules="[(v) => !!v || 'Gender is required']"
-                    row
-                    class="mt-0 pt-0"
-                    v-model="gender"
-                  >
-                    <v-radio label="Female" value="female"></v-radio>
-                    <v-radio label="Male" value="male"></v-radio>
-                  </v-radio-group>
-                  <v-card-actions class="justify-end">
-                    <v-btn color="grey" text @click="closeDialog">
-                      <span>Cancel</span>
-                    </v-btn>
-                    <v-btn
-                      :disabled="!valid"
-                      color="#22BBEA"
-                      class="white--text"
-                      @click="completedData"
+                    <v-select
+                      v-model="userMajor"
+                      label="Major"
+                      dense
+                      outlined                      
+                      :items="major"
+                    ></v-select>
+                    <v-select
+                      v-model="userBatch"
+                      label="Batch"
+                      dense
+                      outlined                 
+                      :items="batch"
+                    ></v-select>
+                    <v-radio-group
+                      :rules="[(v) => !!v || 'Gender is required']"
+                      row
+                      class="mt-0 pt-0"
+                      v-model="gender"
                     >
-                      <span>Update</span>
-                    </v-btn>
-                    <v-dialog
-                      v-model="checkPassword"
-                      persistent
-                      max-width="500px"
-                    >
-                      <v-card class="rounded-lg">
-                        <v-card-title class="justify-center">
-                          <span class="text-h5 text-color"
-                            >VERIFY YOUR PASSWORD</span
-                          >
-                        </v-card-title>
-                        <v-card-text>
-                          <v-divider
-                            color="#FF9933"
-                            class="mx-auto "
-                            width="93%"
-                          ></v-divider>
-
-                          <v-row class="mt-6 pt-0" dense>
-                            <v-col cols="12">
-                              <v-text-field
-                                v-model="password"
-                                label="Password"
-                                placeholder="Password"
-                                type="password"
-                                :rules="passwordRules"
-                                outlined
-                                dense
-                                width="100px"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                          <v-card-actions class="justify-end">
-                            <v-btn dark color="grey" text @click="closeDialog">
-                              <span>Cancel</span>
-                            </v-btn>
-                            <v-btn dark color="#22BBEA" @click="updateData">
-                              <span>Confirm</span>
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
-                  </v-card-actions>
-                </v-card-text>
-              </v-card>
+                      <v-radio label="Female" value="female"></v-radio>
+                      <v-radio label="Male" value="male"></v-radio>
+                    </v-radio-group>
+                    <v-card-actions class="justify-end">
+                      <v-btn color="grey" text @click="closeDialog">
+                        <span>Cancel</span>
+                      </v-btn>
+                      <v-btn
+                        :disabled="!valid"
+                        color="#22BBEA"
+                        class="white--text"
+                        @click="completedData"
+                      >
+                        <span>Update</span>
+                      </v-btn>
+                      <v-dialog
+                        v-model="checkPassword"
+                        persistent
+                        max-width="500px"
+                      >
+                        <v-card class="rounded-lg">
+                          <v-card-title class="justify-center">
+                            <span class="text-h5 text-color"
+                              >VERIFY YOUR PASSWORD</span
+                            >
+                          </v-card-title>
+                          <v-card-text>
+                            <v-divider
+                              color="#FF9933"
+                              class="mx-auto mt-3"
+                              width="98%"
+                            ></v-divider>
+                            <v-row class="mt-6 pt-0" dense>
+                              <v-col cols="12">
+                                <v-text-field
+                                  v-model="password"
+                                  label="Password"
+                                  placeholder="Password"
+                                  type="password"
+                                  :rules="passwordRules"
+                                  outlined
+                                  dense
+                                  width="100px"
+                                ></v-text-field>
+                              </v-col>
+                            </v-row>
+                            <v-card-actions class="justify-end">
+                              <v-btn
+                                dark
+                                color="grey"
+                                text
+                                @click="closeDialog"
+                              >
+                                <span>Cancel</span>
+                              </v-btn>
+                              <v-btn dark color="#22BBEA" @click="updateData">
+                                <span>Confirm</span>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card-text>
+                        </v-card>
+                      </v-dialog>
+                    </v-card-actions>
+                  </v-card-text>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-text>
         </v-card-text>
@@ -201,9 +209,9 @@
     </v-hover>
 
     <v-card tile color=" pt-6" class="">
-      <skill-card></skill-card>
+    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni"></skill-card>
 
-      <v-card width="100%" class="pb-6">
+      <v-card width="100%" elevation="0" color="transparent" class="pb-6">
         <v-card-text class="d-flex justify-center align-center">
           <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
           <v-spacer></v-spacer>
@@ -372,8 +380,8 @@ export default {
   },
   data() {
     return {
-      companyLogo: "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
-      // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
+      companyLogo:
+        "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
       dialog: false,
       valid: true,
       dialogCreate: false,
@@ -421,16 +429,36 @@ export default {
       startYear: "",
       endYear: "",
       major: ["WEB", "SNA"],
-      batch: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-      companyAddresses:['Phnom Penh','Kampong Thom','Kampong Cham','Kompot'],
-      companyDomain:['Bank','Insuranc'],
-      searchComapanyDomain:'',
-      modelCompanyDomain:'',
-      // modelCompanyLogo:'',
-      modelCompanyAddress:'',
-      searchComapanyAddress:'',
-      companyPhoneNumber:'',
-      companyEmail:'',
+      batch: [
+        "Batch-2021",
+        "Batch-2020",
+        "Batch-2019",
+        "Batch-2018",
+        "Batch-2017",
+        "Batch-2016",
+        "Batch-2015",
+        "Batch-2014",
+        "Batch-2013",
+        "Batch-2012",
+        "Batch-2011",
+        "Batch-2010",
+        "Batch-2009",
+        "Batch-2008",
+        "Batch-2007",
+      ],
+      companyAddresses: [
+        "Phnom Penh",
+        "Kampong Thom",
+        "Kampong Cham",
+        "Kompot",
+      ],
+      companyDomain: ["Bank", "Insuranc"],
+      searchComapanyDomain: "",
+      modelCompanyDomain: "",
+      modelCompanyAddress: "",
+      searchComapanyAddress: "",
+      companyPhoneNumber: "",
+      companyEmail: "",
       passwordRules: [],
       companies: [],
       positions: [],
@@ -457,6 +485,7 @@ export default {
       companyId : null,
       positionId : null,
       isInputInfoCompany:true,
+      alumniSkills: [],
     };
   },
   watch: {
@@ -493,16 +522,17 @@ export default {
         this.isInputInfoCompany = true;
       }
     },
-    getOneAlumni(){
-      axios.get('users/'+ JSON.parse(localStorage.getItem('userId'))).then(res=>{
-        this.alumni = res.data.user;
-        this.alumniData = res.data.user.alumni;
-        this.workExperience = res.data.workExperience;
-        console.log(res.data);
-        this.profile = 'http://localhost:8000/storage/profiles/' + this.alumniData.profile;
-
-      
-    })
+    getOneAlumni() {
+      axios
+        .get("users/" + JSON.parse(localStorage.getItem("userId")))
+        .then((res) => {
+          this.alumni = res.data.user;
+          this.alumniData = res.data.user.alumni;
+          this.workExperience = res.data.workExperience;
+          this.alumniSkills = res.data.skills;
+          this.profile =
+            "http://localhost:8000/storage/profiles/" + this.alumniData.profile;
+        });
     },
     closeDialog() {
       this.dialog = false;
@@ -645,28 +675,27 @@ export default {
        this.closeCreateDialog()
       }
       },
-      getCompanyAndPosition(){
-        axios.get('companies').then(res=>{
-          this.objectCompanies = res.data;
-          this.objectCompanies.map((company)=>{
-            this.companies.push(company.companyName)
-          })
-          console.log(this.companies)
+      
+  
+    getCompanyAndPosition() {
+      axios.get("companies").then((res) => {
+        this.objectCompanies = res.data;
+        this.objectCompanies.map((company) => {
+          this.companies.push(company.companyName);
         });
-        axios.get('positions').then(res=>{
-          this.objectPositions = res.data;
-          for(let position of this.objectPositions){
-            this.positions.push(position.positionName);
-          }
-        }); 
-      }
-
+      });
+      axios.get("positions").then((res) => {
+        this.objectPositions = res.data;
+        for (let position of this.objectPositions) {
+          this.positions.push(position.positionName);
+        }
+      });
+    },
   },
   mounted() {
     this.alumni = JSON.parse(localStorage.getItem("user"));
-    this.getOneAlumni()
+    this.getOneAlumni();
     this.getCompanyAndPosition();
-    
   },
 };
 </script>

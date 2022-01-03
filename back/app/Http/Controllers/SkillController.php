@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Skill;
+use App\Models\AlumniSkill;
 
 class SkillController extends Controller
 {
@@ -30,18 +31,40 @@ class SkillController extends Controller
      */
     public function createSkill(Request $request)
     {
-        $skillData = $request->input();
+        $skillData = $request['skills'];
+        $oldSkills = Skill::get();
         foreach($skillData as $key => $value){
-            $skill = new Skill();
-            $skill->Title = $value;
-            $skill->save();
-        }
-        return response()->json(['message'=>'Skill created','data'=>$skill],200);
-    }
+            $isTrue = false;
+            $id = 0;
+            foreach($oldSkills as $oneSkill){
+                if ($oneSkill['Title'] === $value){
+                    $isTrue = true;
+                    $id = $oneSkill->id;
+                }
+            }
+            if($isTrue === true){
+                $alumniSkill = new AlumniSkill();
+                $alumniSkill->alumni_id = $request->alumni_id;
+                $alumniSkill->skill_id = $id;
+                $alumniSkill->save();
 
-    /**
-     * Display the specified resource.
-     *
+            }else{
+                $skill = new Skill();
+                $skill->Title = $value;
+                $skill->save();
+
+                $alumniSkill = new AlumniSkill();
+                $alumniSkill->alumni_id = $request['alumni_id'];
+                $alumniSkill->skill_id = $skill->id;
+                $alumniSkill->save();
+
+            }
+            }
+            
+        return response()->json(['message'=>'Skill created','data'=>$skillData],200);
+    }
+    
+     /*
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

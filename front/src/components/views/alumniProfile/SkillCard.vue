@@ -2,22 +2,22 @@
   <v-container>
     <v-divider></v-divider>
 
-    <v-row justify="center">
-      <v-expansion-panels accordion flat >
-        <v-expansion-panel>
+    <v-row justify="center" >
+      <v-expansion-panels  accordion flat >
+        <v-expansion-panel class="elevation-1 rounded-0" >
           <v-expansion-panel-header
             width="100px"
-            class="title elevation-0 title ml-4 text-h5 "
+            class="title  elevation-0 title  text-h5 "
             >Skills</v-expansion-panel-header
           >
           <v-expansion-panel-content>
             <v-chip-group active-class="primary--text" column>
-              <v-chip v-for="(skill, index) in skills" :key="index">
+              <v-chip v-for="(skill, index) in alumniSkills" :key="index">
               <v-hover v-slot="{hover}">
 
                 <v-card-text class="px-0">
-                  {{ skill }}
-                <v-icon v-if="hover" right @click="deleteSkill(index)">mdi-close-circle-outline</v-icon>
+                  {{ skill.Title }}
+                <v-icon v-if="hover" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
                 </v-card-text>
               </v-hover>
               </v-chip>
@@ -92,6 +92,8 @@
 <script>
 import axios from './../../../api/api.js';
 export default {
+  props:['alumniSkills', 'alumniId'],
+  emits: ['add'],
   data: () => ({
     skills: [],
     dialog: false,
@@ -104,30 +106,39 @@ export default {
       let array = [];
       for(let skill of this.newSkills){
         for(let sk of skill.split(' ')){
-          array.push(sk);
+          if((this.alumniSkills.filter(skill=> skill.Title === sk).length ===0) && sk !== ''){
+            array.push(sk);
+
+          }
         }
       }
       this.newSkills = array
     },
-    getSkils(){
+    getSkills(){
       axios.get('/skills').then((res)=>{
         this.skills = res.data;
       })
     },
     deleteSkill(id){
       axios.delete('/skills/'+id).then(()=>{
-        this.getSkils();
+        this.getSkills();
       })
     },
     addNewSkills(){
-      axios.post('/skills', this.newSkills).then(()=>{
-        this.getSkils();
+      let object = {
+        alumni_id: this.alumniId,
+        skills: this.newSkills
+      }
+      axios.post('/skills', object).then(()=>{
+        this.$emit('add')
+        this.getSkills();
         this.dialog = false;
+        this.newSkills = [];
       })
     }
   },
   mounted(){
-    this.getSkils();
+    this.getSkills();
   }
 };
 </script>

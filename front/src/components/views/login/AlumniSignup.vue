@@ -1,12 +1,11 @@
 
 <template>
   <div
-    class="d-flex justify-center align-center flex-column"
+    class=" d-flex justify-center align-center flex-column"
     style="height: 100vh"
   >
-    <v-form ref="form" v-model="valid" >
+    <v-form ref="form" class="pa-5" style="width:70%"  v-model="valid" >
       <v-card
-        width="750px"
         color="#22BBEA"
         elevation="15"
         class="main-container pa-3 d-flex justify-center align-center"
@@ -81,9 +80,10 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="ma-0 pa-0">
-                <v-col cols="12" class="mt-0 pt-0">
+              <v-row no-gutters class="koko ma-0 pa-0">
+                <v-col cols="12" class="yaya mt-0 pt-0">
                   <v-checkbox
+                    class="kiki ma-0"
                     v-model="checkbox"
                     label="Show password"
                   ></v-checkbox>

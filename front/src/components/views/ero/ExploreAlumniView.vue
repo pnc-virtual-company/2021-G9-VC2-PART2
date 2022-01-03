@@ -186,7 +186,6 @@ export default {
       }else if(this.searchMajor!=="" && this.searchCompany!==""){
         this.alumniList = allAlumni.filter((alumni)=>alumni.major.toLowerCase()===this.searchMajor.toLowerCase() 
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
-
       // filter name
       }else if(this.searchName!=="" ){
         this.alumniList = allAlumni.filter((alumni) =>(alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
@@ -199,11 +198,9 @@ export default {
       // filter gender
       }else if(this.searchGender!==""){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
-
       // filter major
       }else if(this.searchMajor!==""){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
-      
       //===============================================///
       //filter company
       }else if(this.searchCompany!==""){
