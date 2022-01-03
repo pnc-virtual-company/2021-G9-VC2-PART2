@@ -74,6 +74,18 @@
                 </v-col>
               </v-row>
               <v-row no-gutters>
+                <v-col cols="12" class="pa-0 ma-0">
+                    <v-combobox
+                      dense
+                      outlined
+                      v-model="modelCompanyAddress"
+                      :search-input.sync="searchComapanyAddress"
+                      label="Company Address"
+                    >
+                    </v-combobox>
+                  </v-col>
+              </v-row>
+              <v-row no-gutters>
                 <v-col cols="12">
                    <v-combobox
                         dense
@@ -183,9 +195,11 @@ export default {
       startYear: null,
       endYear: null,
       searchComapany: null,
+      searchComapanyAddress:null,
       searchPosition: null,
       modelPosition: "",
       modelCompany: "",
+      modelCompanyAddress: "",
       id: null,
       alumni_id: null,
     };
