@@ -207,7 +207,7 @@
         </v-card-text>
       </v-container>
     </v-hover>
-    <skill-card></skill-card>
+    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni"></skill-card>
     <v-card width="100%" elevation="0" color="transparent" class="pb-6">
       <v-card-text class="d-flex justify-center align-center px-0">
         <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
@@ -473,6 +473,7 @@ export default {
       userId: localStorage.getItem("userId"),
       profile: "",
       image: "",
+      alumniSkills: [],
     };
   },
   watch: {
@@ -503,7 +504,7 @@ export default {
           this.alumni = res.data.user;
           this.alumniData = res.data.user.alumni;
           this.workExperience = res.data.workExperience;
-          console.log(res.data);
+          this.alumniSkills = res.data.skills;
           this.profile =
             "http://localhost:8000/storage/profiles/" + this.alumniData.profile;
         });
@@ -640,13 +641,9 @@ export default {
     getCompanyAndPosition() {
       axios.get("companies").then((res) => {
         this.objectCompanies = res.data;
-        // for(let company of this.objectCompanies){
-        //   this.companies.push(company.companyName)
-        // }
         this.objectCompanies.map((company) => {
           this.companies.push(company.companyName);
         });
-        console.log(this.companies);
       });
       axios.get("positions").then((res) => {
         this.objectPositions = res.data;

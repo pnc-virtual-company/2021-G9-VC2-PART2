@@ -12,11 +12,11 @@
           >
           <v-expansion-panel-content>
             <v-chip-group active-class="primary--text" column>
-              <v-chip v-for="(skill, index) in skills" :key="index">
+              <v-chip v-for="(skill, index) in alumniSkills" :key="index">
               <v-hover v-slot="{hover}">
 
                 <v-card-text class="px-0">
-                  {{ skill }}
+                  {{ skill.Title }}
                 <v-icon v-if="hover" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
                 </v-card-text>
               </v-hover>
@@ -92,7 +92,8 @@
 <script>
 import axios from './../../../api/api.js';
 export default {
-  // props:['skills'],
+  props:['alumniSkills', 'alumniId'],
+  emits: ['add'],
   data: () => ({
     skills: [],
     dialog: false,
@@ -105,7 +106,10 @@ export default {
       let array = [];
       for(let skill of this.newSkills){
         for(let sk of skill.split(' ')){
-          array.push(sk);
+          if((this.alumniSkills.filter(skill=> skill.Title === sk).length ===0) && sk !== ''){
+            array.push(sk);
+
+          }
         }
       }
       this.newSkills = array
@@ -121,9 +125,15 @@ export default {
       })
     },
     addNewSkills(){
-      axios.post('/skills', this.newSkills).then(()=>{
+      let object = {
+        alumni_id: this.alumniId,
+        skills: this.newSkills
+      }
+      axios.post('/skills', object).then(()=>{
+        this.$emit('add')
         this.getSkills();
         this.dialog = false;
+        this.newSkills = [];
       })
     }
   },

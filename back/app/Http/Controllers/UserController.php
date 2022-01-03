@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Alumni;
 use App\Models\WorkExperience;
+use App\Models\AlumniSkill;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
@@ -27,7 +28,13 @@ class UserController extends Controller
         ->orderBy('work_experiences.id','DESC')
         ->get(['work_experiences.id','work_experiences.alumni_id','companyName','positionName','start_year','end_year']);
         
-        return response()->json(['user'=>$user, 'workExperience'=> $workExperience]);
+        $skills = AlumniSkill::join('alumnis', 'alumnis.id', '=', 'alumni_skills.alumni_id')
+        ->join('skills', 'skills.id', '=', 'alumni_skills.skill_id')
+        ->where([['alumni_skills.alumni_id','=',$user->alumni->id]])
+        ->orderBy('alumni_skills.id','DESC')
+        ->get(['skills.*']);
+
+        return response()->json(['user'=>$user, 'workExperience'=> $workExperience, 'skills'=> $skills]);
     }
 
     public function createUser(Request $request)
