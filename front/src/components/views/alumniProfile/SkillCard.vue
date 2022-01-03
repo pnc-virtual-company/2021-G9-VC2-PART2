@@ -2,12 +2,12 @@
   <v-container>
     <v-divider></v-divider>
 
-    <v-row justify="center">
-      <v-expansion-panels accordion flat >
-        <v-expansion-panel>
+    <v-row justify="center" >
+      <v-expansion-panels  accordion flat >
+        <v-expansion-panel class="elevation-1 rounded-0" >
           <v-expansion-panel-header
             width="100px"
-            class="title elevation-0 title ml-4 text-h5 "
+            class="title  elevation-0 title  text-h5 "
             >Skills</v-expansion-panel-header
           >
           <v-expansion-panel-content>
@@ -96,6 +96,7 @@ export default {
   data: () => ({
     skills: [],
     dialog: false,
+    // model:'',
     newSkills: [],
     search: '',
   }),

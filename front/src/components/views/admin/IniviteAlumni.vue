@@ -34,6 +34,7 @@
                     multiple
                     small-chips
                     label="Enter Email"
+                    @change="checkEmail"
                   >
                   </v-combobox>
                 </v-row>
@@ -69,49 +70,69 @@ export default {
     userList: [],
   }),
 
-  watch: {
-    model(val, prev) {
-      if (val.length === prev.length) return;
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      this.model = val.filter((v) => pattern.test(v) && this.userList.filter(user=> user.email === v).length === 0);
-      this.items = [];
+  // watch: {
+    // model(val, prev) {
+    //   if (val.length === prev.length) return;
+    //   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //   this.model = val.filter((v) => pattern.test(v) && this.userList.filter(user=> user.email === v).length === 0);
+    //   this.items = [];
       
-      val.map((v)=>{
-        if (pattern.test(v)){
-            let object = {
-              email: v,
+    //   val.map((v)=>{
+    //     if (pattern.test(v)){
+    //         let object = {
+    //           email: v,
+    //           role: 'alumni',
+    //           status: 'invited'
+    //         }
+    //         this.items.push(object);
+    //     }
+    //     return v;
+    //   });
+    // },
+  // },
+  methods: {
+    checkEmail(){
+      let array = [];
+      this.items = [];
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      for (let emails of this.model){
+        for(let email of emails.split(' ')){
+           if(pattern.test(email) && this.userList.filter(user=> user.email === email).length === 0){
+             let object = {
+              email: email,
               role: 'alumni',
               status: 'invited'
             }
             this.items.push(object);
+            array.push(email);
+           }
         }
-        return v;
-      });
+      }
+      this.model = array;
     },
-  },
-  methods: {
     inviteAlumni() {
-        this.items.map((value)=>{
-            axios.post('/users', value).then(()=>{
-              this.model = [];
-              this.items = [];
-              this.$emit('alumni', 'alumni');
-              // console.log(res.data)
-              // console.log(res.request)
-            })
-        })
+      axios.post('/users', this.items).then((res)=>{
+        
+        this.$emit('alumni', 'alumni');
+        console.log(res.data)
+        this.getUsers();
+      })
+      this.model = [];
+      this.items = [];
       this.alert = true;
       this.dialog = false;
       setTimeout(() => {
         this.alert = false;
       }, 2000);
     },
-    
-  },
-  mounted(){
-     axios.get('/users').then((res)=>{
+    getUsers(){
+      axios.get('/users').then((res)=>{
         this.userList = res.data;
     })
+    }
+  },
+  mounted(){
+     this.getUsers();
 
     
   }

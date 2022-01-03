@@ -16,8 +16,8 @@
         
       </v-col>
       <v-col cols="12">
-          <invite-alumni v-if="isSwitched == 'alumni'"></invite-alumni>
-          <manage-ero-user v-else></manage-ero-user>
+          <invite-alumni v-if="isSwitched == 'alumni'" @alumni="getAllUsers"></invite-alumni>
+          <manage-ero-user v-else @ero="getAllUsers"></manage-ero-user>
       </v-col>
     <v-col cols="12" >
         <search-button @searchValue="searchValue"></search-button>
@@ -112,14 +112,21 @@ export default {
       
 
       
+    },
+    getAllUsers(value){
+      axios.get('/users').then((res)=>{
+      this.allUsers = res.data;
+      if(value === 'alumni'){
+        this.showAlumniData();
+      }else{
+        this.showEroData();
+      }
+
+    })
     }
   },
   mounted() {
-    axios.get('/users').then((res)=>{
-      this.allUsers = res.data;
-      this.showAlumniData();
-
-    })
+    this.getAllUsers(this.isSwitched);
 
   },
 };
