@@ -29,7 +29,6 @@
                 width="95%"
               ></v-divider>
               <v-container>
-                <!-- <v-row> -->
                   <v-row>
                     <v-col cols="6" class="mb-0 pb-0 pt-0">
                       <v-text-field
@@ -93,7 +92,6 @@
                       label="Show password"
                     ></v-checkbox>
                   </v-col>
-                <!-- </v-row> -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn dark color="grey" text @click="dialog = false">
@@ -145,13 +143,13 @@ export default {
   }),
   methods: {
     createAnEro() {
-      let eroData = {
+      let eroData = [{
         first_name: this.firstName,
         last_name: this.lastName,
         email: this.email,
         password: this.password,
         role: 'ero'
-      };
+      }];
       axios.post('/users', eroData).then(()=>{
         this.$emit('ero', 'ero');
       })

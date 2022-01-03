@@ -174,9 +174,7 @@
       </v-expansion-panels>
     </v-col>
   </v-hover>
-  <!-- </v-container> -->
 </template>
-
 <script>
 import axios from "./../../../api/api.js";
 export default {
@@ -279,15 +277,8 @@ export default {
   mounted() {},
 };
 </script>
-
 <style scoped>
-/* .edit {
-  height: 39px;
-  margin-top: 40px;
-} */
-
 .text-color {
   color: #22bbea;
 }
-
 </style>

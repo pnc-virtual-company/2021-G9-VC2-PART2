@@ -168,7 +168,6 @@
                               class="mx-auto mt-3"
                               width="98%"
                             ></v-divider>
-
                             <v-row class="mt-6 pt-0" dense>
                               <v-col cols="12">
                                 <v-text-field
@@ -208,9 +207,7 @@
         </v-card-text>
       </v-container>
     </v-hover>
-
     <skill-card></skill-card>
-
     <v-card width="100%" elevation="0" color="transparent" class="pb-6">
       <v-card-text class="d-flex justify-center align-center px-0">
         <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
@@ -231,7 +228,6 @@
                 class="mx-auto mt-4"
                 width="95%"
               ></v-divider>
-
               <v-container>
                 <v-row>
                   <v-col cols="12" class="d-flex justify-center pa-0 mb-3 mt-4">
@@ -378,7 +374,6 @@ export default {
     return {
       companyLogo:
         "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
-      // profile:"https://ussecuritysupply.com/wp-content/uploads/2013/05/default_avatar.png",
       dialog: false,
       valid: true,
       dialogCreate: false,
@@ -452,7 +447,6 @@ export default {
       companyDomain: ["Bank", "Insuranc"],
       searchComapanyDomain: "",
       modelCompanyDomain: "",
-      // modelCompanyLogo:'',
       modelCompanyAddress: "",
       searchComapanyAddress: "",
       companyPhoneNumber: "",
