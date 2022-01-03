@@ -145,13 +145,13 @@ export default {
   }),
   methods: {
     createAnEro() {
-      let eroData = {
+      let eroData = [{
         first_name: this.firstName,
         last_name: this.lastName,
         email: this.email,
         password: this.password,
         role: 'ero'
-      };
+      }];
       axios.post('/users', eroData).then(()=>{
         this.$emit('ero', 'ero');
       })

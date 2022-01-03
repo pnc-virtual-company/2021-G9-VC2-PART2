@@ -36,7 +36,7 @@ class SkillController extends Controller
             $skill->Title = $value;
             $skill->save();
         }
-        return response()->json(['message'=>'Skill created','data'=>$skill],200);
+        return response()->json(['message'=>'Skill created','data'=>$skillData],200);
     }
 
     /**
