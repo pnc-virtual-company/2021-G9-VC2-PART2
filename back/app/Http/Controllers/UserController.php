@@ -32,7 +32,7 @@ class UserController extends Controller
         ->join('skills', 'skills.id', '=', 'alumni_skills.skill_id')
         ->where([['alumni_skills.alumni_id','=',$user->alumni->id]])
         ->orderBy('alumni_skills.id','DESC')
-        ->get(['skills.*']);
+        ->get(['skills.*', 'alumni_skills.id']);
 
         return response()->json(['user'=>$user, 'workExperience'=> $workExperience, 'skills'=> $skills]);
     }

@@ -17,7 +17,15 @@
 
                 <v-card-text class="px-0">
                   {{ skill.Title }}
-                <v-icon v-if="hover" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
+                  <v-progress-circular
+                    v-if="hover && isDelete"
+                    :size="20"
+                    :width="2"
+                    color="red"
+                    indeterminate
+                    right
+                  ></v-progress-circular>
+                <v-icon v-if="hover && !isDelete" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
                 </v-card-text>
               </v-hover>
               </v-chip>
@@ -28,6 +36,7 @@
               <v-dialog v-model="dialog" persistent max-width="500px">
                 <v-card>
                   <v-form class="pt-5 px-5">
+                    
                     <v-card-title class="d-flex justify-center my-0 py-0">
                       <span class="text-h5 text-color">Add New Skills</span>
                     </v-card-title>
@@ -38,6 +47,7 @@
                     ></v-divider>
 
                     <v-container class="pb-0 px-0">
+                      
                       <v-col cols="12" class="pb-0">
                         <v-combobox
                           v-model="newSkills"
@@ -93,13 +103,14 @@
 import axios from './../../../api/api.js';
 export default {
   props:['alumniSkills', 'alumniId'],
-  emits: ['add'],
+  emits: ['add', 'delete'],
   data: () => ({
     skills: [],
     dialog: false,
     // model:'',
     newSkills: [],
     search: '',
+    isDelete: false,
   }),
   methods:{
     getData(){
@@ -120,8 +131,15 @@ export default {
       })
     },
     deleteSkill(id){
-      axios.delete('/skills/'+id).then(()=>{
+      this.isDelete = true;
+      axios.delete('/alumniSkill/'+id).then(()=>{
+        this.$emit('delete');
+        // axios.get('/alumniSkill/'+ this.alumni_id).then(()=>{})
         this.getSkills();
+        
+        setTimeout(() => {
+        this.isDelete = false;
+      }, 400);
       })
     },
     addNewSkills(){

@@ -207,7 +207,7 @@
         </v-card-text>
       </v-container>
     </v-hover>
-    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni"></skill-card>
+    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni" @delete="getOneAlumni"></skill-card>
     <v-card width="100%" elevation="0" color="transparent" class="pb-6">
       <v-card-text class="d-flex justify-center align-center px-0">
         <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
