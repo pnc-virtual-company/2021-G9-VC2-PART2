@@ -40,7 +40,7 @@
             :to="{ path: '/explore_alumni' }"
             class="text-h6 blue--text"
             color="black"
-            v-if="role === 'admin'"
+            v-if="role === 'admin' || role === 'ero'"
           >
             Explore Alumnis
           </v-tab>
@@ -86,6 +86,7 @@
   </div>
 </template>
 <script>
+import axios from '../../api/api.js';
 export default {
   emits: ["sign-out"],
   data() {
@@ -98,9 +99,12 @@ export default {
   methods: {
     logoutAcout() {
       this.dialog = false;
-      this.$emit("sign-out");
-      localStorage.clear();
-      this.$router.push("/verify_email").catch(() => {});
+      axios.post("/signout").then(()=>{
+        this.$emit("sign-out");
+        localStorage.clear();
+        this.$router.push("/verify_email").catch(() => {});
+      })
+     
     },
   },
   mounted() {},

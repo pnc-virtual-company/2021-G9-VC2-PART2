@@ -113,6 +113,9 @@ export default {
       axios
         .post("/signin", user)
         .then((res) => {
+          localStorage.setItem("stepLogin","main_page");
+          localStorage.setItem("role",res.data.user.role);
+          localStorage.setItem("userName", res.data.user.first_name);
           if (res.data.user.role === "admin" || res.data.user.role === "ero") {
             this.$router.push("/admin_view").catch(() => {});
           } else if (res.data.user.role === "alumni") {
@@ -120,7 +123,7 @@ export default {
               .push("/alumni/profile/" + res.data.user.first_name)
               .catch(() => {});
           }
-          this.$emit("signin", res.data.user);
+          this.$emit("signin", res.data.user,res.data.token);
         })
         .catch(() => {
           this.passwordRules = ["Your Password does not exist"];

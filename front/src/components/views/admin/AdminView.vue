@@ -6,7 +6,7 @@
           <v-tabs fixed-tabs color="#FF9933" height="45px">
             <v-tab class="v-tab-item blue--text" @click="showAlumniData" style="font-size: 13px"
               >ALUMNI LIST</v-tab>
-            <v-tab
+            <v-tab v-show="role==='admin'"
               @click="showEroData"
               class="v-tab-item blue--text"
               style="font-size: 13px"
@@ -48,6 +48,7 @@ export default {
     // "manage-ero-user": ManagerEroUser,
   },
   data: () => ({
+     role: JSON.parse(localStorage.getItem("user")).role,
     select: { state: "ALUMNI LIST" },
     item: [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }],
     isSwitched: 'alumni',

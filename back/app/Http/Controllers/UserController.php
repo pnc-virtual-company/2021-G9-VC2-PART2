@@ -54,6 +54,9 @@ class UserController extends Controller
                 $alumni->profile = 'default_profile.png';
                 $alumni->save();
             }
+            // $token = $user->createToken("mytoken")->plainTextToken;
+            $token = $user->createToken('token-'.$request->role)->plainTextToken;   
+
         // }
         return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
@@ -84,8 +87,18 @@ class UserController extends Controller
         if(!$user||!Hash::check($request->password,$user->password)){
             return response()->json(["message"=>"Username or Password Invalid"],401);
         }
+        $token = $user->createToken('token-'.$user->role)->plainTextToken;
         return response()->json([
             "user"=>$user,
-        ]);
+            "token"=>$token,
+        ],201);
+    }
+    public function signOut(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'message' => 'Sign out',
+            'status_code' => 200
+        ], 200);
     }
 }
