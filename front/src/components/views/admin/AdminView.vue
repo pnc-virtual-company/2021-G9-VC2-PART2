@@ -1,6 +1,5 @@
 <template>
   <v-container >    
-    <!-- <v-row class="pa-0 ma-0 mt-5"> -->
       <v-col cols="10" lg="5" md="6" sm="8" xs="12" class="mx-auto pb-0 mt-6">
         <v-card elevation="2" id="listContainer">
           <v-tabs fixed-tabs color="#FF9933" height="45px">
@@ -30,7 +29,6 @@
 <script>
 import InviteAlumni from "./IniviteAlumni.vue";
 import userData from "../../UI/UserData.vue";
-// import ManagerEroUser from "./ManageEroUser.vue";
 import SearchButton from "../../UI/SearchButton.vue";
 import ManageEroUser from './ManageEroUser.vue';
 import axios from './../../../api/api.js';
@@ -40,7 +38,6 @@ export default {
     "invite-alumni": InviteAlumni,
     "user-data": userData,
     ManageEroUser,
-    // "manage-ero-user": ManagerEroUser,
   },
   
   data: () => ({
@@ -70,7 +67,6 @@ export default {
   watch: {},
   methods: {
     showEroData() {
-
       this.headers = this.headersEro;
       this.isSwitched = 'ero';
       this.eroList = this.allUsers.filter(user => user.role == 'ero');
@@ -78,23 +74,14 @@ export default {
       this.searchValue(this.search);
     },
     showAlumniData(){
-
       this.headers = this.headersAlumni;
       this.isSwitched = 'alumni';
       this.alumnilist = this.allUsers.filter(user => user.role == 'alumni');
       this.userList =  this.alumnilist
-      this.searchValue(this.search);
-     
-      
+      this.searchValue(this.search); 
     },
     searchValue(value){
       this.search = value;
-      // let users = this.alumnilist;
-     
-      // this.userList = this.allUsers.filter(object=> (object.first_name.toLowerCase().includes(this.search.toLowerCase())
-      // || object.last_name.toLowerCase().includes(this.search.toLowerCase()) 
-      // || object.email.toLowerCase().includes(this.search.toLowerCase())) 
-      // && object.role == this.isSwitched);
       if(this.isSwitched==='alumni'){
         
         let users = this.alumnilist;

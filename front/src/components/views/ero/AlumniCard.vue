@@ -1,7 +1,6 @@
 <template>
     <v-container class="mx-0 px-0 mb-0 pb-0">
       <v-card class="mx-0 px-0 py-2 pl-2 d-flex justify-center align-center" 
-       
       >
         <v-col cols="1">
           <v-avatar size="70">

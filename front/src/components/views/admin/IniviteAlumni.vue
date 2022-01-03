@@ -55,8 +55,6 @@
     </v-container>
   </v-container>
 </template>
-
-    
 <script>
 import axios from './../../../api/api.js';
 export default {
@@ -70,26 +68,6 @@ export default {
     userList: [],
   }),
 
-  // watch: {
-    // model(val, prev) {
-    //   if (val.length === prev.length) return;
-    //   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //   this.model = val.filter((v) => pattern.test(v) && this.userList.filter(user=> user.email === v).length === 0);
-    //   this.items = [];
-      
-    //   val.map((v)=>{
-    //     if (pattern.test(v)){
-    //         let object = {
-    //           email: v,
-    //           role: 'alumni',
-    //           status: 'invited'
-    //         }
-    //         this.items.push(object);
-    //     }
-    //     return v;
-    //   });
-    // },
-  // },
   methods: {
     checkEmail(){
       let array = [];
@@ -133,8 +111,6 @@ export default {
   },
   mounted(){
      this.getUsers();
-
-    
   }
 };
 </script>
