@@ -19,7 +19,6 @@
               <v-row no-gutters class="mt-6">
                 <v-col cols="12">
                   <v-text-field
-                    v-if="true"
                     dense
                     placeholder="E-mail"
                     :rules="emailRules"

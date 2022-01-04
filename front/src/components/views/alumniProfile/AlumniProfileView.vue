@@ -66,7 +66,7 @@
                     <v-divider
                       color="#FF9933"
                       class="mx-auto mt-3"
-                      width="98%"
+                      width="100%"
                     ></v-divider>
                     <v-row class="mt-4 pb-0" dense>
                       <v-col cols="6" class="pb-0">
@@ -166,7 +166,7 @@
                             <v-divider
                               color="#FF9933"
                               class="mx-auto mt-3"
-                              width="98%"
+                              width="100%"
                             ></v-divider>
                             <v-row class="mt-6 pt-0" dense>
                               <v-col cols="12">
@@ -229,7 +229,7 @@
                 <v-divider
                   color="#FF9933"
                   class="mx-auto "
-                  width="93%"
+                  width="100%"
                 ></v-divider>
 
                 <v-container>

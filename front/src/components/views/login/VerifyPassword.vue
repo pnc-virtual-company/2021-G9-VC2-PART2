@@ -28,7 +28,6 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-
               <v-checkbox
                 class="ma-0 pa-0"
                 v-model="showPassword"

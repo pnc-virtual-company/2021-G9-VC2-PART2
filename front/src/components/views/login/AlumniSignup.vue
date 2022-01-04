@@ -171,8 +171,8 @@ export default {
     };
   },
   watch: {
-    checkbox() {
-      this.isShowPassword = !this.isShowPassword;
+    checkbox(val) {
+      this.isShowPassword = val;
     },
     password() {
       if (this.confirmPassword !== this.password) {
@@ -233,7 +233,6 @@ export default {
   mounted() {
     axios.get("/alumnis").then((res) => {
       this.alumnis = res.data.data;
-      console.log( this.alumnis);
     });
   },
 };
