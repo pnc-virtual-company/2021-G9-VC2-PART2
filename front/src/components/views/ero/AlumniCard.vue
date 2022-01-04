@@ -1,13 +1,14 @@
 <template>
-    <v-container class="mx-0 px-0 mb-0 pb-0">
+    <v-container class="mx-0 px-0 mb-0 pb-0" @click="selectAlumni(alumni)">
       <v-card class="mx-0 px-0 py-2 pl-2 d-flex justify-center align-center" 
+       
       >
         <v-col cols="1">
           <v-avatar size="70">
-          <img
+          <v-img
             :src="'http://localhost:8000/storage/profiles/'+alumni.alumni.profile"
             alt="John"
-          >
+          ></v-img>
         </v-avatar>
         </v-col>
         <v-col cols="4">
@@ -48,5 +49,11 @@ export default ({
             
         }
     },
+    methods:{
+      selectAlumni(alumni){
+        localStorage.setItem('userId', alumni.id);
+        this.$router.push("/explore_alumni/alumni_profile/"+alumni.first_name).catch(() => {});
+      }
+    }
 })
 </script>

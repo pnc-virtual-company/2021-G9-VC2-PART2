@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <v-row class="navbar-container d-flex align-center pa-0 ma-0">
       <v-col cols="12" lg="2" md="2" sm="2" xs="12" class="pa-2 ma-0">
         <v-img
@@ -25,7 +25,7 @@
         >
           <v-tab
             :to="{ path: '/admin_view' }"
-            class="text-h6 blue--text pa-0 ma-0 item-list"
+            class="text-h6 blue--text item-list"
             v-if="role === 'admin' || role === 'ero'"
             >Manager Users</v-tab
           >
@@ -83,7 +83,7 @@
         </v-dialog>
       </v-col>
     </v-row>
-  </div>
+  </section>
 </template>
 <script>
 export default {

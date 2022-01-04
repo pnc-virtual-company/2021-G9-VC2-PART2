@@ -9,6 +9,7 @@
           </v-avatar>
           <label for="profile"
             ><v-icon
+              v-if="role === 'alumni'"
               class="icon align-center rounded-circle pa-1 blue-grey darken-2"
               color="white"
               >mdi-camera</v-icon
@@ -51,7 +52,7 @@
             </v-card-subtitle>
             <v-spacer></v-spacer>
             <v-icon
-              v-if="hover"
+              v-if="hover && role === 'alumni'"
               class="edit pa-2 mr-1 white elevation-6 rounded-circle"
               @click="editData"
               >mdi-pen</v-icon
@@ -209,18 +210,26 @@
     </v-hover>
 
     <v-card tile  elevation="0" color="transparent" class="px-0">
-    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni"></skill-card>
+    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni" @delete="getOneAlumni"></skill-card>
 
-      <v-card width="100%" elevation="0" color="transparent" class="pb-6">
-        <v-card-text class="d-flex justify-center align-center">
-          <h2 class="title mt-4 ml-2 text-h5 text-color">Work Experience</h2>
-          <v-spacer></v-spacer>
-          <v-icon
+    <v-expansion-panels  accordion flat >
+        <v-expansion-panel class="elevation-1 mt-4 rounded-0" >
+          <v-expansion-panel-header
+          left
+            class="title  elevation-0 title  text-h5 "
+            >
+            <template v-slot:actions>
+            <v-icon left class="workIcon">$expand</v-icon>
+            </template>
+            <span class="workHeader">Work Experience</span>
+            <v-spacer class="space"></v-spacer>
+            <v-col cols="1" class="btn pa-0">
+              <v-icon
+              v-if="role === 'alumni'"
             @click="dialogCreate = !dialogCreate"
-            class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
-            >mdi-plus</v-icon
-          >
-          <v-dialog v-model="dialogCreate" persistent max-width="500px">
+            class="white mr-6 pa-2 elevation-6 rounded-circle  orange--text"
+            >mdi-plus</v-icon>
+            <v-dialog v-model="dialogCreate" persistent max-width="500px">
             <v-card>
               <v-form class="pt-5 px-5">
                 <v-card-title class="d-flex justify-center my-0 py-0">
@@ -348,9 +357,12 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-        </v-card-text>
-        <v-divider color="#FF9933" class="mx-auto" width="100%"></v-divider>
-        <alumni-current-employment
+            </v-col>
+            </v-expansion-panel-header
+          >
+          <v-expansion-panel-content>
+              <v-divider color="#FF9933" class="mx-auto" width="100%"></v-divider>
+              <alumni-current-employment
           v-for="work of workExperience"
           :key="work.id"
           :work="work"
@@ -363,20 +375,24 @@
           :startYears="startYears"
           :endYears="endYears"
         />
-      </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import axios from "./../../../api/api.js";
-import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
 import SkillCard from "./SkillCard.vue";
+// import WorkCard from "./WorkExperienceCard.vue";
+// import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
 
 export default {
   components: {
-    AlumniCurrentEmployment,
+    // AlumniCurrentEmployment,
     SkillCard,
+    // WorkCard
   },
   data() {
     return {
@@ -486,6 +502,7 @@ export default {
       positionId : null,
       isInputInfoCompany:true,
       alumniSkills: [],
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
   watch: {
@@ -667,7 +684,7 @@ export default {
         newWork.append('start_year',this.startYear);
         newWork.append('end_year',this.endYear);
         
-        axios.post('work_experiences',newWork).then((res)=>{
+        axios.post('/work_experiences',newWork).then((res)=>{
           this.getOneAlumni();
           this.getCompanyAndPosition();
           console.log(res.data);
@@ -716,10 +733,26 @@ export default {
 .header {
   background: #22bbea;
 }
-.text-color {
+.text-color,
+.workHeader {
   color: #22bbea;
 }
 .delete {
   height: 40px;
+}
+
+.workIcon {
+        order: 0;
+}
+
+.workHeader {
+    order: 1;
+}
+.space {
+        order: 2;
+}
+
+.btn {
+    order: 3;
 }
 </style>

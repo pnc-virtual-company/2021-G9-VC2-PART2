@@ -23,7 +23,7 @@ const routes = [
     { path: "/alumni_signup", component: AlumniSignup},
     { path: "/event", component: Event},
     { path: "/explore_alumni", component: ExploreAlumniView },
-
+    { path: "/explore_alumni/alumni_profile/:name", component: AlumniProfileView },
     { path: "/", redirect: "/verify_email"},
 
 ]
