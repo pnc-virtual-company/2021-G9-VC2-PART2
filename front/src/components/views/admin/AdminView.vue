@@ -1,6 +1,5 @@
 <template>
   <v-container >    
-    <!-- <v-row class="pa-0 ma-0 mt-5"> -->
       <v-col cols="10" lg="5" md="6" sm="8" xs="12" class="mx-auto pb-0 mt-6">
         <v-card elevation="2" id="listContainer">
           <v-tabs fixed-tabs color="#FF9933" height="45px">
@@ -15,16 +14,11 @@
         </v-card>
         
       </v-col>
-      <v-row>
-        <v-spacer></v-spacer>
-      <v-col cols="2">
-          <invite-alumni v-if="isSwitched == 'alumni'"></invite-alumni>
-          <manage-ero-user v-else></manage-ero-user>
+      <v-col cols="12">
+          <invite-alumni v-if="isSwitched == 'alumni'" @alumni="getAllUsers"></invite-alumni>
+          <manage-ero-user v-else @ero="getAllUsers"></manage-ero-user>
       </v-col>
-      </v-row>
-     
-    <!-- </v-row> -->
-    <v-col cols="12" class="">
+    <v-col cols="12" >
         <search-button @searchValue="searchValue"></search-button>
     </v-col>
      <v-col>
@@ -35,7 +29,6 @@
 <script>
 import InviteAlumni from "./IniviteAlumni.vue";
 import userData from "../../UI/UserData.vue";
-// import ManagerEroUser from "./ManageEroUser.vue";
 import SearchButton from "../../UI/SearchButton.vue";
 import ManageEroUser from './ManageEroUser.vue';
 import axios from './../../../api/api.js';
@@ -45,8 +38,8 @@ export default {
     "invite-alumni": InviteAlumni,
     "user-data": userData,
     ManageEroUser,
-    // "manage-ero-user": ManagerEroUser,
   },
+  
   data: () => ({
      role: JSON.parse(localStorage.getItem("user")).role,
     select: { state: "ALUMNI LIST" },
@@ -55,6 +48,8 @@ export default {
     search:"",
     userList: [],
     allUsers: [],
+    alumnilist:[],
+    eroList:[],
     headers: [],
     headersAlumni: [
       {text: "First name", align: "start", sortable: false, value: "first_name",},
@@ -75,28 +70,50 @@ export default {
     showEroData() {
       this.headers = this.headersEro;
       this.isSwitched = 'ero';
-      this.userList = this.allUsers.filter(user => user.role == 'ero');
+      this.eroList = this.allUsers.filter(user => user.role == 'ero');
+      this.userList = this.eroList;
+      this.searchValue(this.search);
     },
     showAlumniData(){
       this.headers = this.headersAlumni;
       this.isSwitched = 'alumni';
-      this.userList = this.allUsers.filter(user => user.role == 'alumni');
+      this.alumnilist = this.allUsers.filter(user => user.role == 'alumni');
+      this.userList =  this.alumnilist
+      this.searchValue(this.search); 
     },
     searchValue(value){
       this.search = value;
+      if(this.isSwitched==='alumni'){
+        let users = this.alumnilist;
+        this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
+        || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
+       
+        )
+      }else if(this.isSwitched==='ero'){
+        let users = this.eroList;
+        this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
+        || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
+     
+        )
+      }
       
-      // this.userList = this.allUsers.filter(object=> (object.first_name.toLowerCase().includes(this.search.toLowerCase())
-      // || object.last_name.toLowerCase().includes(this.search.toLowerCase()) 
-      // || object.email.toLowerCase().includes(this.search.toLowerCase())) 
-      // && object.role == this.isSwitched);
+
+      
+    },
+    getAllUsers(value){
+      axios.get('/users').then((res)=>{
+      this.allUsers = res.data;
+      if(value === 'alumni'){
+        this.showAlumniData();
+      }else{
+        this.showEroData();
+      }
+
+    })
     }
   },
   mounted() {
-    axios.get('/users').then((res)=>{
-      this.allUsers = res.data;
-      this.showAlumniData();
-
-    })
+    this.getAllUsers(this.isSwitched);
 
   },
 };

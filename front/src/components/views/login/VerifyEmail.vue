@@ -4,9 +4,9 @@
     class="d-flex justify-center align-center flex-column"
     style="height: 100vh"
   >
-    <v-form ref="form" v-model="valid">
+    <v-form ref="form" style="width:70%" v-model="valid">
       <v-card
-        width="750px"
+        
         color="#22BBEA"
         elevation="15"
         class="main-container pa-3 d-flex justify-center align-center"
@@ -14,7 +14,7 @@
         <v-row class="sub-container">
           <v-col cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
-              <h1 class="text-center white--text">SIGN IN</h1>
+              <h1 class="text-center white--text">Enter Email</h1>
 
               <v-row no-gutters class="mt-6">
                 <v-col cols="12">
@@ -96,6 +96,7 @@ export default {
           role: user[0].role,
         };
         localStorage.setItem("user", JSON.stringify(userEmail));
+        localStorage.setItem("userId", user[0].id);
         if (user[0].first_name === null && user[0].last_name === null) {
           localStorage.setItem("stepLogin","enter_information");
           this.$router.push("/alumni_signup").catch(() => {});
@@ -104,8 +105,6 @@ export default {
           this.$router.push("/verify_password").catch(() => {});
           
         }
-        
-        // localStorage.setItem("userId", user[0].id);
       }
     },
   },

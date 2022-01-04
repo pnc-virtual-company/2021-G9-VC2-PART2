@@ -1,5 +1,5 @@
 <template>
-  <v-container class="ma-0 pa-0 mb-5">
+  <v-container class=" ma-0 pa-0 mb-5">
     <v-alert
       v-model="alert"
       dismissible
@@ -10,8 +10,8 @@
     >
       You've <strong>Invited</strong> new alumni successfully!.
     </v-alert>
-    <v-container>
-      <v-row>
+    <v-container >
+      <v-row class="d-flex justify-end">
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
@@ -34,6 +34,7 @@
                     multiple
                     small-chips
                     label="Enter Email"
+                    @change="checkEmail"
                   >
                   </v-combobox>
                 </v-row>
@@ -41,7 +42,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="#FF9933" dark @click="dialog = false">
+              <v-btn dark color="grey" text  @click="dialog = false">
                 Close
               </v-btn>
               <v-btn color="#22BBEA" dark @click="inviteAlumni">
@@ -54,8 +55,6 @@
     </v-container>
   </v-container>
 </template>
-
-    
 <script>
 import axios from './../../../api/api.js';
 export default {
@@ -69,51 +68,49 @@ export default {
     userList: [],
   }),
 
-  watch: {
-    model(val, prev) {
-      if (val.length === prev.length) return;
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      this.model = val.filter((v) => pattern.test(v) && this.userList.filter(user=> user.email === v).length === 0);
+  methods: {
+    checkEmail(){
+      let array = [];
       this.items = [];
-      
-      val.map((v)=>{
-        if (pattern.test(v)){
-            let object = {
-              email: v,
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      for (let emails of this.model){
+        for(let email of emails.split(' ')){
+           if(pattern.test(email) && this.userList.filter(user=> user.email === email).length === 0){
+             let object = {
+              email: email,
               role: 'alumni',
               status: 'invited'
             }
             this.items.push(object);
+            array.push(email);
+           }
         }
-        return v;
-      });
+      }
+      this.model = array;
     },
-  },
-  methods: {
     inviteAlumni() {
-        this.items.map((value)=>{
-            axios.post('/users', value).then(()=>{
-              this.model = [];
-              this.items = [];
-              this.$emit('alumni', 'alumni');
-              // console.log(res.data)
-              // console.log(res.request)
-            })
-        })
+      axios.post('/users', this.items).then((res)=>{
+        
+        this.$emit('alumni', 'alumni');
+        console.log(res.data)
+        this.getUsers();
+      })
+      this.model = [];
+      this.items = [];
       this.alert = true;
       this.dialog = false;
       setTimeout(() => {
         this.alert = false;
       }, 2000);
     },
-    
-  },
-  mounted(){
-     axios.get('/users').then((res)=>{
+    getUsers(){
+      axios.get('/users').then((res)=>{
         this.userList = res.data;
     })
-
-    
+    }
+  },
+  mounted(){
+     this.getUsers();
   }
 };
 </script>

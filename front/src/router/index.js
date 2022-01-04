@@ -25,20 +25,20 @@ const routes = [
     { path: "/explore_alumni", component: ExploreAlumniView},
     { path: "/", redirect: "/verify_email"},
 ]
-const EnterEmail = 'enter_email';
-const EnterPassword = 'enter_password';
-const EnterInformation = 'enter_information';
-const MainPage = 'main_page';
+const ENTER_EMAIL= 'enter_email';
+const ENTER_PASSWORD= 'enter_password';
+const ENTER_INFORMATION= 'enter_information';
+const MAIN_PAGE= 'main_page';
 let authenticationGuard = (to, from, next) => {
   let stepProcessing = localStorage.getItem('stepLogin');
   next()
-  if(stepProcessing === EnterEmail){
+  if(stepProcessing === ENTER_EMAIL){
     next()
-  }else if (stepProcessing === EnterPassword){
+  }else if (stepProcessing === ENTER_PASSWORD){
     next("/verify_password")
-  }else if (stepProcessing === EnterInformation){
+  }else if (stepProcessing === ENTER_INFORMATION){
     next("/alumni_signup")
-  }else if (stepProcessing===MainPage){
+  }else if (stepProcessing===MAIN_PAGE){
     let role = localStorage.getItem('role');
     if(role==="admin" || role === "ero"){
       let path = window.location.pathname;

@@ -1,12 +1,11 @@
 
 <template>
   <div
-    class="d-flex justify-center align-center flex-column"
+    class=" d-flex justify-center align-center flex-column"
     style="height: 100vh"
   >
-    <v-form ref="form" v-model="valid" >
+    <v-form ref="form" class="pa-5" style="width:70%"  v-model="valid" >
       <v-card
-        width="750px"
         color="#22BBEA"
         elevation="15"
         class="main-container pa-3 d-flex justify-center align-center"
@@ -14,7 +13,7 @@
         <v-row class="sub-container">
           <v-col cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
-              <h1 class="text-center white--text mb-3">SIGN UP</h1>
+              <h1 class="text-center white--text mb-3">Enter Information</h1>
               <v-row no-gutters>
                 <v-col cols="12" lg="6" md="6" sm="6" xs="12">
                   <v-text-field
@@ -81,9 +80,10 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="ma-0 pa-0">
-                <v-col cols="12" class="mt-0 pt-0">
+              <v-row no-gutters class="koko ma-0 pa-0">
+                <v-col cols="12" class="yaya mt-0 pt-0">
                   <v-checkbox
+                    class="kiki ma-0"
                     v-model="checkbox"
                     label="Show password"
                   ></v-checkbox>
@@ -216,19 +216,24 @@ export default {
           user_id: this.userId,
           id: id[0].id,
         };
-        axios.put("/alumnis/" + id[0].id, alumniData).then(() => {});
-        axios.put("/users/" + this.userId, userData).then(() => {
-          this.$emit("signin", userData);
+        axios.put("/alumnis/" + id[0].id, alumniData).then(() => {
+          
+        });
+        axios.put("/users/" + this.userId, userData).then((res) => {
+          localStorage.setItem("stepLogin","main_page");
+          this.$emit("signin", userData,res.data.token);
           this.$router
             .push("/alumni/profile/" + this.first_name)
             .catch(() => {});
         });
+
       }
     },
   },
   mounted() {
     axios.get("/alumnis").then((res) => {
       this.alumnis = res.data.data;
+      console.log( this.alumnis);
     });
   },
 };

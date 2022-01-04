@@ -89,9 +89,9 @@ export default {
   },
   data: () => ({
     searchMore: false,
-    genders: ["NONE", "FEMALE", "MALE"],
+    genders: ["FEMALE", "MALE"],
     batches: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-    majors: ["NONE", "WEB", "SNA"],
+    majors: ["WEB", "SNA"],
     skills: [],
     companies: [],
     alumniList: [],
@@ -186,7 +186,6 @@ export default {
       }else if(this.searchMajor!=="" && this.searchCompany!==""){
         this.alumniList = allAlumni.filter((alumni)=>alumni.major.toLowerCase()===this.searchMajor.toLowerCase() 
         && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
-
       // filter name
       }else if(this.searchName!=="" ){
         this.alumniList = allAlumni.filter((alumni) =>(alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
@@ -199,11 +198,9 @@ export default {
       // filter gender
       }else if(this.searchGender!==""){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
-
       // filter major
       }else if(this.searchMajor!==""){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
-      
       //===============================================///
       //filter company
       }else if(this.searchCompany!==""){

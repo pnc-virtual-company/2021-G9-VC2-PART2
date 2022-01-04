@@ -28,7 +28,9 @@ class Alumni extends Model
     public function position(){
         return $this->belongsToMany(Position::class);
     }
-    
+    public function skill(){
+        return $this->belongsToMany(Skill::class);
+    }
     public $table = 'alumnis';
 
 }

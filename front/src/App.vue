@@ -38,6 +38,7 @@ export default {
       this.activeUser = user;
       localStorage.setItem("token",token);
       localStorage.setItem("userId", user.id);
+      console.log("sign_in");
     },
     emailChecking(user) {
       this.userDataSignIn = user;

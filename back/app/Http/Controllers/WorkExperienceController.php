@@ -30,14 +30,39 @@ class WorkExperienceController extends Controller
          $workExperience = new WorkExperience();
          $workExperience->alumni_id = $request->alumni_id;
          
-        if (is_numeric($request->company_id)){
-            $workExperience->company_id = $request->company_id;
-        }else{
+        if ($request->company_id === 'null' ){
+            $request -> validate([
+                'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+            ]);
+            $request->file('logo')->store('public/pictures');
             $company = new Company();
-            $company->companyName = $request->company_id;
+            $company->companyName = $request->companyName;
+            $company -> email = $request->email;
+            $company->address = $request ->address;
+            $company-> phone = $request->phone;
+            $company-> domain= $request->domain;
+            $company-> logo = $request->file('logo')->hashName();
             $company->save();
             $workExperience->company_id = $company->id;
+        }else{
+            $workExperience->company_id = $request->company_id;
+
         }
+        // } else{
+        //     $request -> validate([
+        //         'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+        //     ]);
+        //     $request->file('logo')->store('public/pictures');
+        //     $company = new Company();
+        //     $company->companyName = $request->companyName;
+        //     $company -> email = $request->email;
+        //     $company->address = $request ->address;
+        //     $company-> phone = $request->phone;
+        //     $company-> domain= $request->domain;
+        //     $company-> logo = $request->file('logo')->hashName();
+        //     $company->save();
+        //     $workExperience->company_id = $company->id;
+        // }
         if (is_numeric($request->position_id)){
             $workExperience->position_id = $request->position_id;
         }else{
@@ -54,7 +79,6 @@ class WorkExperienceController extends Controller
    
             // return response()->json(['message'=>is_numeric($request->value)],201);
        
-        // retrun ()
     }
 
     /**
@@ -91,9 +115,19 @@ class WorkExperienceController extends Controller
        if (is_numeric($request->company_id)){
            $workExperience->company_id = $request->company_id;
        }else{
-           $company = new Company();
-           $company->companyName = $request->company_id;
-           $company->save();
+            $request -> validate([
+                'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
+            ]);
+            $request->file('logo')->store('public/pictures');
+            $company = new Company();
+            $company->companyName = $request->companyName;
+            $company -> email = $request->email;
+            $company->address = $request -> address;
+            $company-> phone = $request->phone;
+            $company-> domain= $request-> domain;
+            $company-> logo = $request->file('logo')->hashName();
+            $company->save();
+            $workExperience->company_id = $company->id;
            $workExperience->company_id = $company->id;
        }
        if (is_numeric($request->position_id)){

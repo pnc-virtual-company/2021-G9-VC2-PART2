@@ -72,7 +72,7 @@
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Are you sure you want to delete this item?</v-card-title
+              >Are you sure you want to logout?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
