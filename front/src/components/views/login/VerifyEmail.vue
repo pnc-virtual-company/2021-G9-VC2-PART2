@@ -4,15 +4,15 @@
     class="d-flex justify-center align-center flex-column"
     style="height: 100vh"
   >
-    <v-form ref="form" style="width:70%" v-model="valid">
+    <v-form ref="form" style="width:70%;"  v-model="valid">
       <v-card
         
         color="#22BBEA"
         elevation="15"
-        class="main-container pa-3 d-flex justify-center align-center"
+        class=" main-container pa-3 d-flex justify-center align-center"
       >
-        <v-row class="sub-container">
-          <v-col cols="12" xs="12" sm="10" md="6" lg="6">
+        <v-row class=" sub-container">
+          <v-col class="py-8" cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
               <h1 class="text-center white--text">Enter Email</h1>
 
@@ -56,7 +56,7 @@
             md="6"
             sm="12"
             xs="12"
-            class="white d-flex justify-center align-center"
+            class="py-8 white d-flex justify-center align-center"
           >
             <v-img
               src="https://www.passerellesnumeriques.org/wp-content/uploads/2019/03/PN-Cambodia-Alumni-Association.png"

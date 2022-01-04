@@ -25,7 +25,7 @@
         >
           <v-tab
             :to="{ path: '/admin_view' }"
-            class="text-h6 blue--text pa-0 ma-0 item-list"
+            class="text-h6 blue--text item-list"
             v-if="role === 'admin' || role === 'ero'"
             >Manager Users</v-tab
           >

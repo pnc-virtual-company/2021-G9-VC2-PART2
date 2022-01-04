@@ -77,8 +77,6 @@ export default {
     dialogDelete: false,
     search: "",
     selectedItem: false,
-    
-    // desserts: [],
     editedIndex: -1,
     editedItem: {
       first_name: "",

@@ -91,14 +91,13 @@ export default {
       this.model = array;
     },
     inviteAlumni() {
-      console.log(this.items);
       axios.post("/users", this.items).then((res) => {
         this.$emit("alumni", "alumni");
         if (res.data.message === "User Created") {
           this.alert = true;
           setTimeout(() => {
             this.alert = false;
-          }, 4000);
+          }, 8000);
         }
         this.getUsers();
       });

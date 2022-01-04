@@ -40,7 +40,6 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-
               <v-row no-gutters>
                 <v-col cols="12">
                   <v-text-field
@@ -80,10 +79,10 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="koko ma-0 pa-0">
-                <v-col cols="12" class="yaya mt-0 pt-0">
+              <v-row no-gutters class=" ma-0 pa-0">
+                <v-col cols="12" class="mt-0 pt-0">
                   <v-checkbox
-                    class="kiki ma-0"
+                    class=" ma-0"
                     v-model="checkbox"
                     label="Show password"
                   ></v-checkbox>
@@ -120,7 +119,7 @@
             md="6"
             sm="12"
             xs="12"
-            class="white d-flex justify-center align-center"
+            class="logoContainer"
           >
             <v-img
               src="https://www.passerellesnumeriques.org/wp-content/uploads/2019/03/PN-Cambodia-Alumni-Association.png"
@@ -188,13 +187,16 @@ export default {
         this.passwordConfirmRules = [];
       }
     },
-    phone_number() {
+    phone_number(val) {
       this.phoneRules = [
         (v) => !!v || "Phone Number is required",
-        (v) => /^\d+$/.test(v) || "Must be a number",
         (v) =>
-          (v.length >= 9 && v.length <= 10) || "Phone Number must be valid",
+           (v.length >= 9 && v.length <= 10 && v[0] =="0" ) || "Phone Number must be valid",
       ];
+
+      if(val[1] === "0" || val[1] === "4" || val[1] === "5"){
+        this.phoneRules =['Phone Number must be valid']
+      }
     },
   },
   methods: {
@@ -242,7 +244,13 @@ export default {
 a {
   text-decoration: none;
 }
-@media screen and (min-width: 300px) and (max-width: 960px) {
+.logoContainer{
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 610px) and (max-width: 960px) {
   .sub-container {
     display: flex;
     flex-direction: column-reverse;
@@ -250,9 +258,15 @@ a {
     align-items: center;
   }
 }
-@media screen and (min-width: 300px) and (max-width: 500px) {
-  .alumni-logo {
-    width: 100px;
+@media screen and (min-width: 300px) and (max-width: 610px) {
+  .sub-container {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+  }
+  .logoContainer{
+    display: none;
   }
 }
 </style>

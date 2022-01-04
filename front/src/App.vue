@@ -38,15 +38,10 @@ export default {
       this.activeUser = user;
       localStorage.setItem("token",token);
       localStorage.setItem("userId", user.id);
-      console.log("sign_in");
     },
     emailChecking(user) {
       this.userDataSignIn = user;
     },
-    // userSignin(user){
-    //   this.activeUser = user;
-    //   localStorage.setItem("userID",JSON.stringify(user.id));
-    // },
     userSignOut() {
       this.activeUser = null;
     },
@@ -67,11 +62,6 @@ export default {
       this.activeUser = userData;
     }
     this.activeUser = JSON.parse(localStorage.getItem("userId"));
-    // if(user !== null){
-    //     this.activeUser = JSON.parse(localStorage.getItem("user"));}
-    // else{
-    //    this.activeUser = null;
-    // }
   },
   
 };

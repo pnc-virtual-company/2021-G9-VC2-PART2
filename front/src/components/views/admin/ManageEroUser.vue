@@ -169,7 +169,7 @@ export default {
           this.alert = true;
           setTimeout(() => {
             this.alert = false;
-          }, 4000);
+          }, 8000);
         })
         .catch(() => {
           this.emailRules = ["This email already exist!"];

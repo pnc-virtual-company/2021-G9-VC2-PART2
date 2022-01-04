@@ -58,7 +58,6 @@
               class="mx-auto mt-4"
               width="100%"
             ></v-divider>
-
             <v-container>
               <v-row no-gutters>
                 <v-col cols="12" class="mt-4">
@@ -268,7 +267,6 @@ export default {
       }
     },
     deleteWorkExperience(id) {
-      console.log(id);
       axios.delete("work_experiences/" + id).then(() => {
         this.$emit("get-work-experience");
       });
