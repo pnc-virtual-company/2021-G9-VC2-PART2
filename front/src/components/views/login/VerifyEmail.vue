@@ -14,12 +14,11 @@
         <v-row class="sub-container">
           <v-col cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
-              <h1 class="text-center white--text">SIGN IN</h1>
+              <h1 class="text-center white--text">Enter Email</h1>
 
               <v-row no-gutters class="mt-6">
                 <v-col cols="12">
                   <v-text-field
-                    v-if="true"
                     dense
                     placeholder="E-mail"
                     :rules="emailRules"
@@ -91,17 +90,20 @@ export default {
       if (user.length === 0) {
         this.emailRules = ["Your Email does not exist"];
       } else {
-        if (user[0].first_name === null && user[0].last_name === null) {
-          this.$router.push("/alumni_signup").catch(() => {});
-        } else {
-          this.$router.push("/verify_password").catch(() => {});
-        }
         let userEmail = {
           email: user[0].email,
           role: user[0].role,
         };
         localStorage.setItem("user", JSON.stringify(userEmail));
         localStorage.setItem("userId", user[0].id);
+        if (user[0].first_name === null && user[0].last_name === null) {
+          localStorage.setItem("stepLogin","enter_information");
+          this.$router.push("/alumni_signup").catch(() => {});
+        } else {
+          localStorage.setItem("stepLogin","enter_password");
+          this.$router.push("/verify_password").catch(() => {});
+          
+        }
       }
     },
   },

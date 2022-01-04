@@ -26,7 +26,7 @@
             </v-card-title>
           </v-card>
         </v-col>
-        <v-card-text class="mb-0 pb-0">
+        <v-card-text class="mb-0 pb-0 pt-10">
           <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
             <v-card-subtitle class="white--text text-wrap">
               <v-icon>mdi-phone-classic</v-icon>
@@ -37,7 +37,7 @@
               {{ alumni.email }}
             </v-card-subtitle>
           </v-card-text>
-          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+          <v-card-text class="d-flex ml-0 pl-0 my-0 py-0">
             <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
               <v-icon>mdi-briefcase</v-icon>
               Web developer at Mango Byte co, ltd
@@ -67,7 +67,7 @@
                     <v-divider
                       color="#FF9933"
                       class="mx-auto mt-3"
-                      width="98%"
+                      width="100%"
                     ></v-divider>
                     <v-row class="mt-4 pb-0" dense>
                       <v-col cols="6" class="pb-0">
@@ -167,7 +167,7 @@
                             <v-divider
                               color="#FF9933"
                               class="mx-auto mt-3"
-                              width="98%"
+                              width="100%"
                             ></v-divider>
                             <v-row class="mt-6 pt-0" dense>
                               <v-col cols="12">
@@ -238,7 +238,7 @@
                 <v-divider
                   color="#FF9933"
                   class="mx-auto "
-                  width="93%"
+                  width="100%"
                 ></v-divider>
 
                 <v-container>
@@ -386,11 +386,11 @@
 import axios from "./../../../api/api.js";
 import SkillCard from "./SkillCard.vue";
 // import WorkCard from "./WorkExperienceCard.vue";
-// import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
+import AlumniCurrentEmployment from "./AlumniCurrentEmployment.vue";
 
 export default {
   components: {
-    // AlumniCurrentEmployment,
+    AlumniCurrentEmployment,
     SkillCard,
     // WorkCard
   },
@@ -654,7 +654,12 @@ export default {
         this.modelPosition !== "" &&
         this.modelCompany !== "" &&
         this.startYear !== "" &&
-        this.endYear !== ""
+        this.endYear !== "" &&
+        this.modelCompanyAddress !== "" &&
+        this.companyEmail !=="" &&
+        this.modelCompanyDomain !=="" &&
+        this.companyPhoneNumber !== ""
+
       ) {
         let objectOfCompany = this.objectCompanies.filter(
           (company) => company.companyName == this.modelCompany
@@ -671,6 +676,8 @@ export default {
         } else {
           this.position = this.modelPosition;
         }
+      this.dialogCreate = false;
+
         let newWork =new FormData();
         newWork.append('alumni_id',this.alumniData.id);
         newWork.append('company_id',this.companyId);
@@ -678,22 +685,19 @@ export default {
         newWork.append('phone', this.companyPhoneNumber);
         newWork.append('email',this.companyEmail);
         newWork.append('address',this.modelCompanyAddress);
-        newWork.append('domain',this.modelCompanyDomain);
+        // newWork.append('domain',this.modelCompanyDomain);
         newWork.append('logo',this.image);
         newWork.append('position_id',this.position);
         newWork.append('start_year',this.startYear);
         newWork.append('end_year',this.endYear);
-        
-        axios.post('/work_experiences',newWork).then((res)=>{
+
+        axios.post('work_experiences',newWork).then(()=>{
           this.getOneAlumni();
           this.getCompanyAndPosition();
-          console.log(res.data);
         })
        this.closeCreateDialog()
       }
       },
-      
-  
     getCompanyAndPosition() {
       axios.get("companies").then((res) => {
         this.objectCompanies = res.data;

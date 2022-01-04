@@ -56,7 +56,7 @@
             <v-divider
               color="#FF9933"
               class="mx-auto mt-4"
-              width="95%"
+              width="100%"
             ></v-divider>
 
             <v-container>

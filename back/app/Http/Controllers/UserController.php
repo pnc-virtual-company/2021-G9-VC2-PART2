@@ -72,8 +72,11 @@ class UserController extends Controller
                 $user->role = $data['role'];
                 $user->save();
             }
+            // $token = $user->createToken("mytoken")->plainTextToken;
+            $token = $user->createToken('token-'.$request->role)->plainTextToken;   
+
         }
-        return response()->json(["message"=>"User Created", 'data'=>$users],200);
+        return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
 
     public function updateUser(Request $request, $id)
@@ -85,8 +88,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
-
-        return response()->json(["message"=>"Post Updated","user"=>$user],201);
+        $token = $user->createToken('token-'.$user->role)->plainTextToken;
+        return response()->json(["message"=>"Post Updated","user"=>$user,"token"=>$token],201);
     }
 
     public function deleteUser($id)
@@ -102,8 +105,18 @@ class UserController extends Controller
         if(!$user||!Hash::check($request->password,$user->password)){
             return response()->json(["message"=>"Username or Password Invalid"],401);
         }
+        $token = $user->createToken('token-'.$user->role)->plainTextToken;
         return response()->json([
             "user"=>$user,
-        ]);
+            "token"=>$token,
+        ],201);
+    }
+    public function signOut(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'message' => 'Sign out',
+            'status_code' => 200
+        ], 200);
     }
 }

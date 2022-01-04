@@ -34,10 +34,11 @@ export default {
     },
   },
   methods: {
-    userSignin(user) {
+    userSignin(user,token) {
       this.activeUser = user;
+      localStorage.setItem("token",token);
       localStorage.setItem("userId", user.id);
-      localStorage.setItem("userName", user.first_name);
+      console.log("sign_in");
     },
     emailChecking(user) {
       this.userDataSignIn = user;
@@ -59,13 +60,13 @@ export default {
         );
       });
     }
-    let userData = JSON.parse(localStorage.getItem("user"));
+    let userData = JSON.parse(localStorage.getItem("userId"));
     if (userData !== null) {
-      this.activeUser = JSON.parse(localStorage.getItem("user"));
+      this.activeUser = JSON.parse(localStorage.getItem("userId"));
     } else {
       this.activeUser = userData;
     }
-    this.activeUser = JSON.parse(localStorage.getItem("user"));
+    this.activeUser = JSON.parse(localStorage.getItem("userId"));
     // if(user !== null){
     //     this.activeUser = JSON.parse(localStorage.getItem("user"));}
     // else{

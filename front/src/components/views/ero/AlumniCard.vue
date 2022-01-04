@@ -52,7 +52,7 @@ export default ({
     methods:{
       selectAlumni(alumni){
         localStorage.setItem('userId', alumni.id);
-        this.$router.push("/explore_alumni/alumni_profile/"+alumni.first_name).catch(() => {});
+        this.$router.push("/explore_alumni/alumni_profile/"+alumni.id).catch(() => {});
       }
     }
 })
