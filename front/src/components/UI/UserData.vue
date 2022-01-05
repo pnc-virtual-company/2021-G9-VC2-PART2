@@ -37,14 +37,6 @@
           <td v-if="item.role === 'alumni'">{{ item.alumni.status }}</td>
           <td>
             <div v-if="item === selectedItem">
-              <v-icon
-                small
-                class="mr-2"
-                @click="editItem(item)"
-                color="#22BBEA"
-              >
-                mdi-pencil
-              </v-icon>
               <v-icon small @click="deleteItem(item)" color="#FF9933">
                 mdi-delete
               </v-icon>

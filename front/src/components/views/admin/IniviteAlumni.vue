@@ -93,6 +93,9 @@ export default {
     inviteAlumni() {
       axios.post("/users", this.items).then((res) => {
         this.$emit("alumni", "alumni");
+        axios.post('/send-mails', this.items).then(()=>{
+          this.items = [];
+      })
         if (res.data.message === "User Created") {
           this.alert = true;
           setTimeout(() => {
@@ -102,7 +105,6 @@ export default {
         this.getUsers();
       });
       this.model = [];
-      this.items = [];
      
       this.dialog = false;
     },

@@ -7,15 +7,34 @@ use App\Models\User;
 use App\Models\Alumni;
 use App\Models\WorkExperience;
 use App\Models\AlumniSkill;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
-
+use Mail;
 
 class UserController extends Controller
 {
     public function getUsers(){
 
-        return User::with('alumni')->latest()->get();
+        $users = User::with('alumni')->latest()->get();
+        $array = [];
+        foreach($users as $user){
+            $workExperience = WorkExperience::join('companies', 'companies.id', '=', 'work_experiences.company_id')
+                                            ->join('positions', 'positions.id', '=', 'work_experiences.position_id')
+                                            ->join('alumnis', 'alumnis.id', '=', 'work_experiences.alumni_id')
+                                            ->where([['alumnis.user_id','=',$user->id]])
+                                            ->orderBy('work_experiences.id','DESC')
+                                            ->get(['work_experiences.id','work_experiences.alumni_id','companyName','positionName','start_year','end_year']);
+            $skills = AlumniSkill::join('alumnis', 'alumnis.id', '=', 'alumni_skills.alumni_id')
+                                ->join('skills', 'skills.id', '=', 'alumni_skills.skill_id')
+                                ->where([['alumnis.user_id','=',$user->id]])
+                                ->orderBy('alumni_skills.id','DESC')
+                                ->get(['skills.*', 'alumni_skills.id']);
+            $user['workExperience'] = $workExperience;
+            $user['skills'] = $skills;
+
+            array_push($array, $user);
+        }
+
+        return $array;
         
     }
 
@@ -41,17 +60,7 @@ class UserController extends Controller
     {
         $users = $request->input();
         foreach($users as $data){
-            // dd($data);
-            // $data->validate([
-            // "first_name"=>"nullable",
-            // "last_name"=>"nullable",
-            // "password"=>"nullable",
-            // 'email' => 'required|email|unique:users,email',
-            // 'role' => "required"
-            // ]);
-            //move image to storage
-            
-    
+
             if ($data['role'] === 'alumni'){
                 $user = new User();
                 $user->email = $data['email'];
@@ -78,6 +87,19 @@ class UserController extends Controller
         }
         return response()->json(["message"=>"User Created", 'data'=>$user],200);
     }
+
+    public function sendEmail(Request $request)
+    {
+        $users = $request->input();
+        foreach($users as $data){
+            Mail::send('email-template', $data, function($message) use ($data) {
+                $message->to($data['email'])
+                ->subject("PNC Alumni: Invitaition");
+            });
+        }
+        return $users;
+    }
+
 
     public function updateUser(Request $request, $id)
     {

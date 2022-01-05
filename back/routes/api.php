@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('skills/{skill_id}',[SkillController::class,'updateSkill']);
     Route::delete('skills/{skill_id}',[SkillController::class,'deleteSkill']);
 
+    Route::post('send-mails',[UserController::class,'sendEmail']);
 
     Route::delete('alumniSkill/{id}',[AlumniSkillController::class,'deleteAlumniSkill']);
     Route::get('alumniSkill/{id}',[AlumniSkillController::class,'show']);

@@ -84,11 +84,17 @@ export default {
     searchValue(value){
       this.search = value;
       if(this.isSwitched==='alumni'){
+        if(this.search !== ""){
         let users = this.alumnilist;
-        console.log(users)
+        
+        users = users.filter(user=> user.first_name !== null && user.last_name !== null);
+        
         this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
         || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
         )
+        }else{
+          this.userList = this.alumnilist;
+        }
       }else if(this.isSwitched==='ero'){
         let users = this.eroList;
         this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())

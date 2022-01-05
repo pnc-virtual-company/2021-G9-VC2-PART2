@@ -25,6 +25,7 @@
                     outlined
                     :type="showPassword ? 'text' : 'password'"
                     v-model="password"
+                    autocomplete="on"
                   ></v-text-field>
                 </v-col>
               </v-row>

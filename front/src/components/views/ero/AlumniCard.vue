@@ -19,9 +19,13 @@
         </v-card-text>
         </v-col>
         <v-col cols="4">
-          <v-card-text>
-            <v-icon>mdi-briefcase</v-icon>
-            Software support at First Cambodia
+          <v-card-text v-if="alumni.workExperience.length !== 0" class="align-center">
+            <v-icon left>mdi-briefcase</v-icon>
+            {{ alumni.workExperience[0].positionName }} at {{ alumni.workExperience[0].companyName }}
+        </v-card-text>
+        <v-card-text v-if="alumni.workExperience.length === 0" class="align-center">
+            <v-icon left>mdi-briefcase</v-icon>
+            No Work
         </v-card-text>
         </v-col>
         <v-col cols="3" class="d-flex align-center">

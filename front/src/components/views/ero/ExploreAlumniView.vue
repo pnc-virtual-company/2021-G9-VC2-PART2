@@ -6,13 +6,13 @@
       </v-col>
       <v-col cols="2">
         <!-- <v-btn color="blue" class="py-5">Search More</v-btn> -->
-        <v-expansion-panels focusable>
-          <v-expansion-panel  @click.stop="searchMore = !searchMore">
-            <v-expansion-panel-header>Search More</v-expansion-panel-header>     
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <v-btn color="grey" text height="100%" @click.stop="searchMore = !searchMore">
+          <!-- <v-icon>$expand</v-icon> -->
+          Search More
+        </v-btn>
       </v-col>
     </v-row>
+    <transition name="slide-fade">
     <v-row v-if="searchMore">
       <v-col cols="2">
          <v-select
@@ -70,7 +70,7 @@
           ></v-select>
       </v-col>
     </v-row>
-
+    </transition>
     <alumni-card v-for="alumni of alumniList" :key="alumni.id"
       :alumni="alumni"
     ></alumni-card>
@@ -89,17 +89,17 @@ export default {
   },
   data: () => ({
     searchMore: false,
-    genders: ["FEMALE", "MALE"],
-    batches: ['Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
-    majors: ["WEB", "SNA"],
+    genders: ["None","FEMALE", "MALE"],
+    batches: ["None",'Batch-2021', 'Batch-2020','Batch-2019','Batch-2018','Batch-2017','Batch-2016','Batch-2015','Batch-2014','Batch-2013','Batch-2012','Batch-2011','Batch-2010','Batch-2009','Batch-2008','Batch-2007'],
+    majors: ["None","WEB", "SNA"],
     skills: [],
     companies: [],
     alumniList: [],
-    searchName: "",
-    searchBatch: "",
-    searchGender: "",
-    searchCompany: "",
-    searchMajor: "",
+    searchName: "None",
+    searchBatch: "None",
+    searchGender: "None",
+    searchCompany: "None",
+    searchMajor: "None",
     alumnis:[],
     // fullName:'',
   }),
@@ -111,104 +111,394 @@ export default {
     findAlumniInfo() {
       let allAlumni = this.alumnis ;
       
- //==================================================//   
-      // filter name, batch, gender, major and company
-      if(this.searchName!=="" && this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.name.toLowerCase().includes(this.searchName.toLowerCase())
-        && alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
+      if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
         ))
-  //===============================================//
-      // filter search, gender, major and company 
-      }else if(this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
+ 
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
         ))
-      // filter batch, gender and major
-      }else if(this.searchBatch!=="" && this.searchGender!=="" && this.searchMajor!==""){
+    
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+      
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+  
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+  
+      }else if( this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+    
+      } else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+
+    
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+  
+        ))
+
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        ))
+     
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+ 
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+   
+        ))
+      }else if(this.searchName!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchBatch!=="None" && this.searchGender!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if( this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      }else if( this.searchBatch!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if( this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchGender!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        ))
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        
+        ))
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" && this.searchMajor!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+
+        ))
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      }else if(this.searchName!=="None" && this.searchGender!=="None" && this.searchMajor!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        ))
+      }else if(this.searchName!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      }else if( this.searchBatch!=="None" && this.searchGender!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchBatch!=="None" && this.searchGender!=="None" && this.searchCompany!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      }else if(this.searchBatch!=="None" && this.searchGender!=="None" && this.searchMajor!=="None"){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
         && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
         && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
         ))
-
-    //====================================================//
-      // filter batch, gender and company
-      }else if(this.searchBatch!=="" && this.searchGender!=="" &&this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
+      }else if(this.searchBatch!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
         ))
-  //==========================================================//
-      // filter batch, major and company
-      }else if(this.searchBatch!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
+      }else if(this.searchBatch!=="None"  && this.searchMajor!=="None"  && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>( alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
         ))
-  //=============================================//
-      // filter gender, major and company
-      }else if(this.searchGender!=="" && this.searchMajor!=="" &&this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
-        && alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase()
+      }else if(this.searchBatch!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>( alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        
         ))
-      // filter batch with gender
-      } else if(this.searchBatch!=="" && this.searchGender!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
-        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase());
+      }else if( this.searchGender!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if( this.searchGender!=="None" && this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if( this.searchGender!=="None" && this.searchMajor!=="None" && this.searchCompany!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        ))
+      }else if(this.searchMajor!=="None" && this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchBatch!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        ))
+      }else if(this.searchName!=="None" && this.searchGender!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        ))
+      }else if(this.searchName!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchName!=="None" && this.searchCompany!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && this.getCompany(alumni.workExperience)===this.searchCompany
 
-      // filter batch with major
-      }else if(this.searchBatch!=="" && this.searchMajor!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
-        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
-//====================================//
-      // filter batch with company
-      }else if(this.searchBatch!=="" && this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.batch.toLowerCase()===this.searchBatch.toLowerCase() 
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
-
-      // filter gender and major
-      }else if(this.searchGender!=="" && this.searchMajor!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
-        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase());
-//=================================================//
-      // filter gender with company
-      }else if(this.searchGender!=="" && this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.gender.toLowerCase()===this.searchGender.toLowerCase() 
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
- //=============================================//
-      //filter major with company
-      }else if(this.searchMajor!=="" && this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>alumni.major.toLowerCase()===this.searchMajor.toLowerCase() 
-        && alumni.company.toLowerCase()===this.searchCompany.toLowerCase());
-      // filter name
-      }else if(this.searchName!=="" ){
-        this.alumniList = allAlumni.filter((alumni) =>(alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        ))
+      }else if(this.searchName!=="None" && this.searchMajor!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>((alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
+        || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase()))
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+    
+        ))
+      }else if(this.searchBatch!=="None" && this.searchGender!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+      
+        ))
+        
+      }else if(this.searchBatch!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if( this.searchBatch!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+       
+        ))
+      }else if(this.searchBatch!=="None" && this.searchMajor!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+    
+        ))
+      }else if(this.searchGender!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchGender!=="None" && this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+       
+        ))
+      }else if(this.searchGender!=="None" && this.searchMajor!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()
+        && alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        ))
+      }else if(this.searchCompany!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(this.getCompany(alumni.workExperience)===this.searchCompany
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchMajor!=="None" && this.searchSkill!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getSkill(alumni.skills)===this.searchSkill
+        ))
+      }else if(this.searchMajor!=="None" && this.searchCompany!=="None" ){
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()
+        && this.getCompany(alumni.workExperience)===this.searchCompany
+      
+        ))
+      }else if(this.searchName!=="None" ){
+        
+        this.alumniList = allAlumni.filter((alumni)=>(alumni.first_name.toLowerCase().includes(this.searchName.toLowerCase())
         || alumni.last_name.toLowerCase().includes(this.searchName.toLowerCase())
         ))
-      //filter batch
-      }else if(this.searchBatch!==""){
-        
+      }
+      else if(this.searchBatch!=="None"){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()))
 
-      // filter gender
-      }else if(this.searchGender!==""){
+      }else if(this.searchGender!=="None"){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.gender.toLowerCase()===this.searchGender.toLowerCase()))
-      // filter major
-      }else if(this.searchMajor!==""){
+      
+      }else if(this.searchMajor!=="None"){
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.major.toLowerCase()===this.searchMajor.toLowerCase()))
-      //===============================================///
-      //filter company
-      }else if(this.searchCompany!==""){
-        this.alumniList = allAlumni.filter((alumni)=>(alumni.toLowerCase()===this.searchCompany.toLowerCase()))
-      } else {
+      }else if(this.searchCompany!=="None"){
+        this.alumniList = allAlumni.filter((alumni)=>this.getCompany(alumni.workExperience)===this.searchCompany)
+      } else if (this.searchSkill!==""){
+        this.alumniList = allAlumni.filter((alumni)=> this.getSkill(alumni.skills)===this.searchSkill)
+      }
+      else {
         this.alumniList = allAlumni;
       }
     },
+    getSkill(skillList){
+      let skill = skillList.filter((title)=>title.Title===this.searchSkill)
+      if (skill.length !== 0){
+        return skill[0].Title
+      }
+      // return null
+    },
+    getCompany(companyList){
+      let company = companyList.filter((title)=>title.companyName===this.searchCompany)
+      if (company.length !== 0){
+        return company[0].companyName
+      }
+      // return null
+    }
   },
   mounted() {
     axios.get("/users").then((res)=> {
@@ -232,3 +522,17 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to{
+  transform: translateY(-30px);
+
+}
+</style>

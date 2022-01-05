@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container >
 
     <v-row justify="center" >
       <v-expansion-panels  accordion flat >
-        <v-expansion-panel class="elevation-1 mt-4 rounded-0" >
+        <v-expansion-panel class="elevation-0 mt-4 rounded-0" >
           <v-expansion-panel-header
           left
             class="title  elevation-0 title  text-h5 "
@@ -14,25 +14,13 @@
             <span class="header">Skills</span>
             </v-expansion-panel-header
           >
-          <v-expansion-panel-content>
-            <v-card-subtitle v-if="skills.length === 0">No Skill</v-card-subtitle>
-            <v-chip-group active-class="primary--text" column>
+          <v-expansion-panel-content  class="justify-start">
+            <v-chip-group  column>
               <v-chip v-for="(skill, index) in alumniSkills" :key="index">
-              <v-hover v-slot="{hover}">
 
-                <v-card-text class="px-0">
                   {{ skill.Title }}
-                  <v-progress-circular
-                    v-if="hover && isDelete && role === 'alumni'"
-                    :size="20"
-                    :width="2"
-                    color="red"
-                    indeterminate
-                    right
-                  ></v-progress-circular>
-                <v-icon v-if=" !isDelete && role === 'alumni'" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
-                </v-card-text>
-              </v-hover>
+                  
+                <v-icon v-if=" role === 'alumni'" right @click="deleteSkill(skill.id)">mdi-close-circle-outline</v-icon>
               </v-chip>
               <v-chip v-if="role === 'alumni'" @click="dialog = true">
                 <v-icon color="blue">mdi-plus</v-icon>
@@ -111,10 +99,8 @@ export default {
   data: () => ({
     skills: [],
     dialog: false,
-    // model:'',
     newSkills: [],
     search: '',
-    isDelete: false,
     role: JSON.parse(localStorage.getItem('user')).role,
 
   }),
@@ -137,15 +123,10 @@ export default {
       })
     },
     deleteSkill(id){
-      this.isDelete = true;
       axios.delete('/alumniSkill/'+id).then(()=>{
         this.$emit('delete');
-        // axios.get('/alumniSkill/'+ this.alumni_id).then(()=>{})
         this.getSkills();
         
-        setTimeout(() => {
-        this.isDelete = false;
-      }, 400);
       })
     },
     addNewSkills(){

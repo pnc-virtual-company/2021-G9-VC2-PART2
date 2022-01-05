@@ -1,13 +1,13 @@
 <template>
   <v-container class="mt-9" width="50%">
-    <v-card height="22vh" class="elevation-0"> </v-card>
+    <v-card height="18vh" class="elevation-0"> </v-card>
     <v-hover v-slot="{ hover }">
       <v-container class="header d-flex elevation-0">
         <v-col cols="5">
           <v-avatar size="170" class="avatar">
             <v-img :src="profile" alt="John"></v-img>
           </v-avatar>
-          <label for="profile"
+          <label for="profile" v-if="role === 'alumni'"
             ><v-icon
               class="icon align-center rounded-circle pa-1 blue-grey darken-2"
               color="white"
@@ -26,28 +26,30 @@
           </v-card>
         </v-col>
         <v-card-text class="mb-0 pb-0">
-          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
+          <!-- <v-card-text height="300px">
+
+          </v-card-text> -->
+          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0 mt-15">
             <v-card-subtitle class="white--text text-wrap">
-              <v-icon>mdi-phone-classic</v-icon>
+              <v-icon left>mdi-phone-classic</v-icon>
               {{ alumniData.phone_number }}
             </v-card-subtitle>
             <v-card-subtitle class="white--text text-wrap">
-              <v-icon>mdi-gmail</v-icon>
+              <v-icon left>mdi-gmail</v-icon>
               {{ alumni.email }}
             </v-card-subtitle>
-          </v-card-text>
-          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
-            <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
-              <v-icon>mdi-cloud-tags</v-icon>
+        
+            <v-card-subtitle class="white--text text-wrap">
+              <v-icon left>mdi-cloud-tags</v-icon>
               {{ alumniData.major }}
             </v-card-subtitle>
-            <v-card-subtitle class="mt-0 pt-0 mb-0 pb-0 white--text text-wrap">
-              <v-icon>mdi-certificate</v-icon>
+            <v-card-subtitle class="white--text text-wrap">
+              <v-icon left>mdi-certificate</v-icon>
               {{ alumniData.batch }}
             </v-card-subtitle>
             <v-spacer></v-spacer>
             <v-icon
-              v-if="hover"
+              v-if="hover && role === 'alumni'"
               class="edit pa-2 mr-1 white elevation-6 rounded-circle"
               @click="editData"
               >mdi-pen</v-icon
@@ -207,22 +209,32 @@
       </v-container>
     </v-hover>
 
-    <v-card tile color=" pt-6" class="">
+    <v-card tile color=" pt-0" class="elevation-0">
       <skill-card
         :alumni-skills="alumniSkills"
         :alumni-id="alumniData.id"
         @add="getOneAlumni"
+        @delete="getOneAlumni"
       ></skill-card>
-
-      <v-card width="100%" elevation="0" color="transparent" class="pb-6">
-        <v-card-text class="d-flex justify-center align-center">
-          <h2 class="title mt-4 ml-6 text-h5 text-color">Work Experience</h2>
-          <v-spacer></v-spacer>
-          <v-icon
-            @click="dialogCreate = !dialogCreate"
-            class="white mr-6 pa-2 elevation-6 rounded-circle my-3 orange--text"
-            >mdi-plus</v-icon
+      <v-divider></v-divider>
+      <v-expansion-panels class="pa-0" accordion flat>
+        <v-expansion-panel class="pa-0 ma-0 elevation-0 mt-4 rounded-0">
+          <v-expansion-panel-header
+            left
+            class="pa-4 title elevation-0 title text-h5"
           >
+            <template v-slot:actions>
+              <v-icon left class="workIcon">$expand</v-icon>
+            </template>
+            <span class="workHeader">Work Experience</span>
+            <v-spacer class="space"></v-spacer>
+            <v-col cols="1" class="btn pa-0">
+              <v-icon
+                v-if="role === 'alumni'"
+                @click="dialogCreate = !dialogCreate"
+                class="white mr-6 pa-2 elevation-6 rounded-circle orange--text"
+                >mdi-plus</v-icon>
+            </v-col>
           <v-dialog v-model="dialogCreate" persistent max-width="500px">
             <v-card>
               <v-form ref="form" class="pa-4" v-model="valid">
@@ -315,7 +327,6 @@
               </v-form>
             </v-card>
           </v-dialog>
-          <!-- =======================aaaaa=================== -->
           
           <!-- =======================Company Dialog==================================== -->
           <v-dialog
@@ -451,8 +462,9 @@
                       </v-card>
                     </v-dialog>
           <!-- ========================================== -->
-        </v-card-text>
-        <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
+
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
         <alumni-current-employment
           v-for="work of workExperience"
           :key="work.id"
@@ -469,9 +481,13 @@
           :companyDomain="companyDomain"
           :companyAddresses="companyAddresses"
         />
-      </v-card>
+      </v-expansion-panel-content>
+      </v-expansion-panel>
+      </v-expansion-panels>
     </v-card>
+  
   </v-container>
+
 </template>
 
 <script>
@@ -606,6 +622,8 @@ export default {
       positionId: null,
       isInputInfoCompany: false,
       alumniSkills: [],
+      role: JSON.parse(localStorage.getItem('user')).role,
+      sheet: true,
     };
   },
   watch: {
@@ -817,9 +835,8 @@ export default {
       company.append("domain", this.modelCompanyDomain);
       company.append("logo", this.image);
 
-      axios.post("/companies", company).then((res) => {
+      axios.post("/companies", company).then(() => {
         this.$refs.form.reset();
-        console.log(res.data);
         this.getCompanyAndPosition();
         this.closeCompanyDialog();
         
@@ -880,6 +897,10 @@ export default {
 </script>
 
 <style scoped>
+.edit{
+  height: 40px;
+  width: 40px;
+}
 .avatar {
   margin-top: -100px;
   margin-left: 7%;
@@ -895,10 +916,26 @@ export default {
 .header {
   background: #22bbea;
 }
-.text-color {
+.text-color,
+.workHeader {
   color: #22bbea;
 }
 .delete {
   height: 40px;
+}
+
+.workIcon {
+  order: 0;
+}
+
+.workHeader {
+  order: 1;
+}
+.space {
+  order: 2;
+}
+
+.btn {
+  order: 3;
 }
 </style>

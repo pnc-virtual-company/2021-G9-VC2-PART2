@@ -44,7 +44,7 @@
               </v-list-item>
               </v-col>
             </v-list>
-            <v-list width="10%">
+            <v-list width="10%" v-if="role === 'alumni'">
               <v-icon v-if="hover" @click="getDataToUpdate(work)" class="pa-2 mr-1 white elevation-6 rounded-circle">mdi-pen</v-icon>
 
               <v-icon v-if="hover" @click="deleteEmployment = true" class="pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
@@ -281,6 +281,7 @@ export default {
       isSelectCompanyName:false,
       companyIdToEdit:null,
       deleteEmployment: false,
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
   methods: {
