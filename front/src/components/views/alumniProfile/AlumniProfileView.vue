@@ -26,19 +26,17 @@
           </v-card>
         </v-col>
         <v-card-text class="mb-0 pb-0">
-          <!-- <v-card-text height="300px">
-
-          </v-card-text> -->
-          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0 mt-15">
-            <v-card-subtitle class="white--text text-wrap">
+          <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0 mt-6">
+            <v-card-subtitle class="white--text text-wrap pb-0 mb-0">
               <v-icon left>mdi-phone-classic</v-icon>
               {{ alumniData.phone_number }}
             </v-card-subtitle>
-            <v-card-subtitle class="white--text text-wrap">
+            <v-card-subtitle class="white--text text-wrap pb-0 mb-0">
               <v-icon left>mdi-gmail</v-icon>
               {{ alumni.email }}
             </v-card-subtitle>
-        
+          </v-card-text>
+          <v-card-text class="d-flex ml-0 pl-0 my-0 py-0">
             <v-card-subtitle class="white--text text-wrap">
               <v-icon left>mdi-cloud-tags</v-icon>
               {{ alumniData.major }}
