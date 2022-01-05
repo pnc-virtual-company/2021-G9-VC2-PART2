@@ -401,9 +401,8 @@
                       <v-btn
                         color="#22BBEA"
                         :disabled="!validate"
-                        @click="createWorkExperience"
                       >
-                        <span class="pink--text">Submit</span>
+                        <span class="white--text">Submit</span>
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -747,85 +746,7 @@ export default {
       this.startYear = "";
       this.endYear = "";
     },
-    createWorkExperience() {
-      console.log(
-        this.modelPosition,
-        this.modelCompany,
-        this.startYear,
-        this.endYear,
-        this.modelCompanyAddress,
-        this.companyEmail,
-        this.modelCompanyDomain,
-        this.companyPhoneNumber
-      );
-      if (
-        this.modelPosition !== "" &&
-        this.modelCompany !== "" &&
-        this.startYear !== "" &&
-        this.endYear !== ""  &&
-        this.modelCompanyAddress !== "" &&
-        this.companyEmail !== "" &&
-        this.modelCompanyDomain !== "" &&
-        this.companyPhoneNumber !== ""
-      ) {
-        let objectOfCompany = this.objectCompanies.filter(
-          (company) => company.companyName == this.modelCompany
-        );
-        let objectOfPosition = this.objectPositions.filter(
-          (position) => position.positionName == this.modelPosition
-        );
-        // var company = null;
-        if (objectOfCompany.length !== 0) {
-          this.companyId = objectOfCompany[0].id;
-        }
-        if (objectOfPosition.length !== 0) {
-          this.position = objectOfPosition[0].id;
-        } else {
-          this.position = this.modelPosition;
-        }
 
-        this.dialogCreate = false;
-
-        // let newWork = new FormData();
-        // newWork.append("alumni_id", this.alumniData.id);
-        // newWork.append("company_id", this.companyId);
-        // newWork.append("companyName", this.modelCompany);
-        // newWork.append("phone", this.companyPhoneNumber);
-        // newWork.append("email", this.companyEmail);
-        // newWork.append("address", this.modelCompanyAddress);
-        // newWork.append('domain',this.modelCompanyDomain);
-        // newWork.append("logo", this.image);
-        // newWork.append("position_id", this.position);
-        // newWork.append("start_year", this.startYear);
-        // newWork.append("end_year", this.endYear);
-
-        // axios.post("work_experiences", newWork).then(() => {
-        //   this.getOneAlumni();
-        //   this.getCompanyAndPosition();
-        // });
-        // this.closeCreateDialog();
-
-        let newWork = new FormData();
-        newWork.append("alumni_id", this.alumniData.id);
-        newWork.append("company_id", this.companyId);
-        newWork.append("companyName", this.modelCompany);
-        newWork.append("phone", this.companyPhoneNumber);
-        newWork.append("email", this.companyEmail);
-        newWork.append("address", this.modelCompanyAddress);
-        newWork.append("domain", this.modelCompanyDomain);
-        newWork.append("logo", this.image);
-        newWork.append("position_id", this.position);
-        newWork.append("start_year", this.startYear);
-        newWork.append("end_year", this.endYear);
-
-        axios.post("work_experiences", newWork).then(() => {
-          this.$refs.form.reset();
-          this.getOneAlumni();
-          this.getCompanyAndPosition();
-        });
-        this.closeCreateDialog();
-      }
-    },
     getCompanyAndPosition() {
       axios.get("companies").then((res) => {
         this.objectCompanies = res.data;
