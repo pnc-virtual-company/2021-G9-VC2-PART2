@@ -44,7 +44,7 @@
               </v-list-item>
               </v-col>
             </v-list>
-            <v-list width="10%">
+            <v-list width="10%" v-if="role === 'alumni'">
               <v-icon v-if="hover" @click="getDataToUpdate(work)" class="pa-2 mr-1 white elevation-6 rounded-circle">mdi-pen</v-icon>
               <v-icon v-if="hover" @click="deleteWorkExperience(work.id)" class="pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
               <v-dialog v-model="dialog" persistent max-width="500px">
@@ -201,6 +201,7 @@ export default {
       modelCompanyAddress: "",
       id: null,
       alumni_id: null,
+      role: JSON.parse(localStorage.getItem('user')).role,
     };
   },
   methods: {

@@ -80,9 +80,9 @@
                 </v-col>
               </v-row>
               <v-row no-gutters class=" ma-0 pa-0">
-                <v-col cols="12" class="mt-0 pt-0">
+                <v-col cols="12" class=" mt-0 pt-0">
                   <v-checkbox
-                    class=" ma-0"
+                    class="kiki ma-0"
                     v-model="checkbox"
                     label="Show password"
                   ></v-checkbox>

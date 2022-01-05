@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <v-row class="navbar-container d-flex align-center pa-0 ma-0">
       <v-col cols="12" lg="2" md="2" sm="2" xs="12" class="pa-2 ma-0">
         <v-img
@@ -83,7 +83,7 @@
         </v-dialog>
       </v-col>
     </v-row>
-  </div>
+  </section>
 </template>
 <script>
 import axios from '../../api/api.js';

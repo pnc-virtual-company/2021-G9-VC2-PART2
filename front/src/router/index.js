@@ -22,7 +22,9 @@ const routes = [
     { path: "/verify_password", component: VerifyPassword},
     { path: "/alumni_signup", component: AlumniSignup},
     { path: "/event", component: Event},
-    { path: "/explore_alumni", component: ExploreAlumniView},
+    { path: "/explore_alumni", component: ExploreAlumniView },
+    { path: "/explore_alumni/alumni_profile/:name", component: AlumniProfileView },
+
     { path: "/", redirect: "/verify_email"},
 ]
 const ENTER_EMAIL= 'enter_email';
@@ -42,15 +44,21 @@ let authenticationGuard = (to, from, next) => {
     let role = localStorage.getItem('role');
     if(role==="admin" || role === "ero"){
       let path = window.location.pathname;
-      if(path !== "/admin_view" && path !== "/explore_alumni"){
+      if((path !== "/admin_view" && path !== "/explore_alumni" && path !== "/event")){
+        let id = localStorage.getItem("userId");
+        next("/explore_alumni/alumni_profile/"+id)
+      }
+      else if(path !== "/admin_view" && path !== "/explore_alumni"){
         next("/event")
       }
-      if(path !== "/explore_alumni" && path !== "/event"){
+      else if(path !== "/explore_alumni" && path !== "/event"){
         next("/admin_view")
       }
-      if(path !== "/event" && path !== "/admin_view"){
+      else if(path !== "/event" && path !== "/admin_view"){
         next("/explore_alumni")
       }
+      
+
     }else if (role === "alumni"){
       let name = localStorage.getItem("userName");
       let path = window.location.pathname;

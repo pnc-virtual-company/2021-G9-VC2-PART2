@@ -87,7 +87,6 @@ export default {
         let users = this.alumnilist;
         this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
         || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
-       
         )
       }else if(this.isSwitched==='ero'){
         let users = this.eroList;
