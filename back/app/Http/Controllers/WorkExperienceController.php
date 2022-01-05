@@ -112,24 +112,43 @@ class WorkExperienceController extends Controller
         $workExperience = WorkExperience::findOrFail($id);
         $workExperience->alumni_id = $request->alumni_id;
         
-       if (is_numeric($request->company_id)){
-           $workExperience->company_id = $request->company_id;
-       }else{
-            $request -> validate([
-                'logo' =>'image|mimes:jpg,png,jpeg,gif|max:19999',
-            ]);
-            $request->file('logo')->store('public/pictures');
-            $company = new Company();
-            $company->companyName = $request->companyName;
-            $company -> email = $request->email;
-            $company->address = $request -> address;
-            $company-> phone = $request->phone;
-            $company-> domain= $request-> domain;
-            $company-> logo = $request->file('logo')->hashName();
-            $company->save();
-            $workExperience->company_id = $company->id;
-           $workExperience->company_id = $company->id;
-       }
+        if ($request->company_id !== 'null'){
+            if ($request->company_id !== $request->companyIdEdit){
+                $workExperience->company_id = $request->company_id;
+            }else{
+                $company = Company::findOrFail($request->company_id);
+                $company->companyName = $request->companyName;
+                $company -> email = $request->email;
+                $company->address = $request ->address;
+                $company-> phone = $request->phone;
+                $company-> domain= $request->domain;
+                $company-> logo =  $company-> logo;
+                $company->save();
+                $workExperience->company_id = $company->id;
+            }
+            
+        }else{
+            if ($request->company_id === 'null' ){
+                $request -> validate([
+                    'logo' =>'image|mimes:jpg,png,jpeg,gif|max:199999',
+                ]);
+                $request->file('logo')->store('public/pictures');
+                $company = new Company();
+                $company->companyName = $request->companyName;
+                $company->email = $request->email;
+                $company->address = $request->address;
+                $company->phone = $request->phone;
+                $company->domain= $request->domain;
+                $company->logo = $request->file('logo')->hashName();
+                $company->save();
+                $workExperience->company_id = $company->id;
+                // return response()->json(['message'=>'Work Experience updated','name'=>$request->companyName,'email'=>$request->email,'address'=>$request->address,'phone'=>$request->phone,'domain'=>$request->domain,"image"=>$request->file('logo')->hashName()],200);
+
+            }else{
+                $workExperience->company_id = $request->company_id;
+    
+            }
+        }
        if (is_numeric($request->position_id)){
            $workExperience->position_id = $request->position_id;
        }else{

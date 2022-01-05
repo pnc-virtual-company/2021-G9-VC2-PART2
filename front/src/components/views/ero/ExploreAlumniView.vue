@@ -193,6 +193,7 @@ export default {
         ))
       //filter batch
       }else if(this.searchBatch!==""){
+        
         this.alumniList = allAlumni.filter((alumni)=>(alumni.alumni.batch.toLowerCase()===this.searchBatch.toLowerCase()))
 
       // filter gender
@@ -213,8 +214,20 @@ export default {
   mounted() {
     axios.get("/users").then((res)=> {
         
-        this.alumnis = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status == "active");
+        this.alumnis = res.data.filter((user)=> user.role === 'alumni' && user.alumni.status === "active");
         this.alumniList = this.alumnis;
+    });
+    axios.get('/companies').then((res)=>{
+      let companyList = res.data;
+      for (let company of companyList){
+        this.companies.push(company.companyName);
+      }
+    });
+    axios.get('/skills').then((res)=>{
+      let skillList = res.data;
+      for (let skill of skillList){
+        this.skills.push(skill);
+      }
     })
     
   },

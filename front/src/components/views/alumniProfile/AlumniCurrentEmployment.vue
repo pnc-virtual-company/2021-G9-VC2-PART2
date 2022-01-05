@@ -9,7 +9,7 @@
               
               <v-col cols="5" class="d-flex">
                 <v-img
-                src="http://www.topjobcambodia.com/photos/social/20191010-182540-mango_byte_technology_co_ltd.png"
+                :src="'http://localhost:8000/storage/pictures/'+work.logo"
                 width="90"
               ></v-img>
 
@@ -49,77 +49,148 @@
               <v-icon v-if="hover" @click="deleteWorkExperience(work.id)" class="pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
               <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
-          <v-form class="pt-5 px-5">
-            <v-card-title class="d-flex justify-center my-0 py-0">
-              <span class="text-h5 text-color">UPDATE EMPLOYMENT</span>
-            </v-card-title>
-            <v-divider
-              color="#FF9933"
-              class="mx-auto mt-4"
-              width="95%"
-            ></v-divider>
+         <v-form class="pt-5 px-5">
+                <v-card-title class="d-flex justify-center my-0 py-0">
+                  <span class="text-h5 text-color">UPDATE EMPLOYMENT</span>
+                </v-card-title>
+                <v-divider
+                  color="#FF9933"
+                  class="mx-auto "
+                  width="93%"
+                ></v-divider>
 
-            <v-container>
-              <v-row no-gutters>
-                <v-col cols="12" class="mt-4">
-                   <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompany"
-                        :items="companies"
-                        :search-input.sync="searchComapany"
-                        label="Company"
+                <v-container>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      class="d-flex justify-center pa-0 mb-3 mt-4"
+                      v-if="hideLogoComapnay"
                     >
-                    </v-combobox>
-                </v-col>
-              </v-row>
-              <v-row no-gutters>
-                <v-col cols="12" class="pa-0 ma-0">
-                    <v-combobox
-                      dense
-                      outlined
-                      v-model="modelCompanyAddress"
-                      :search-input.sync="searchComapanyAddress"
-                      label="Company Address"
-                    >
-                    </v-combobox>
-                  </v-col>
-              </v-row>
-              <v-row no-gutters>
-                <v-col cols="12">
-                   <v-combobox
+                      <label for="companyImg">
+                        <v-avatar id="addCompanyImg" size="70">
+                          <v-img
+                            :src="companyLogo"
+                            alt="Company logo"
+                          ></v-img>
+                        </v-avatar>
+                      </label>
+                      <input type="file" accept="image/jpeg, image/png, image/gif" id="companyImg" hidden @change="selectLogoOfCompany" />
+                    </v-col>
+                     <v-col cols="12" class="pa-0 ma-0">
+                      <v-combobox
                         dense
                         outlined
                         v-model="modelPosition"
                         :items="positions"
                         :search-input.sync="searchPosition"
                         label="Position"
+                         persistent-hint
+                      >
+                      <template v-slot:no-data>
+                            <v-list-item scroll>
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                  Press <kbd>Enter</kbd> to Create New
+                               
+                                </v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </template>
+                      </v-combobox>
+                    </v-col>
+                    <v-col cols="12" class="pa-0 ma-0">
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompany"
+                        :items="companies"
+                        :search-input.sync="searchComapany"
+                        label="Company"
+                        @change="findNameOfCompany"
+                        persistent-hint
+                        
+                       
+                      >
+                      <template v-slot:no-data>
+                            <v-list-item scroll>
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                  Press <kbd>Enter</kbd> to Create New
+                                 
+                                </v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </template>
+                      </v-combobox>
+                    </v-col>
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
+                      <v-text-field
+                        dense
+                        outlined
+                        v-model="companyPhoneNumber"
+                        label="Company Phone Number"
+                        v-if="hasComapnyName"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="pr-0 py-0 ma-0">
+                      <v-text-field
+                        dense
+                        outlined
+                        v-model="companyEmail"
+                        label="Company Email"
+                        v-if="hasComapnyName"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompanyDomain"
+                        :items="companyDomain"
+                        :search-input.sync="searchComapanyDomain"
+                        label="Company Domain"
+                        v-if="hasComapnyName"
                       >
                       </v-combobox>
-                </v-col>
-              </v-row>
-              <v-row class="mt-0 pb-0" dense>
-                <v-col cols="6">
-                  <v-select
-                    v-model="startYear"
-                    :items="startYears"
-                    label="Start Year"
-                    dense
-                    outlined
-                  ></v-select>
-                </v-col>
-                <v-col cols="6">
-                  <v-select
-                    v-model="endYear"
-                    :items="endYears"
-                    label="End Year"
-                    dense
-                    outlined
-                  ></v-select>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
+                    </v-col>
+                   
+                     <v-col  cols="6" class="pr-0 py-0 ma-0" >
+                      <v-combobox
+                        dense
+                        outlined
+                        v-model="modelCompanyAddress"
+                        :items="companyAddresses"
+                        :search-input.sync="searchComapanyAddress"
+                        label="Company Address"
+                         v-if="hasComapnyName"
+                      >
+                      </v-combobox>
+                    </v-col>
+                    <v-col cols="6" class="pl-0 py-0 ma-0">
+                      <v-select
+                        v-model="startYear"
+                        :items="startYears"
+                        label="Start Year"
+                        dense
+                        :rules="[(v) => !!v || 'Start year is required']"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="6" class="pr-0 py-0 ma-0">
+                      <v-select
+                        v-model="endYear"
+                        :items="endYears"
+                        label="End Year"
+                        dense
+                        :rules="[(v) => !!v || 'End year is required']"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
           <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
             <v-spacer></v-spacer>
             <v-btn dark color="grey" text @click="closeDialog">
@@ -139,7 +210,7 @@
                <v-list-item two-line>
                 <v-list-item-content>
                   <v-list-item-title>Address</v-list-item-title>
-                  <v-list-item-subtitle class="text-wrap mt-2">Aquation, #540 Koh Pich St, Koh Pich (Diamond Island), Phnom Penh 120101 Cambodia</v-list-item-subtitle>
+                  <v-list-item-subtitle class="text-wrap mt-2">{{work.address}}</v-list-item-subtitle>
                 </v-list-item-content>
                </v-list-item>
              </v-col>
@@ -149,11 +220,11 @@
                   <v-list-item-title>Contact</v-list-item-title>
                   <v-list-item-subtitle class="mt-2 text-wrap">
                     <v-icon>mdi-phone</v-icon>
-                    09232323443
+                    {{work.phone}}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle class="mt-2 text-wrap">
                     <v-icon>mdi-gmail</v-icon>
-                    knfkdknj@mangobyte.com
+                    {{work.email}}
                   </v-list-item-subtitle>
                 </v-list-item-content>
                </v-list-item>
@@ -163,7 +234,7 @@
                 <v-list-item-content>
                   <v-list-item-title>Domain</v-list-item-title>
                   <v-list-item-subtitle class="mt-2"
-                    >Bank</v-list-item-subtitle
+                    >{{work.domain}}</v-list-item-subtitle
                   >
                 </v-list-item-content>
                </v-list-item>
@@ -188,9 +259,13 @@ export default {
     "objectPositions",
     "startYears",
     "endYears",
+    "companyDomain",
+    "companyAddresses",
   ],
   data() {
     return {
+      companyLogo:
+        "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
       dialog: false,
       startYear: null,
       endYear: null,
@@ -202,20 +277,89 @@ export default {
       modelCompanyAddress: "",
       id: null,
       alumni_id: null,
+      previewImage:'',
+      image:'',
+      companyPhoneNumber:'',
+      companyEmail:'',
+      modelCompanyDomain:'',
+      searchComapanyDomain:'',
+      hideLogoComapnay:false,
+      hasComapnyName:true,
+      company:'',
+      position:'',
+      companyId:'',
+      // isSelectCompanyName:false,
+      companyIdToEdit:null
     };
   },
   methods: {
+
     closeDialog() {
       this.dialog = false;
+      this.hideLogoComapnay = false;
+      this.hasComapnyName = true;
+      this.alumni_id="";
+      this.companyIdToEdit="";
+      this.companyId="";
+      this.modelCompany="";
+      this.companyPhoneNumber="";
+      this.companyEmail="";
+      this.modelCompanyAddress="";
+      this.modelCompanyDomain="";
+      this.image="https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png";
+      this.modelPosition="";
+      this.startYear="";
+      this.endYear="";
     },
     getDataToUpdate(work) {
+      
       this.dialog = true;
       this.id = work.id;
       this.alumni_id = work.alumni_id;
+      this.companyIdToEdit = work.company_id;
       this.modelCompany = work.companyName;
       this.modelPosition = work.positionName;
       this.startYear = JSON.stringify(work.start_year);
       this.endYear = work.end_year;
+      this.modelCompanyAddress=work.address;
+      this.modelCompanyDomain= work.domain;
+      this.companyPhoneNumber= work.phone;
+      this.companyEmail = work.email;
+      this.image = null;
+    },
+   
+    findNameOfCompany(){
+     
+      let companyName = this.objectCompanies.filter(
+          (company) => company.companyName == this.modelCompany
+        );
+      if(companyName.length!==0){
+        this.hasComapnyName = false;
+        this.hideLogoComapnay= false;
+        this.isSelectCompanyName = true;
+      }else{
+        this.hasComapnyName = true;
+        this.hideLogoComapnay= true;
+        this.modelCompanyAddress='';
+        this.modelCompanyDomain= '';
+        this.companyPhoneNumber= '';
+        this.companyEmail = '';
+        this.modelPosition = '';
+        this.startYear = '';
+        this.endYear = '';
+        
+
+      }
+    },
+    selectLogoOfCompany(event) {
+      this.image = event.target.files[0];
+      this.companyLogo = URL.createObjectURL(this.image);
+      let reader = new FileReader();
+      reader.onloadend = (event) => {
+        this.previewImage = event.target.result;
+      };
+      reader.readAsDataURL(this.image);
+    
     },
     updateworkExperience() {
       if (
@@ -230,40 +374,95 @@ export default {
         let objectOfPosition = this.objectPositions.filter(
           (position) => position.positionName == this.modelPosition
         );
-        let company = null;
-        let position = null;
+       
         if (objectOfCompany.length !== 0) {
-          company = objectOfCompany[0].id;
-        } else {
-          company = this.modelCompany;
+          this.companyId = objectOfCompany[0].id;
+          this.hasComapnyName = true;
+          // if(this.isSelectCompanyName){
+          //   this.hasComapnyName = true;
+          //   // this.image = objectOfCompany[0].logo;
+          //   // this.modelCompanyAddress=objectOfCompany[0].address;
+          //   // this.modelCompanyDomain= objectOfCompany[0].domain;
+          //   // this.companyPhoneNumber= objectOfCompany[0].phone;
+          //   // this.companyEmail = objectOfCompany[0].email;
+          // }
         }
         if (objectOfPosition.length !== 0) {
-          position = objectOfPosition[0].id;
+          this.position = objectOfPosition[0].id;
         } else {
-          position = this.modelPosition;
+          this.position = this.modelPosition;
         }
-        let updateWork = {
-          alumni_id: this.alumni_id,
-          company_id: company,
-          position_id: position,
-          start_year: this.startYear,
-          end_year: this.endYear,
-        };
-        axios.put("work_experiences/" + this.id, updateWork).then(() => {
+        if (this.companyId !== ""){
+          let updateWorks = {
+          alumni_id:this.alumni_id,
+          companyIdEdit:this.companyIdToEdit,
+          company_id:this.companyId,
+          companyName:this.modelCompany,
+          phone: this.companyPhoneNumber,
+          email:this.companyEmail,
+          address:this.modelCompanyAddress,
+          domain:this.modelCompanyDomain,
+          logo:this.image,
+          position_id:this.position,
+          start_year:this.startYear,
+          end_year:this.endYear
+        }
+          console.log(updateWorks.logo);
+          axios.put("work_experiences/"+this.id,updateWorks).then((res) => {
+          console.log(res)
           axios.get("companies").then((res) => {
-            this.objectCompanies = res.data;
-            for (let company of this.objectCompanies) {
+            let otbjectCompanies = res.data;
+            for (let company of otbjectCompanies) {
               this.companies.push(company.companyName);
             }
           });
           axios.get("positions").then((res) => {
-            this.objectPositions = res.data;
-            for (let position of this.objectPositions) {
+            let objectPositions = res.data;
+            for (let position of objectPositions) {
               this.positions.push(position.positionName);
             }
           });
           this.$emit("get-work-experience");
         });
+
+        }else{
+          let updateWork =new FormData();
+          updateWork.append('alumni_id',this.alumni_id);
+          updateWork.append('company_id','null');
+          updateWork.append('companyIdEdit',this.companyIdToEdit)
+          updateWork.append('companyName',this.modelCompany);
+          updateWork.append('phone', this.companyPhoneNumber);
+          updateWork.append('email',this.companyEmail);
+          updateWork.append('address',this.modelCompanyAddress);
+          updateWork.append('domain',this.modelCompanyDomain);
+          updateWork.append('logo',this.image);
+          updateWork.append('position_id',this.position);
+          updateWork.append('start_year',this.startYear);
+          updateWork.append('end_year',this.endYear);
+          updateWork.append("_method", "PUT");
+          console.log(updateWork.get("logo"));
+          console.log(updateWork.get("company_id"));
+          axios.post("work_experiences/"+this.id,updateWork).then((res) => {
+          console.log(res)
+          axios.get("companies").then((res) => {
+            let otbjectCompanies = res.data;
+            for (let company of otbjectCompanies) {
+              this.companies.push(company.companyName);
+            }
+          });
+          axios.get("positions").then((res) => {
+            let objectPositions = res.data;
+            for (let position of objectPositions) {
+              this.positions.push(position.positionName);
+            }
+          });
+          this.$emit("get-work-experience");
+        });
+
+        }
+        
+
+        
         this.closeDialog();
       }
     },

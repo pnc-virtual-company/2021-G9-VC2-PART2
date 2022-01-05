@@ -26,7 +26,7 @@ class UserController extends Controller
         ->join('alumnis', 'alumnis.id', '=', 'work_experiences.alumni_id')
         ->where([['work_experiences.alumni_id','=',$user->alumni->id]])
         ->orderBy('work_experiences.id','DESC')
-        ->get(['work_experiences.id','work_experiences.alumni_id','companyName','positionName','start_year','end_year']);
+        ->get(['work_experiences.id','work_experiences.alumni_id','positionName','companyName','companies.id as company_id','phone','email','domain','address','logo','start_year','end_year']);
         
         $skills = AlumniSkill::join('alumnis', 'alumnis.id', '=', 'alumni_skills.alumni_id')
         ->join('skills', 'skills.id', '=', 'alumni_skills.skill_id')

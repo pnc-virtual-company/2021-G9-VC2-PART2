@@ -77,7 +77,7 @@ export default {
       this.headers = this.headersAlumni;
       this.isSwitched = 'alumni';
       this.alumnilist = this.allUsers.filter(user => user.role == 'alumni');
-      this.userList =  this.alumnilist
+      this.userList =  this.alumnilist;
       this.searchValue(this.search); 
     },
     searchValue(value){
@@ -85,6 +85,7 @@ export default {
       if(this.isSwitched==='alumni'){
         
         let users = this.alumnilist;
+        console.log(users)
         this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
         || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
        

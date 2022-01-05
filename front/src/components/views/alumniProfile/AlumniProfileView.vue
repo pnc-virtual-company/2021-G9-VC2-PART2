@@ -362,6 +362,8 @@
           :objectPositions="objectPositions"
           :startYears="startYears"
           :endYears="endYears"
+          :companyDomain="companyDomain"
+          :companyAddresses="companyAddresses"
         />
       </v-card>
     </v-card>
@@ -452,7 +454,7 @@ export default {
         "Kampong Cham",
         "Kompot",
       ],
-      companyDomain: ["Bank", "Insuranc"],
+      companyDomain: ["Bank", "Insuranc","Solution","Finance"],
       searchComapanyDomain: "",
       modelCompanyDomain: "",
       modelCompanyAddress: "",
@@ -630,22 +632,21 @@ export default {
       this.modelPosition = "";
       this.startYear = "";
       this.endYear = "";
+      this.companyLogo="https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png";
+      this.companyPhoneNumber="";
+      this.modelCompanyDomain ="";
+      this.companyEmail="";
+      this.modelCompanyAddress="";
       this.isInputInfoCompany = true;
     },
     createWorkExperience() {
-      if (
-        this.modelPosition !== "" &&
-        this.modelCompany !== "" &&
-        this.startYear !== "" &&
-        this.endYear !== ""
-      ) {
+      
         let objectOfCompany = this.objectCompanies.filter(
           (company) => company.companyName == this.modelCompany
         );
         let objectOfPosition = this.objectPositions.filter(
           (position) => position.positionName == this.modelPosition
         );
-        // var company = null;
         if (objectOfCompany.length !== 0) {
           this.companyId = objectOfCompany[0].id;
         } 
@@ -666,14 +667,12 @@ export default {
         newWork.append('position_id',this.position);
         newWork.append('start_year',this.startYear);
         newWork.append('end_year',this.endYear);
-        
-        axios.post('work_experiences',newWork).then((res)=>{
+        axios.post('work_experiences',newWork).then(()=>{
           this.getOneAlumni();
           this.getCompanyAndPosition();
-          console.log(res.data);
         })
        this.closeCreateDialog()
-      }
+      
       },
       
   
