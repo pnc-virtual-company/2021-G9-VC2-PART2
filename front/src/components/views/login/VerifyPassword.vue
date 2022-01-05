@@ -12,7 +12,7 @@
         <v-row class="sub-container">
           <v-col cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
-              <h1 class="text-center white--text mb-3">Sign in</h1>
+              <h1 class="text-center white--text mb-3">Enter Password</h1>
 
               <v-row no-gutters>
                 <v-col cols="12">
@@ -28,7 +28,6 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-
               <v-checkbox
                 class="ma-0 pa-0"
                 v-model="showPassword"
@@ -112,6 +111,9 @@ export default {
       axios
         .post("/signin", user)
         .then((res) => {
+          localStorage.setItem("stepLogin","main_page");
+          localStorage.setItem("role",res.data.user.role);
+          localStorage.setItem("userName", res.data.user.first_name);
           if (res.data.user.role === "admin" || res.data.user.role === "ero") {
             this.$router.push("/admin_view").catch(() => {});
           } else if (res.data.user.role === "alumni") {
@@ -119,7 +121,7 @@ export default {
               .push("/alumni/profile/" + res.data.user.first_name)
               .catch(() => {});
           }
-          this.$emit("signin", res.data.user);
+          this.$emit("signin", res.data.user,res.data.token);
         })
         .catch(() => {
           this.passwordRules = ["Your Password does not exist"];

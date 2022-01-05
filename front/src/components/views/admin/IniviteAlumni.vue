@@ -1,5 +1,5 @@
 <template>
-  <v-container class=" ma-0 pa-0 mb-5">
+  <v-container class="ma-0 pa-0 mb-5">
     <v-alert
       v-model="alert"
       dismissible
@@ -10,7 +10,7 @@
     >
       You've <strong>Invited</strong> new alumni successfully!.
     </v-alert>
-    <v-container >
+    <v-container>
       <v-row class="d-flex justify-end">
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on, attrs }">
@@ -42,12 +42,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn dark color="grey" text  @click="dialog = false">
+              <v-btn dark color="grey" text @click="dialog = false">
                 Close
               </v-btn>
-              <v-btn color="#22BBEA" dark @click="inviteAlumni">
-                invite
-              </v-btn>
+              <v-btn color="#22BBEA" dark @click="inviteAlumni"> invite </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -56,9 +54,9 @@
   </v-container>
 </template>
 <script>
-import axios from './../../../api/api.js';
+import axios from "./../../../api/api.js";
 export default {
-  emits:['alumni'],
+  emits: ["alumni"],
   data: () => ({
     items: [],
     dialog: false,
@@ -69,48 +67,53 @@ export default {
   }),
 
   methods: {
-    checkEmail(){
+    checkEmail() {
       let array = [];
       this.items = [];
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      for (let emails of this.model){
-        for(let email of emails.split(' ')){
-           if(pattern.test(email) && this.userList.filter(user=> user.email === email).length === 0){
-             let object = {
+      const pattern =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      for (let emails of this.model) {
+        for (let email of emails.split(" ")) {
+          if (
+            pattern.test(email) &&
+            this.userList.filter((user) => user.email === email).length === 0
+          ) {
+            let object = {
               email: email,
-              role: 'alumni',
-              status: 'invited'
-            }
+              role: "alumni",
+              status: "invited",
+            };
             this.items.push(object);
             array.push(email);
-           }
+          }
         }
       }
       this.model = array;
     },
     inviteAlumni() {
-      axios.post('/users', this.items).then((res)=>{
-        
-        this.$emit('alumni', 'alumni');
-        console.log(res.data)
+      axios.post("/users", this.items).then((res) => {
+        this.$emit("alumni", "alumni");
+        if (res.data.message === "User Created") {
+          this.alert = true;
+          setTimeout(() => {
+            this.alert = false;
+          }, 8000);
+        }
         this.getUsers();
-      })
+      });
       this.model = [];
       this.items = [];
-      this.alert = true;
+     
       this.dialog = false;
-      setTimeout(() => {
-        this.alert = false;
-      }, 2000);
     },
-    getUsers(){
-      axios.get('/users').then((res)=>{
+    getUsers() {
+      axios.get("/users").then((res) => {
         this.userList = res.data;
-    })
-    }
+      });
+    },
   },
-  mounted(){
-     this.getUsers();
-  }
+  mounted() {
+    this.getUsers();
+  },
 };
 </script>

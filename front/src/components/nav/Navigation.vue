@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <v-row class="navbar-container d-flex align-center pa-0 ma-0">
       <v-col cols="12" lg="2" md="2" sm="2" xs="12" class="pa-2 ma-0">
         <v-img
@@ -25,7 +25,7 @@
         >
           <v-tab
             :to="{ path: '/admin_view' }"
-            class="text-h6 blue--text pa-0 ma-0 item-list"
+            class="text-h6 blue--text item-list"
             v-if="role === 'admin' || role === 'ero'"
             >Manager Users</v-tab
           >
@@ -40,7 +40,7 @@
             :to="{ path: '/explore_alumni' }"
             class="text-h6 blue--text"
             color="black"
-            v-if="role === 'admin'"
+            v-if="role === 'admin' || role === 'ero'"
           >
             Explore Alumnis
           </v-tab>
@@ -71,8 +71,8 @@
         </v-btn>
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5"
-              >Are you sure you want to delete this item?</v-card-title
+            <v-card-title class="text-h5 justify-center"
+              >Are you sure you want to logout this account?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -83,9 +83,10 @@
         </v-dialog>
       </v-col>
     </v-row>
-  </div>
+  </section>
 </template>
 <script>
+import axios from '../../api/api.js';
 export default {
   emits: ["sign-out"],
   data() {
@@ -98,9 +99,12 @@ export default {
   methods: {
     logoutAcout() {
       this.dialog = false;
-      this.$emit("sign-out");
-      localStorage.clear();
-      this.$router.push("/verify_email").catch(() => {});
+      axios.post("/signout").then(()=>{
+        this.$emit("sign-out");
+        localStorage.clear();
+        this.$router.push("/verify_email").catch(() => {});
+      })
+     
     },
   },
   mounted() {},

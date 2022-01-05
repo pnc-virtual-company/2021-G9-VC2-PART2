@@ -13,7 +13,7 @@
         <v-row class="sub-container">
           <v-col cols="12" xs="12" sm="10" md="6" lg="6">
             <v-card color="transparent" elevation="0" class="pa-5">
-              <h1 class="text-center white--text mb-3">SIGN UP</h1>
+              <h1 class="text-center white--text mb-3">Enter Information</h1>
               <v-row no-gutters>
                 <v-col cols="12" lg="6" md="6" sm="6" xs="12">
                   <v-text-field
@@ -40,7 +40,6 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-
               <v-row no-gutters>
                 <v-col cols="12">
                   <v-text-field
@@ -80,8 +79,8 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="koko ma-0 pa-0">
-                <v-col cols="12" class="yaya mt-0 pt-0">
+              <v-row no-gutters class=" ma-0 pa-0">
+                <v-col cols="12" class=" mt-0 pt-0">
                   <v-checkbox
                     class="kiki ma-0"
                     v-model="checkbox"
@@ -120,7 +119,7 @@
             md="6"
             sm="12"
             xs="12"
-            class="white d-flex justify-center align-center"
+            class="logoContainer"
           >
             <v-img
               src="https://www.passerellesnumeriques.org/wp-content/uploads/2019/03/PN-Cambodia-Alumni-Association.png"
@@ -171,8 +170,8 @@ export default {
     };
   },
   watch: {
-    checkbox() {
-      this.isShowPassword = !this.isShowPassword;
+    checkbox(val) {
+      this.isShowPassword = val;
     },
     password() {
       if (this.confirmPassword !== this.password) {
@@ -188,13 +187,16 @@ export default {
         this.passwordConfirmRules = [];
       }
     },
-    phone_number() {
+    phone_number(val) {
       this.phoneRules = [
         (v) => !!v || "Phone Number is required",
-        (v) => /^\d+$/.test(v) || "Must be a number",
         (v) =>
-          (v.length >= 9 && v.length <= 10) || "Phone Number must be valid",
+           (v.length >= 9 && v.length <= 10 && v[0] =="0" ) || "Phone Number must be valid",
       ];
+
+      if(val[1] === "0" || val[1] === "4" || val[1] === "5"){
+        this.phoneRules =['Phone Number must be valid']
+      }
     },
   },
   methods: {
@@ -216,13 +218,17 @@ export default {
           user_id: this.userId,
           id: id[0].id,
         };
-        axios.put("/alumnis/" + id[0].id, alumniData).then(() => {});
-        axios.put("/users/" + this.userId, userData).then(() => {
-          this.$emit("signin", userData);
+        axios.put("/alumnis/" + id[0].id, alumniData).then(() => {
+          
+        });
+        axios.put("/users/" + this.userId, userData).then((res) => {
+          localStorage.setItem("stepLogin","main_page");
+          this.$emit("signin", userData,res.data.token);
           this.$router
             .push("/alumni/profile/" + this.first_name)
             .catch(() => {});
         });
+
       }
     },
   },
@@ -238,7 +244,13 @@ export default {
 a {
   text-decoration: none;
 }
-@media screen and (min-width: 300px) and (max-width: 960px) {
+.logoContainer{
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 610px) and (max-width: 960px) {
   .sub-container {
     display: flex;
     flex-direction: column-reverse;
@@ -246,9 +258,15 @@ a {
     align-items: center;
   }
 }
-@media screen and (min-width: 300px) and (max-width: 500px) {
-  .alumni-logo {
-    width: 100px;
+@media screen and (min-width: 300px) and (max-width: 610px) {
+  .sub-container {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+  }
+  .logoContainer{
+    display: none;
   }
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
   <v-container >    
-      <v-col cols="10" lg="5" md="6" sm="8" xs="12" class="mx-auto pb-0 mt-6">
-        <v-card elevation="2" id="listContainer">
+      <v-col cols="10" lg="5" md="6" sm="8" xs="12" class="mx-auto pb-0 mt-6" :class="role === 'admin' ? '' : 'showListContainer'">
+        <v-card class="pa-0 " elevation="2" id="listContainer" :class="role === 'admin' ? '' : 'eroRole'">
           <v-tabs fixed-tabs color="#FF9933" height="45px">
-            <v-tab class="v-tab-item blue--text" @click="showAlumniData" style="font-size: 13px"
+            <v-tab  class=" ma-0 pa-0 v-tab-item blue--text" @click="showAlumniData" style="font-size: 13px"
               >ALUMNI LIST</v-tab>
-            <v-tab
+            <v-tab v-show="role==='admin'"
               @click="showEroData"
               class="v-tab-item blue--text"
               style="font-size: 13px"
@@ -41,6 +41,7 @@ export default {
   },
   
   data: () => ({
+     role: JSON.parse(localStorage.getItem("user")).role,
     select: { state: "ALUMNI LIST" },
     item: [{ state: "ALUMNI LIST" }, { state: "ERO USER LIST" }],
     isSwitched: 'alumni',
@@ -83,12 +84,10 @@ export default {
     searchValue(value){
       this.search = value;
       if(this.isSwitched==='alumni'){
-        
         let users = this.alumnilist;
         console.log(users)
         this.userList = users.filter(user=>user.first_name.toLowerCase().includes(this.search.toLowerCase())
         || user.last_name.toLowerCase().includes(this.search.toLowerCase()) 
-       
         )
       }else if(this.isSwitched==='ero'){
         let users = this.eroList;
@@ -120,6 +119,17 @@ export default {
 };
 </script>
 <style>
+.eroRole{
+  width: 200px;
+}
+.showListContainer{
+  display: flex;
+  justify-content: center;
+}
+.v-slide-group__content{
+  display: flex;
+  justify-content: center;
+}
 @media screen and (min-width: 300px) and (max-width: 760px) {
   #listContainer {
     width: 100%;

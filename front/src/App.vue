@@ -34,18 +34,14 @@ export default {
     },
   },
   methods: {
-    userSignin(user) {
+    userSignin(user,token) {
       this.activeUser = user;
+      localStorage.setItem("token",token);
       localStorage.setItem("userId", user.id);
-      localStorage.setItem("userName", user.first_name);
     },
     emailChecking(user) {
       this.userDataSignIn = user;
     },
-    // userSignin(user){
-    //   this.activeUser = user;
-    //   localStorage.setItem("userID",JSON.stringify(user.id));
-    // },
     userSignOut() {
       this.activeUser = null;
     },
@@ -59,18 +55,13 @@ export default {
         );
       });
     }
-    let userData = JSON.parse(localStorage.getItem("user"));
+    let userData = JSON.parse(localStorage.getItem("userId"));
     if (userData !== null) {
-      this.activeUser = JSON.parse(localStorage.getItem("user"));
+      this.activeUser = JSON.parse(localStorage.getItem("userId"));
     } else {
       this.activeUser = userData;
     }
-    this.activeUser = JSON.parse(localStorage.getItem("user"));
-    // if(user !== null){
-    //     this.activeUser = JSON.parse(localStorage.getItem("user"));}
-    // else{
-    //    this.activeUser = null;
-    // }
+    this.activeUser = JSON.parse(localStorage.getItem("userId"));
   },
   
 };

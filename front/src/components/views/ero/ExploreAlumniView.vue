@@ -110,7 +110,6 @@ export default {
     },
     findAlumniInfo() {
       let allAlumni = this.alumnis ;
-      console.log(allAlumni)
       
  //==================================================//   
       // filter name, batch, gender, major and company

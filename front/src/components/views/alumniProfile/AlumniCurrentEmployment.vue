@@ -37,7 +37,7 @@
                 <v-list-item-content>
                   <v-list-item-title>Years</v-list-item-title>
                   <v-list-item-subtitle class="mt-2"
-                    >{{ work.start_year }}-
+                    >{{ work.start_year }} -
                     {{ work.end_year }}</v-list-item-subtitle
                   >
                 </v-list-item-content>
@@ -46,7 +46,22 @@
             </v-list>
             <v-list width="10%">
               <v-icon v-if="hover" @click="getDataToUpdate(work)" class="pa-2 mr-1 white elevation-6 rounded-circle">mdi-pen</v-icon>
-              <v-icon v-if="hover" @click="deleteWorkExperience(work.id)" class="pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
+
+              <v-icon v-if="hover" @click="deleteEmployment = true" class="pa-2 mr-1 ml-2 white elevation-6 rounded-circle">mdi-delete</v-icon>
+  <!-- ==========================Delete Work Employment Dialog================================================== -->
+              <v-dialog v-model="deleteEmployment" max-width="500px">
+                <v-card>
+                  <v-card-title class="text-h5 justify-center"
+                    >Are you sure you want to this card?</v-card-title
+                  >
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="grey" text @click="deleteEmployment = false">No</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteWorkExperience(work.id)">Yes</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+  <!-- ===============================Update Work Employment Dialog================================================== -->
               <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
          <v-form class="pt-5 px-5">
@@ -60,7 +75,7 @@
                 ></v-divider>
 
                 <v-container>
-                  <v-row>
+                  <v-row class="mt-4">
                     <v-col
                       cols="12"
                       class="d-flex justify-center pa-0 mb-3 mt-4"
@@ -92,31 +107,6 @@
                                 <v-list-item-title>
                                   Press <kbd>Enter</kbd> to Create New
                                
-                                </v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
-                          </template>
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="12" class="pa-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompany"
-                        :items="companies"
-                        :search-input.sync="searchComapany"
-                        label="Company"
-                        @change="findNameOfCompany"
-                        persistent-hint
-                        
-                       
-                      >
-                      <template v-slot:no-data>
-                            <v-list-item scroll>
-                              <v-list-item-content>
-                                <v-list-item-title>
-                                  Press <kbd>Enter</kbd> to Create New
-                                 
                                 </v-list-item-title>
                               </v-list-item-content>
                             </v-list-item>
@@ -197,7 +187,7 @@
               <span >Cancel</span>
             </v-btn>
             <v-btn color="#22BBEA" @click="updateworkExperience()">
-                <span class="white--text">Submit</span>
+                <span class="white--text">Create</span>
               </v-btn>
           </v-card-actions>
         </v-card>
@@ -249,7 +239,7 @@
 <script>
 import axios from "./../../../api/api.js";
 export default {
-  emits: ["get-work-experience"],
+  emits: ["get-work-experience", "get-position-companies"],
   props: [
     "work",
     "companies",
@@ -288,8 +278,9 @@ export default {
       company:'',
       position:'',
       companyId:'',
-      // isSelectCompanyName:false,
-      companyIdToEdit:null
+      isSelectCompanyName:false,
+      companyIdToEdit:null,
+      deleteEmployment: false,
     };
   },
   methods: {
@@ -297,22 +288,8 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.hideLogoComapnay = false;
-      this.hasComapnyName = true;
-      this.alumni_id="";
-      this.companyIdToEdit="";
-      this.companyId="";
-      this.modelCompany="";
-      this.companyPhoneNumber="";
-      this.companyEmail="";
-      this.modelCompanyAddress="";
-      this.modelCompanyDomain="";
-      this.image="https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png";
-      this.modelPosition="";
-      this.startYear="";
-      this.endYear="";
     },
     getDataToUpdate(work) {
-      
       this.dialog = true;
       this.id = work.id;
       this.alumni_id = work.alumni_id;
@@ -329,7 +306,6 @@ export default {
     },
    
     findNameOfCompany(){
-     
       let companyName = this.objectCompanies.filter(
           (company) => company.companyName == this.modelCompany
         );
@@ -348,7 +324,6 @@ export default {
         this.startYear = '';
         this.endYear = '';
         
-
       }
     },
     selectLogoOfCompany(event) {
@@ -364,110 +339,43 @@ export default {
     updateworkExperience() {
       if (
         this.modelPosition !== "" &&
-        this.modelCompany !== "" &&
+        this.companyEmail !== "" &&
+        this.companyPhoneNumber !== "" &&
+        this.modelCompanyDomain !== "" &&
+        this.modelCompanyAddress !== "" &&
         this.startYear !== "" &&
         this.endYear !== ""
       ) {
-        let objectOfCompany = this.objectCompanies.filter(
-          (company) => company.companyName == this.modelCompany
-        );
+
         let objectOfPosition = this.objectPositions.filter(
           (position) => position.positionName == this.modelPosition
         );
-       
-        if (objectOfCompany.length !== 0) {
-          this.companyId = objectOfCompany[0].id;
-          this.hasComapnyName = true;
-          // if(this.isSelectCompanyName){
-          //   this.hasComapnyName = true;
-          //   // this.image = objectOfCompany[0].logo;
-          //   // this.modelCompanyAddress=objectOfCompany[0].address;
-          //   // this.modelCompanyDomain= objectOfCompany[0].domain;
-          //   // this.companyPhoneNumber= objectOfCompany[0].phone;
-          //   // this.companyEmail = objectOfCompany[0].email;
-          // }
-        }
         if (objectOfPosition.length !== 0) {
           this.position = objectOfPosition[0].id;
         } else {
           this.position = this.modelPosition;
         }
-        if (this.companyId !== ""){
-          let updateWorks = {
+        let updateWorks = {
           alumni_id:this.alumni_id,
-          companyIdEdit:this.companyIdToEdit,
-          company_id:this.companyId,
-          companyName:this.modelCompany,
+          company_id:this.companyIdToEdit,
           phone: this.companyPhoneNumber,
           email:this.companyEmail,
           address:this.modelCompanyAddress,
           domain:this.modelCompanyDomain,
-          logo:this.image,
           position_id:this.position,
           start_year:this.startYear,
           end_year:this.endYear
         }
-          console.log(updateWorks.logo);
-          axios.put("work_experiences/"+this.id,updateWorks).then((res) => {
-          console.log(res)
-          axios.get("companies").then((res) => {
-            let otbjectCompanies = res.data;
-            for (let company of otbjectCompanies) {
-              this.companies.push(company.companyName);
-            }
-          });
-          axios.get("positions").then((res) => {
-            let objectPositions = res.data;
-            for (let position of objectPositions) {
-              this.positions.push(position.positionName);
-            }
-          });
+        axios.put("work_experiences/"+this.id,updateWorks).then(() => {
+          this.$emit("get-position-companies")
           this.$emit("get-work-experience");
+          this.closeDialog();
+
         });
 
-        }else{
-          let updateWork =new FormData();
-          updateWork.append('alumni_id',this.alumni_id);
-          updateWork.append('company_id','null');
-          updateWork.append('companyIdEdit',this.companyIdToEdit)
-          updateWork.append('companyName',this.modelCompany);
-          updateWork.append('phone', this.companyPhoneNumber);
-          updateWork.append('email',this.companyEmail);
-          updateWork.append('address',this.modelCompanyAddress);
-          updateWork.append('domain',this.modelCompanyDomain);
-          updateWork.append('logo',this.image);
-          updateWork.append('position_id',this.position);
-          updateWork.append('start_year',this.startYear);
-          updateWork.append('end_year',this.endYear);
-          updateWork.append("_method", "PUT");
-          console.log(updateWork.get("logo"));
-          console.log(updateWork.get("company_id"));
-          axios.post("work_experiences/"+this.id,updateWork).then((res) => {
-          console.log(res)
-          axios.get("companies").then((res) => {
-            let otbjectCompanies = res.data;
-            for (let company of otbjectCompanies) {
-              this.companies.push(company.companyName);
-            }
-          });
-          axios.get("positions").then((res) => {
-            let objectPositions = res.data;
-            for (let position of objectPositions) {
-              this.positions.push(position.positionName);
-            }
-          });
-          this.$emit("get-work-experience");
-        });
-
-        }
-        
-
-        
-        this.closeDialog();
       }
     },
     deleteWorkExperience(id) {
-      console.log(id);
       axios.delete("work_experiences/" + id).then(() => {
         this.$emit("get-work-experience");
       });

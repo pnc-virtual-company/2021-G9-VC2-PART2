@@ -38,10 +38,6 @@
           </v-card-text>
           <v-card-text class="d-flex ml-0 pl-0 mb-0 pb-0">
             <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
-              <v-icon>mdi-briefcase</v-icon>
-              Web developer at Mango Byte co, ltd
-            </v-card-subtitle>
-            <v-card-subtitle class="mb-0 pb-0 mt-0 pt-0 white--text text-wrap">
               <v-icon>mdi-cloud-tags</v-icon>
               {{ alumniData.major }}
             </v-card-subtitle>
@@ -77,7 +73,7 @@
                           outlined
                           dense
                           width="100px"
-                          :rules="[v => !!v || 'First name is required']"
+                          :rules="[(v) => !!v || 'First name is required']"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6">
@@ -88,7 +84,7 @@
                           outlined
                           dense
                           width="100px"
-                          :rules="[v => !!v || 'Last name is required']"
+                          :rules="[(v) => !!v || 'Last name is required']"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -120,14 +116,14 @@
                       v-model="userMajor"
                       label="Major"
                       dense
-                      outlined                      
+                      outlined
                       :items="major"
                     ></v-select>
                     <v-select
                       v-model="userBatch"
                       label="Batch"
                       dense
-                      outlined                 
+                      outlined
                       :items="batch"
                     ></v-select>
                     <v-radio-group
@@ -168,7 +164,8 @@
                               class="mx-auto mt-3"
                               width="98%"
                             ></v-divider>
-                            <v-row class="mt-6 pt-0" dense>
+                            <form ref="form">
+                              <v-row class="mt-6 pt-0" dense>
                               <v-col cols="12">
                                 <v-text-field
                                   v-model="password"
@@ -176,12 +173,14 @@
                                   placeholder="Password"
                                   type="password"
                                   :rules="passwordRules"
+                                  autocomplete="on"
                                   outlined
                                   dense
                                   width="100px"
                                 ></v-text-field>
                               </v-col>
                             </v-row>
+                            </form>
                             <v-card-actions class="justify-end">
                               <v-btn
                                 dark
@@ -209,7 +208,11 @@
     </v-hover>
 
     <v-card tile color=" pt-6" class="">
-    <skill-card :alumni-skills="alumniSkills" :alumni-id="alumniData.id" @add="getOneAlumni"></skill-card>
+      <skill-card
+        :alumni-skills="alumniSkills"
+        :alumni-id="alumniData.id"
+        @add="getOneAlumni"
+      ></skill-card>
 
       <v-card width="100%" elevation="0" color="transparent" class="pb-6">
         <v-card-text class="d-flex justify-center align-center">
@@ -222,105 +225,63 @@
           >
           <v-dialog v-model="dialogCreate" persistent max-width="500px">
             <v-card>
-              <v-form class="pt-5 px-5">
+              <v-form ref="form" class="pa-4" v-model="valid">
                 <v-card-title class="d-flex justify-center my-0 py-0">
                   <span class="text-h5 text-color">CREATE EMPLOYMENT</span>
                 </v-card-title>
                 <v-divider
                   color="#FF9933"
-                  class="mx-auto "
+                  class="mx-auto"
                   width="93%"
                 ></v-divider>
-
                 <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      class="d-flex justify-center pa-0 mb-3 mt-4"
-                      v-if="isInputInfoCompany"
-                    >
-                      <label for="companyImg">
-                        <v-avatar id="addCompanyImg" size="70">
-                          <v-img
-                            :src="companyLogo"
-                            alt="Company logo"
-                          ></v-img>
-                        </v-avatar>
-                      </label>
-                      <input type="file" accept="image/jpeg, image/png, image/gif" id="companyImg" hidden @change="selectCompanyLogo" />
-                    </v-col>
-                     <v-col cols="12" class="pa-0 ma-0">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelPosition"
-                        :items="positions"
-                        :search-input.sync="searchPosition"
-                        label="Position"
-                      >
-                      </v-combobox>
-                    </v-col>
+                  <v-row class="mt-4">
                     <v-col cols="12" class="pa-0 ma-0">
                       <v-combobox
                         dense
                         outlined
+                        :rules="companyRules"
                         v-model="modelCompany"
                         :items="companies"
                         :search-input.sync="searchComapany"
                         label="Company"
                         @change="findCompanyName"
-                       
                       >
+                        <template v-slot:no-data>
+                          <v-list-item scroll>
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                Press <kbd>Enter</kbd> to Create New Company
+                                "<strong>{{ searchComapany }}</strong
+                                >"
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </template>
                       </v-combobox>
                     </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0" v-if="isInputInfoCompany">
-                      <v-text-field
-                        dense
-                        outlined
-                        v-model="companyPhoneNumber"
-                        label="Company Phone Number"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="pr-0 py-0 ma-0" v-if="isInputInfoCompany">
-                      <v-text-field
-                        dense
-                        outlined
-                        v-model="companyEmail"
-                        label="Company Email"
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="pl-0 py-0 ma-0" v-if="isInputInfoCompany">
+                    <!-- CompanyDialog -->
+
+                    <v-col cols="12" class="pa-0 ma-0">
                       <v-combobox
                         dense
                         outlined
-                        v-model="modelCompanyDomain"
-                        :items="companyDomain"
-                        :search-input.sync="searchComapanyDomain"
-                        label="Company Domain"
+                        v-model="modelPosition"
+                        :items="positions"
+                        :rules="positionRules"
+                        :search-input.sync="searchPosition"
+                        label="Position"
                       >
                       </v-combobox>
                     </v-col>
-                   
-                     <v-col  cols="6" class="pr-0 py-0 ma-0" v-if="isInputInfoCompany">
-                      <v-combobox
-                        dense
-                        outlined
-                        v-model="modelCompanyAddress"
-                        :items="companyAddresses"
-                        :search-input.sync="searchComapanyAddress"
-                        label="Company Address"
-                      >
-                      </v-combobox>
-                    </v-col>
+
                     <v-col cols="6" class="pl-0 py-0 ma-0">
                       <v-select
                         v-model="startYear"
                         :items="startYears"
                         label="Start Year"
                         dense
-                        :rules="[(v) => !!v || 'Start year is required']"
+                        :rules="startYearRules"
                         outlined
                       ></v-select>
                     </v-col>
@@ -330,24 +291,166 @@
                         :items="endYears"
                         label="End Year"
                         dense
-                        :rules="[(v) => !!v || 'End year is required']"
+                        :rules="endYearRules"
                         outlined
                       ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
+
+                <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
+                  <v-spacer></v-spacer>
+                  <v-btn dark color="grey" text @click="closeCreateDialog">
+                    <span>Cancel</span>
+                  </v-btn>
+                  <v-btn
+                    color="#22BBEA"
+                    dark
+                    :disabled="!valid"
+                    @click="createWorkExperience"
+                  >
+                    <span>CREATE</span>
+                  </v-btn>
+                </v-card-actions>
               </v-form>
-              <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
-                <v-spacer></v-spacer>
-                <v-btn dark color="grey" text @click="closeCreateDialog">
-                  <span>Cancel</span>
-                </v-btn>
-                <v-btn color="#22BBEA" @click="createWorkExperience">
-                  <span class="white--text">Submit</span>
-                </v-btn>
-              </v-card-actions>
             </v-card>
           </v-dialog>
+          <!-- =======================aaaaa=================== -->
+          
+          <!-- =======================Company Dialog==================================== -->
+          <v-dialog
+                      v-model="isInputInfoCompany"
+                      persistent
+                      max-width="500px"
+                    >
+                      <v-card>
+                        <v-form ref="form" class="pa-4" v-model="valid">
+                          <v-card-title class="d-flex justify-center my-0 py-0">
+                            <span class="text-h5 text-color"
+                              >CREATE Company</span
+                            >
+                          </v-card-title>
+                          <v-divider
+                            color="#FF9933"
+                            class="mx-auto"
+                            width="100%"
+                          ></v-divider>
+                          <v-container>
+                            <v-row class="mt-4">
+                              <v-col
+                                cols="12"
+                                class="
+                                  pa-0
+                                  mb-3
+                                  mt-0
+                                  d-flex
+                                  align-center
+                                  justify-center
+                                "
+                                v-if="isInputInfoCompany"
+                              >
+                                <label for="companyImg" class="mx-auto">
+                                  <v-avatar id="addCompanyImg" tile size="100">
+                                    <v-img
+                                      :src="companyLogo"
+                                      alt="Company logo"
+                                    ></v-img>
+                                  </v-avatar>
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/jpeg, image/png, image/gif"
+                                  id="companyImg"
+                                  hidden
+                                  @change="selectCompanyLogo"
+                                />
+                              </v-col>
+                              <v-col
+                                cols="6"
+                                class="pl-0 py-0 ma-0"
+                                v-if="isInputInfoCompany"
+                              >
+                                <v-text-field
+                                  dense
+                                  outlined
+                                  :rules="companyPhoneRules"
+                                  v-model="companyPhoneNumber"
+                                  label="Company Phone Number"
+                                >
+                                </v-text-field>
+                              </v-col>
+                              <v-col
+                                cols="6"
+                                class="pr-0 py-0 ma-0"
+                                v-if="isInputInfoCompany"
+                              >
+                                <v-text-field
+                                  dense
+                                  outlined
+                                  v-model="companyEmail"
+                                  label="Company Email"
+                                  :rules="companyEmailRules"
+                                >
+                                </v-text-field>
+                              </v-col>
+                              <v-col
+                                cols="6"
+                                class="pl-0 py-0 ma-0"
+                                v-if="isInputInfoCompany"
+                              >
+                                <v-combobox
+                                  dense
+                                  outlined
+                                  v-model="modelCompanyDomain"
+                                  :items="companyDomain"
+                                  :search-input.sync="searchComapanyDomain"
+                                  label="Company Domain"
+                                >
+                                </v-combobox>
+                              </v-col>
+
+                              <v-col
+                                cols="6"
+                                class="pr-0 py-0 ma-0"
+                                v-if="isInputInfoCompany"
+                              >
+                                <v-combobox
+                                  dense
+                                  outlined
+                                  v-model="modelCompanyAddress"
+                                  :items="companyAddresses"
+                                  :search-input.sync="searchComapanyAddress"
+                                  label="Company Address"
+                                >
+                                </v-combobox>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+
+                          <v-card-actions class="m-0 pt-0 mr-4 pr-4 pb-7">
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              dark
+                              color="grey"
+                              text
+                              @click="
+                                closeCompanyDialog
+                              "
+                            >
+                              <span>Cancel</span>
+                            </v-btn>
+                            <v-btn
+                              color="#22BBEA"
+                              :disabled="!valid"
+                              @click="createCompany"
+                            >
+                              <span>Create</span>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-form>
+                      </v-card>
+                    </v-dialog>
+          <!-- ========================================== -->
         </v-card-text>
         <v-divider color="#FF9933" class="mx-auto" width="93%"></v-divider>
         <alumni-current-employment
@@ -355,6 +458,7 @@
           :key="work.id"
           :work="work"
           @get-work-experience="getOneAlumni"
+          @get-position-companies="getCompanyAndPosition"
           :companies="companies"
           :positions="positions"
           :workExperience="workExperience"
@@ -382,6 +486,18 @@ export default {
   },
   data() {
     return {
+      companyRules:[],
+      positionRules:[],
+      startYearRules:[],
+      endYearRules:[],
+      dialog2: false,
+      companyPhoneRules: [(v) => !!v || "Phone number is required"],
+      companyEmailRules: [
+        (v) =>
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/.test(
+            v
+          ) || "Invalid Email address",
+      ],
       companyLogo:
         "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png",
       dialog: false,
@@ -394,6 +510,7 @@ export default {
       alumniData: {},
       currentEmployments: [],
       startYears: [
+        "2022",
         "2021",
         "2020",
         "2019",
@@ -412,6 +529,7 @@ export default {
       ],
       endYears: [
         "Present",
+        "2022",
         "2021",
         "2020",
         "2019",
@@ -454,7 +572,7 @@ export default {
         "Kampong Cham",
         "Kompot",
       ],
-      companyDomain: ["Bank", "Insuranc","Solution","Finance"],
+      companyDomain: ["Bank", "Insuranc"],
       searchComapanyDomain: "",
       modelCompanyDomain: "",
       modelCompanyAddress: "",
@@ -483,14 +601,68 @@ export default {
       userId: localStorage.getItem("userId"),
       profile: "",
       image: "",
-      previewImage:'',
-      companyId : null,
-      positionId : null,
-      isInputInfoCompany:true,
+      previewImage: "",
+      companyId: null,
+      positionId: null,
+      isInputInfoCompany: false,
       alumniSkills: [],
     };
   },
   watch: {
+    startYear(val){
+      if(val===''){
+        this.startYearRules=[(v) => !!v || 'Start year is required'];
+      } else {
+        this.startYearRules = [];
+      }
+    },
+    endYear(val){
+      if(val===''){
+        this.endYearRules=[(v) => !!v || 'End year is required'];
+      } else {
+        this.endYearRules = [];
+      }
+    },
+    modelPosition(val){
+      if(val==''){
+        this.positionRules=[(v) => !!v || 'Position is required'];
+      } else {
+        this.positionRules = [];
+      }
+    },
+    modelCompany(val){
+      if(val==''){
+        this.companyRules=[(v) => !!v || 'Company name is required'];
+      } else {
+        this.companyRules = [];
+      }
+    },
+    companyEmailRules(val) {
+      const emailRegex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/;
+      if (!emailRegex.test(val)) {
+        this.emailRules = ["E-mail must be valid"];
+      } else {
+        this.emailRules = [];
+      }
+      if (val == "") {
+        this.emailRules = ["E-mail is required"];
+      }
+    },
+    companyPhoneNumber(val) {
+      this.companyPhoneRules = [
+        (v) => !!v || "Phone Number is required",
+        (v) =>
+          (v.length >= 9 && v.length <= 10 && v[0] == "0") ||
+          "Phone Number must be valid",
+      ];
+      if(val !== ""){
+        if (val[1] === "0" || val[1] === "4" || val[1] === "5") {
+          this.companyPhoneRules = ["Phone Number must be valid"];
+        }
+      }
+      
+    },
     email() {
       this.emailRules = [
         (v) => !!v || "E-mail is required",
@@ -509,19 +681,20 @@ export default {
           "Phone Number must be valid",
       ];
     },
-    
   },
   methods: {
-    findCompanyName(){
-      console.log('find',this.modelCompany)
+    showNewCompany() {
+      this.dialog2 = true;
+    },
+    findCompanyName() {
       let companyName = this.objectCompanies.filter(
-          (company) => company.companyName == this.modelCompany
-        );
-      console.log('again',companyName)
-      if(companyName.length!==0){
+        (company) => company.companyName == this.modelCompany
+      );
+      if (companyName.length !== 0) {
         this.isInputInfoCompany = false;
-      }else{
+      } else {
         this.isInputInfoCompany = true;
+        this.dialogCreate = false;
       }
     },
     getOneAlumni() {
@@ -537,9 +710,11 @@ export default {
         });
     },
     closeDialog() {
+      this.$refs.form.reset();
       this.dialog = false;
       this.checkPassword = false;
       this.phoneRule = [];
+      this.phoneNumber = this.alumniData.phone_number;
     },
     selectCompanyLogo(event) {
       this.image = event.target.files[0];
@@ -549,7 +724,6 @@ export default {
         this.previewImage = event.target.result;
       };
       reader.readAsDataURL(this.image);
-    
     },
     selectProfile(event) {
       let image = event.target.files[0];
@@ -557,7 +731,7 @@ export default {
       let userProfile = new FormData();
       userProfile.append("profile", image);
       userProfile.append("_method", "PUT");
-      
+
       axios
         .post("/alumnisProfile/" + this.alumniData.id, userProfile)
         .then(() => {
@@ -575,22 +749,8 @@ export default {
       this.gender = this.alumniData.gender;
     },
     completedData() {
-      if (
-        this.email.split("@")[0] + "@gmail.com" === this.email &&
-        this.phoneNumber[0] == 0 &&
-        this.phoneNumber.length >= 9 &&
-        this.phoneNumber.length <= 10
-      ) {
         this.dialog = false;
         this.checkPassword = true;
-      } else {
-        this.phoneRule = [
-          (v) =>
-            (v.length >= 9 && v.length <= 10 && v[0] == 0) ||
-            "Phone Number must be valid",
-        ];
-        this.emailRules = ["E-mail must be valid"];
-      }
     },
     updateData() {
       let object = {
@@ -619,63 +779,83 @@ export default {
           axios.put("/alumnis/" + this.alumniData.id, alumniData).then(() => {
             this.closeDialog();
             this.getOneAlumni();
+            this.password = "";
+
           });
-          this.password = "";
         })
         .catch(() => {
           this.passwordRules = ["Your Password does not exist"];
         });
     },
     closeCreateDialog() {
+      this.$refs.form.reset();
       this.dialogCreate = false;
-      this.modelCompany = "";
-      this.modelPosition = "";
-      this.startYear = "";
-      this.endYear = "";
-      this.companyLogo="https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png";
-      this.companyPhoneNumber="";
-      this.modelCompanyDomain ="";
-      this.companyEmail="";
-      this.modelCompanyAddress="";
-      this.isInputInfoCompany = true;
+      this.modelCompany = null;
+      this.modelPosition = null;
+      this.startYear = null;
+      this.endYear = null;
+      
+      this.isInputInfoCompany = false;
+    },
+    closeCompanyDialog(){
+        this.isInputInfoCompany = false;
+        this.dialogCreate = true;
+        this.companyPhoneNumber = "";
+        this.modelCompanyDomain = "";
+        this.companyEmail = "";
+        this.modelCompanyAddress = "";
+        this.companyLogo =
+        "https://cdn2.iconfinder.com/data/icons/business-and-finance-385/30/office_business_work_workplace_home_company-_16-128.png";
+      
+    },
+    createCompany() {
+      let company = new FormData();
+      company.append("companyName", this.modelCompany);
+      company.append("phone", this.companyPhoneNumber);
+      company.append("email", this.companyEmail);
+      company.append("address", this.modelCompanyAddress);
+      company.append("domain", this.modelCompanyDomain);
+      company.append("logo", this.image);
+
+      axios.post("/companies", company).then((res) => {
+        this.$refs.form.reset();
+        console.log(res.data);
+        this.getCompanyAndPosition();
+        this.closeCompanyDialog();
+        
+      });
     },
     createWorkExperience() {
+      let objectOfCompany = this.objectCompanies.filter(
+        (company) => company.companyName == this.modelCompany
+      );
+      let objectOfPosition = this.objectPositions.filter(
+        (position) => position.positionName == this.modelPosition
+      );
+      if (objectOfCompany.length !== 0) {
+        this.companyId = objectOfCompany[0].id;
+      }
+      if (objectOfPosition.length !== 0) {
+        this.position = objectOfPosition[0].id;
+      } else {
+        this.position = this.modelPosition;
+      }
+      let newWork = new FormData();
+      newWork.append("alumni_id", this.alumniData.id);
+      newWork.append("company_id", this.companyId);
+      newWork.append("position_id", this.position);
+      newWork.append("start_year", this.startYear);
+      newWork.append("end_year", this.endYear);
+      axios.post("work_experiences", newWork).then(() => {
+        
+        this.$refs.form.reset();
+        this.getOneAlumni();
+        this.getCompanyAndPosition();
+        this.closeCreateDialog();
+      });
       
-        let objectOfCompany = this.objectCompanies.filter(
-          (company) => company.companyName == this.modelCompany
-        );
-        let objectOfPosition = this.objectPositions.filter(
-          (position) => position.positionName == this.modelPosition
-        );
-        if (objectOfCompany.length !== 0) {
-          this.companyId = objectOfCompany[0].id;
-        } 
-        if (objectOfPosition.length !== 0) {
-          this.position = objectOfPosition[0].id;
-        } else {
-          this.position = this.modelPosition;
-        }
-        let newWork =new FormData();
-        newWork.append('alumni_id',this.alumniData.id);
-        newWork.append('company_id',this.companyId);
-        newWork.append('companyName',this.modelCompany);
-        newWork.append('phone', this.companyPhoneNumber);
-        newWork.append('email',this.companyEmail);
-        newWork.append('address',this.modelCompanyAddress);
-        newWork.append('domain',this.modelCompanyDomain);
-        newWork.append('logo',this.image);
-        newWork.append('position_id',this.position);
-        newWork.append('start_year',this.startYear);
-        newWork.append('end_year',this.endYear);
-        axios.post('work_experiences',newWork).then(()=>{
-          this.getOneAlumni();
-          this.getCompanyAndPosition();
-        })
-       this.closeCreateDialog()
-      
-      },
-      
-  
+    },
+
     getCompanyAndPosition() {
       axios.get("companies").then((res) => {
         this.objectCompanies = res.data;

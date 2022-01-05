@@ -10,9 +10,9 @@
     >
       You've <strong>Created</strong> an ERO Officer.
     </v-alert>
-    <v-container >
+    <v-container>
       <v-row class="d-flex justify-end">
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialog"  persistent max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#FF9933" dark v-bind="attrs" v-on="on">
               Add ero officer
@@ -26,78 +26,83 @@
               <v-divider
                 color="#FF9933"
                 class="mx-auto mt-0 mb-7"
-                width="95%"
+                width="100%"
               ></v-divider>
               <v-container>
-                  <v-row>
-                    <v-col cols="6" class="mb-0 pb-0 pt-0">
-                      <v-text-field
-                        v-model="firstName"
-                        type="text"
-                        dense
-                        label="First name"
-                        :rules="nameRules"
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="mb-0 pb-0 pt-0">
-                      <v-text-field
-                        v-model="lastName"
-                        type="text"
-                        dense
-                        :rules="nameRules"
-                        label="Last name"
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" class="mb-0 pb-0 pt-0">
-                      <v-text-field
-                        v-model="email"
-                        type="email"
-                        dense
-                        :rules="emailRules"
-                        label="E-mail"
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="6" class="mb-0 pb-0 pt-0">
-                      <v-text-field
-                        :type="isShowPassword ? 'text' : 'password'"
-                        dense
-                        label="Password"
-                        v-model="password"
-                        :rules="passwordRules"
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6" class="mb-0 pb-0 pt-0">
-                      <v-text-field
-                        :type="isShowPassword ? 'text' : 'password'"
-                        dense
-                        label="Confirm password"
-                        v-model="confirmPassword"
-                        :rules="passwordConfirmRules"
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-col cols="12" class="mt-0 pt-0 ml-0 pl-0">
-                    <v-checkbox
-                      class="ma-0 pa-0"
-                      v-model="checkbox"
-                      label="Show password"
-                    ></v-checkbox>
+                <v-row>
+                  <v-col cols="6" class="mb-0 pb-0 pt-0">
+                    <v-text-field
+                      v-model="firstName"
+                      type="text"
+                      dense
+                      label="First name"
+                      :rules="nameRules"
+                      outlined
+                    ></v-text-field>
                   </v-col>
+                  <v-col cols="6" class="mb-0 pb-0 pt-0">
+                    <v-text-field
+                      v-model="lastName"
+                      type="text"
+                      dense
+                      :rules="nameRules"
+                      label="Last name"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" class="mb-0 pb-0 pt-0">
+                    <v-text-field
+                      v-model="email"
+                      type="email"
+                      dense
+                      :rules="emailRules"
+                      label="E-mail"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6" class="mb-0 pb-0 pt-0">
+                    <v-text-field
+                      :type="isShowPassword ? 'text' : 'password'"
+                      dense
+                      label="Password"
+                      v-model="password"
+                      :rules="passwordRules"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" class="mb-0 pb-0 pt-0">
+                    <v-text-field
+                      :type="isShowPassword ? 'text' : 'password'"
+                      dense
+                      label="Confirm password"
+                      v-model="confirmPassword"
+                      :rules="passwordConfirmRules"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-col cols="12" class="mt-0 pt-0 ml-0 pl-0">
+                  <v-checkbox
+                    class="ma-0 pa-0"
+                    v-model="checkbox"
+                    label="Show password"
+                  ></v-checkbox>
+                </v-col>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn dark color="grey" text @click="dialog = false">
                     Close
                   </v-btn>
-                  <v-btn color="#22BBEA" class="white--text" :disabled="!valid"  @click="createAnEro">
+                  <v-btn
+                    color="#22BBEA"
+                    class="white--text"
+                    :disabled="!valid"
+                    @click="createAnEro"
+                  >
                     Create
                   </v-btn>
                 </v-card-actions>
@@ -112,14 +117,14 @@
 
     
 <script>
-import axios from './../../../api/api.js';
+import axios from "./../../../api/api.js";
 export default {
-  emits: ['ero'],
+  emits: ["ero"],
   data: () => ({
     valid: true,
     firstName: "",
     lastName: "",
-    email: "",
+    email: null,
     password: "",
     confirmPassword: "",
     passwordRules: [
@@ -133,38 +138,45 @@ export default {
 
     nameRules: [(v) => !!v || "Name is required"],
     emailRules: [
-      (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/.test(v) || "E-mail must be valid",
+      (v) =>
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/.test(
+          v
+        ) || "Invalid Email address",
     ],
     isShowPassword: false,
     checkbox: false,
     alert: false,
     dialog: false,
-    
   }),
   methods: {
     createAnEro() {
-      let eroData = [{
-        first_name: this.firstName,
-        last_name: this.lastName,
-        email: this.email,
-        password: this.password,
-        role: 'ero'
-      }];
-      axios.post('/users', eroData).then(()=>{
-        this.$emit('ero', 'ero');
-      })
-      
-      this.alert = true;
-      this.dialog = false;
-      this.alert = true;
-      setTimeout(() => {
-        this.alert = false;
-      }, 2000);
-
+      let eroData = [
+        {
+          first_name: this.firstName,
+          last_name: this.lastName,
+          email: this.email,
+          password: this.password,
+          role: "ero",
+        },
+      ];
+      axios
+        .post("/users", eroData)
+        .then(() => {
+          this.isShowPassword = false;
+          this.$emit("ero", "ero");
+          this.dialog = false;
+          this.$refs.form.reset();
+          this.alert = true;
+          setTimeout(() => {
+            this.alert = false;
+          }, 8000);
+        })
+        .catch(() => {
+          this.emailRules = ["This email already exist!"];
+        });
     },
   },
   watch: {
-    watch: {
     email(val) {
       const emailRegex =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{3}))$/;
@@ -177,9 +189,9 @@ export default {
         this.emailRules = ["E-mail is required"];
       }
     },
-  },
-    checkbox() {
-      this.isShowPassword = !this.isShowPassword;
+
+    checkbox(val) {
+      this.isShowPassword = val;
     },
     password() {
       if (this.confirmPassword !== this.password) {
@@ -187,6 +199,11 @@ export default {
       } else {
         this.passwordConfirmRules = [];
       }
+    },
+    dialog(val) {
+      if(!val) {
+        this.$refs.form.reset()
+    }
     },
     confirmPassword() {
       if (this.confirmPassword !== this.password) {
